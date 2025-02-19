@@ -1,0 +1,30 @@
+<aside class="w-full md:w-1/4">
+  <!-- SIDEBAR -->
+  <ul class="bg-white rounded-lg shadow-md overflow-hidden">
+    <!-- Dashboard Link -->
+    <a href="{% url 'dashboard' %}" class="block px-6 py-3 text-gray-700 hover:bg-gray-100 {% if '/accounts/' == request.path %}bg-primary text-white hover:bg-primary-dark{% endif %}">
+      Dashboard
+    </a>
+
+    <!-- My Orders Link -->
+    <a href="{% url 'my_orders' %}" class="block px-6 py-3 text-gray-700 hover:bg-gray-100 {% if '/my_orders/' in request.path %}bg-primary text-white hover:bg-primary-dark{% endif %}">
+      My Orders
+    </a>
+
+    <!-- Edit Profile Link -->
+    <a href="{% url 'edit_profile' %}" class="block px-6 py-3 text-gray-700 hover:bg-gray-100 {% if '/edit_profile/' in request.path %}bg-primary text-white hover:bg-primary-dark{% endif %}">
+      Edit Profile
+    </a>
+
+    <!-- Change Password Link -->
+    <a href="{% url 'change_password' %}" class="block px-6 py-3 text-gray-700 hover:bg-gray-100 {% if '/change_password/' in request.path %}bg-primary text-white hover:bg-primary-dark{% endif %}">
+      Change Password
+    </a>
+  </ul>
+
+  <!-- Logout Button -->
+  <a href="{% url 'logout' %}" class="mt-4 block w-full px-6 py-3 bg-white rounded-lg shadow-md text-center text-gray-700 hover:bg-gray-100">
+    <i class="fas fa-power-off"></i> <span class="ml-2">Log out</span>
+  </a>
+  <!-- SIDEBAR .//END -->
+</aside>

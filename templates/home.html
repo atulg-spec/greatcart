@@ -1,0 +1,459 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block meta %}
+    <title>{{ head.site_title }}</title>
+    <meta name="title" content="{{ head.meta_title }}">
+    <meta name="description" content="{{ head.meta_description }}">
+    <meta name="keywords" content="{{ head.meta_keywords }}">
+{% endblock meta %}
+
+{% block content %}
+<br><br>
+<!-- ========================= SECTION MAIN ========================= -->
+<div class="relative w-full overflow-hidden" data-aos="fade-in">
+  <div class="flex transition-transform duration-500 ease-in-out" id="carousel">
+    {% for slider in sliders %}
+    <img src="{{slider.image.url}}" class="w-full flex-shrink-0" />
+    {% endfor %}
+  </div>
+
+  <!-- Previous and Next Buttons -->
+  <button id="prev"
+    class="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white px-1">&#10094;</button>
+  <button id="next"
+    class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white px-1">&#10095;</button>
+
+  <!-- Dots Container -->
+  <div class="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-2" id="dots">
+    {% for slider in sliders %}
+    <span class="dot w-1 h-1 rounded-full bg-gray-400 cursor-pointer"></span>
+    {% endfor %}
+  </div>
+</div>
+<!-- ========================= SECTION MAIN END// ========================= -->
+<section class="container mx-auto my-8 px-4">
+  <!-- Category Buttons -->
+  <div class="flex justify-center flex-wrap gap-3" data-aos="fade-up">
+    {% for category in sections %}
+    <button type="button" onclick="showSection('{{ category.name|slugify }}')"
+      data-section="{{ category.name|slugify }}"
+      class="category-btn bg-white border border-gray-400 transition duration-300 font-medium rounded-full px-6 py-1 font-mono">
+      {{ category.name }}
+    </button>
+    {% endfor %}
+  </div>
+
+  <!-- Product Sections -->
+  {% for category in sections %}
+  <div id="section-{{ category.name|slugify }}" class="product-section {% if not forloop.first %}hidden{% endif %} mt-6"
+    data-aos="fade-up">
+    <h2 class="text-2xl font-bold text-center text-gray-800 mb-4">{{ category.name }}</h2>
+
+    <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+      {% for product in category.products.all %}
+      <div class="group relative" data-aos="fade-up">
+        <a href="{{ product.get_url }}">
+          <div>
+            <img src="{{ product.images.url }}" alt="{{ product.product_name }}"
+              class="block w-full h-auto transition-opacity duration-300 group-hover:opacity-0">
+            {% if product.secondary_image %}
+            <img src="{{ product.secondary_image.url }}" alt="{{ product.product_name }}"
+              class="absolute inset-0 w-full h-auto opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+            {% endif %}
+          </div>
+        </a>
+        <div class="mt-1">
+          <a href="{{ product.get_url }}">
+            <h3 class="text-lg font-semibold text-gray-900 hover:text-gray-600 line-clamp-custom">
+              {{ product.product_name }}
+            </h3>
+          </a>
+          <div>
+            <span class="text-gray-900 font-bold">
+              ₹{{ product.price }}
+            </span>
+            <span class="text-gray-600 font-bold line-through">
+              ₹{{ product.before_discount_price }}
+            </span>
+          </div>
+
+          <p class="my-1">
+            {% for size in product.get_sizes %}
+            <span class="text-gray-800 bg-gray-100 p-1 text-xs">{{ size|upper }}</span>
+            {% endfor %}
+          </p>
+
+          <!-- Stock Availability -->
+          <p class="text-sm {% if product.stock > 0 %}text-green-600{% else %}text-red-600{% endif %}">
+            {% if product.stock > 0 %}
+            In Stock ({{ product.stock }})
+            {% else %}
+            Out of Stock
+            {% endif %}
+          </p>
+        </div>
+      </div>
+      {% empty %}
+      <p class="col-span-full text-center">No products available in this section.</p>
+      {% endfor %}
+    </div>
+    <div class="flex justify-center my-6">
+      <a href="{{category.url}}" class="px-4 py-2 bg-black text-white">View All</a>
+    </div>
+  </div>
+  {% endfor %}
+</section>
+
+<section data-aos="fade-up">
+  <img src="{{settings.main_page_image.url}}" alt="">
+</section>
+
+<section class="my-8" data-aos="fade-up">
+  <h2 class="text-3xl font-bold text-center text-gray-800 mb-4">Categories</h2>
+  <div>
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-6">
+      {% for category in categories %}
+      <div data-aos="fade-up">
+        <a href="{{ category.get_url }}" title="{{ category.category_name }}" class="relative group block">
+          <figure class="overflow-hidden rounded-lg shadow-md relative">
+            {% if category.cat_image %}
+            <img src="{{ category.cat_image.url }}" alt="{{ category.category_name }}"
+              class="w-full h-auto rounded-lg shadow-md transition-transform duration-300 group-hover:scale-125 group-hover:shadow-xl"
+              loading="lazy">
+            <div
+              class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-opacity duration-300 flex items-center justify-center">
+              <span
+                class="text-white text-lg font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                {{ category.category_name|upper }}
+              </span>
+            </div>
+            {% else %}
+            <div class="w-full h-40 bg-gray-200 rounded-lg shadow-md flex items-center justify-center">
+              <span class="text-gray-500">No Image</span>
+            </div>
+            {% endif %}
+          </figure>
+          <figcaption class="mt-2 text-center text-gray-700 group-hover:text-gray-900 transition-colors duration-300">
+            {{ category.category_name }}
+          </figcaption>
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<div class="relative overflow-hidden" data-aos="fade-up">
+  <section
+    class="flex justify-center items-center py-10 transform -rotate-45 {{settings.main_page_timer_strap_classes}}">
+    <div class="flex flex-col md:flex-row items-center gap-10 w-full px-5 space-x-4 transform rotate-45">
+      <!-- Image Section -->
+      <div class="w-full md:w-1/2 flex justify-center items-center" data-aos="fade-up">
+        <img src="{{settings.main_page_timer_thumbnail.url}}" alt="Match Timer Thumbnail" class="w-auto h-auto">
+      </div>
+      <!-- Countdown Section -->
+      <div class="w-full md:w-1/2 text-center flex flex-col items-center gap-6" data-aos="fade-up">
+
+        <!-- Title & Description -->
+        <h2 class="text-5xl md:text-6xl font-bold font-manrope tracking-widest drop-shadow-2xl">
+          {{settings.main_page_timer_heading}}
+        </h2>
+        <p class="text-base font-normal leading-relaxed">
+          {{settings.main_page_timer_caption}}
+        </p>
+
+        <!-- Countdown Timer -->
+        <div class="flex justify-center items-center gap-3 text-2xl font-manrope font-bold">
+          <div class="flex flex-col items-center">
+            <h3 class="countdown-element days"></h3>
+            <p class="text-xs font-normal">DAYS</p>
+          </div>
+          <span>:</span>
+          <div class="flex flex-col items-center">
+            <h3 class="countdown-element hours"></h3>
+            <p class="text-xs font-normal">HRS</p>
+          </div>
+          <span>:</span>
+          <div class="flex flex-col items-center">
+            <h3 class="countdown-element minutes"></h3>
+            <p class="text-xs font-normal">MINS</p>
+          </div>
+          <span>:</span>
+          <div class="flex flex-col items-center">
+            <h3 class="countdown-element seconds"></h3>
+            <p class="text-xs font-normal">SECS</p>
+          </div>
+        </div>
+
+        <!-- Register Button -->
+        <a href="{{settings.main_page_timer_url}}"
+          class="text-lg sm:w-fit w-full px-12 py-3 bg-black text-white transition-all duration-500 ease-in-out shadow-lg flex justify-center items-center hover:scale-105 animate-bounce">
+          Shop Now
+        </a>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+
+
+<!-- ========================= SECTION POPULAR PRODUCTS ========================= -->
+<section class="py-8">
+  <div class="container mx-auto px-4">
+    <header class="flex justify-between items-center mb-6">
+      <h3 class="text-2xl font-bold">Popular Products</h3>
+      <a href="{% url 'store' %}" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-dark">See all</a>
+    </header>
+
+    <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+      {% for product in products %}
+      <div class="group relative" data-aos="fade-up">
+        <a href="{{ product.get_url }}">
+          <div>
+            <img src="{{ product.images.url }}" alt="{{ product.product_name }}"
+              class="block w-full h-auto transition-opacity duration-300 group-hover:opacity-0">
+            {% if product.secondary_image %}
+            <img src="{{ product.secondary_image.url }}" alt="{{ product.product_name }}"
+              class="absolute inset-0 w-full h-auto opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+            {% endif %}
+          </div>
+        </a>
+        <div class="mt-1">
+          <a href="{{ product.get_url }}">
+            <h3 class="text-lg font-semibold text-gray-900 hover:text-gray-600 line-clamp-custom">
+              {{ product.product_name }}
+            </h3>
+          </a>
+          <div>
+            <span class="text-gray-900 font-bold">
+              ₹{{ product.price }}
+            </span>
+            <span class="text-gray-600 font-bold line-through">
+              ₹{{ product.before_discount_price }}
+            </span>
+          </div>
+
+          <p class="my-1">
+            {% for size in product.get_sizes %}
+            <span class="text-gray-800 bg-gray-100 p-1 text-xs">{{ size|upper }}</span>
+            {% endfor %}
+          </p>
+
+          <!-- Stock Availability -->
+          <p class="text-sm {% if product.stock > 0 %}text-green-600{% else %}text-red-600{% endif %}">
+            {% if product.stock > 0 %}
+            In Stock ({{ product.stock }})
+            {% else %}
+            Out of Stock
+            {% endif %}
+          </p>
+        </div>
+      </div>
+      {% empty %}
+      <p class="col-span-full text-center">No products available in this section.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+<!-- ========================= SECTION POPULAR PRODUCTS END// ========================= -->
+<script>
+  const carousel = document.getElementById('carousel');
+  const images = carousel.children;
+  const dots = document.querySelectorAll('.dot');
+  let index = 0;
+  let intervalTime = 3000; // Change slide every 3 seconds
+  let autoSlide;
+
+  function updateDots() {
+    dots.forEach((dot, i) => {
+      dot.classList.toggle('bg-black', i === index);
+      dot.classList.toggle('bg-gray-400', i !== index);
+    });
+  }
+
+  function nextSlide() {
+    index = (index + 1) % images.length;
+    carousel.style.transform = `translateX(-${index * 100}%)`;
+    updateDots();
+  }
+
+  function prevSlide() {
+    index = (index - 1 + images.length) % images.length;
+    carousel.style.transform = `translateX(-${index * 100}%)`;
+    updateDots();
+  }
+
+  document.getElementById('next').addEventListener('click', () => {
+    nextSlide();
+    resetAutoSlide();
+  });
+
+  document.getElementById('prev').addEventListener('click', () => {
+    prevSlide();
+    resetAutoSlide();
+  });
+
+  // Add click event to dots
+  dots.forEach((dot, i) => {
+    dot.addEventListener('click', () => {
+      index = i;
+      carousel.style.transform = `translateX(-${index * 100}%)`;
+      updateDots();
+      resetAutoSlide();
+    });
+  });
+
+  function startAutoSlide() {
+    autoSlide = setInterval(nextSlide, intervalTime);
+  }
+
+  function resetAutoSlide() {
+    clearInterval(autoSlide);
+    startAutoSlide();
+  }
+
+  // Start auto sliding
+  startAutoSlide();
+
+  // Pause auto-slide when mouse is over the carousel
+  document.querySelector('.relative').addEventListener('mouseenter', () => {
+    clearInterval(autoSlide);
+  });
+
+  // Resume auto-slide when mouse leaves the carousel
+  document.querySelector('.relative').addEventListener('mouseleave', () => {
+    startAutoSlide();
+  });
+
+  // Initialize the first dot as active
+  updateDots();
+</script>
+
+<script>
+  function showSection(sectionId) {
+    // Hide all product sections
+    document.querySelectorAll('.product-section').forEach(section => {
+      section.classList.add('hidden');
+    });
+
+    // Show the selected section
+    document.getElementById('section-' + sectionId).classList.remove('hidden');
+
+    // Reset all buttons to default (white background)
+    document.querySelectorAll('.category-btn').forEach(button => {
+      button.classList.remove('bg-black', 'text-white');
+      button.classList.add('bg-white', 'text-black', 'border-gray-400');
+    });
+
+    // Set the active button to black background
+    document.querySelector(`button[data-section="${sectionId}"]`).classList.remove('bg-white', 'text-black');
+    document.querySelector(`button[data-section="${sectionId}"]`).classList.add('bg-black', 'text-white');
+  }
+
+  // Set the first button as active by default on page load
+  document.addEventListener("DOMContentLoaded", function () {
+    let firstButton = document.querySelector('.category-btn');
+    if (firstButton) {
+      firstButton.classList.add('bg-black', 'text-white');
+    }
+  });
+</script>
+<script>
+  function showSection(sectionId) {
+    // Hide all product sections
+    document.querySelectorAll('.product-section').forEach(section => {
+      section.classList.add('hidden');
+    });
+
+    // Show the selected section
+    document.getElementById('section-' + sectionId).classList.remove('hidden');
+
+    // Reset all buttons to default (white background)
+    document.querySelectorAll('.category-btn').forEach(button => {
+      button.classList.remove('bg-black', 'text-white');
+      button.classList.add('bg-white', 'text-black', 'border-gray-400');
+    });
+
+    // Set the active button to black background
+    document.querySelector(`button[data-section="${sectionId}"]`).classList.remove('bg-white', 'text-black');
+    document.querySelector(`button[data-section="${sectionId}"]`).classList.add('bg-black', 'text-white');
+  }
+
+  // Set the first button as active by default on page load
+  document.addEventListener("DOMContentLoaded", function () {
+    let firstButton = document.querySelector('.category-btn');
+    if (firstButton) {
+      firstButton.classList.add('bg-black', 'text-white');
+    }
+  });
+</script>
+
+<script>
+  // count-down timer
+  let dest = new Date("{{settings.main_page_timer}}").getTime();
+  let x = setInterval(function () {
+    let now = new Date().getTime();
+    let diff = dest - now;
+    // Check if the countdown has reached zero or negative
+    if (diff <= 0) {
+      // Set the destination date to the same day next month
+      let nextMonthDate = new Date();
+      nextMonthDate.setMonth(nextMonthDate.getMonth() + 1);
+
+      // If the current month is December, set the destination date to the same day next year
+      if (nextMonthDate.getMonth() === 0) {
+        nextMonthDate.setFullYear(nextMonthDate.getFullYear() + 1);
+      }
+
+      dest = nextMonthDate.getTime();
+      return; // Exit the function
+    }
+
+    let days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    let hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    let minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    let seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+    if (days < 10) {
+      days = `0${days}`;
+    }
+
+    if (hours < 10) {
+      hours = `0${hours}`;
+    }
+    if (minutes < 10) {
+      minutes = `0${minutes}`;
+    }
+    if (seconds < 10) {
+      seconds = `0${seconds}`;
+    }
+
+    // Get elements by class name
+    let countdownElements = document.getElementsByClassName("countdown-element");
+
+    // Loop through the elements and update their content
+    for (let i = 0; i < countdownElements.length; i++) {
+      let className = countdownElements[i].classList[1]; // Get the second class name
+      switch (className) {
+        case "days":
+          countdownElements[i].innerHTML = days;
+          break;
+        case "hours":
+          countdownElements[i].innerHTML = hours;
+          break;
+        case "minutes":
+          countdownElements[i].innerHTML = minutes;
+          break;
+        case "seconds":
+          countdownElements[i].innerHTML = seconds;
+          break;
+        default:
+          break;
+      }
+    }
+  }, 10);
+</script>
+
+{% endblock %}

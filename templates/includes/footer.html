@@ -1,0 +1,41 @@
+<!-- ========================= FOOTER ========================= -->
+<footer class="bg-white border-t">
+	<div class="container mx-auto px-4">
+	  <section class="py-6 border-t">
+		<div class="flex flex-col md:flex-row justify-between items-center">
+		  <!-- Copyright -->
+		  <div class="mb-4 md:mb-0">
+			<p class="text-gray-500">&copy; 2023 The Zainly. All rights reserved.</p>
+		  </div>
+  
+		  <!-- Contact Info -->
+		  <div class="flex flex-wrap justify-center space-x-4 mb-4 md:mb-0">
+			<span class="text-gray-500">info@thezainly.com</span>
+			<span class="text-gray-500">+879-332-9375</span>
+			<span class="text-gray-500">Street name 123, Avenue abc</span>
+		  </div>
+  
+		  <!-- Payment Icons -->
+		  <div class="flex space-x-4">
+			<i class="fab fa-cc-visa text-2xl text-gray-500 hover:text-primary"></i>
+			<i class="fab fa-cc-paypal text-2xl text-gray-500 hover:text-primary"></i>
+			<i class="fab fa-cc-mastercard text-2xl text-gray-500 hover:text-primary"></i>
+		  </div>
+		</div>
+	  </section>
+	</div>
+  </footer>
+  <!-- ========================= FOOTER END // ========================= -->
+  
+  <!-- jQuery -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script>
+	$(document).ready(function () {
+	  $('.thumb a').click(function (e) {
+		e.preventDefault();
+		$('.mainImage img').attr('src', $(this).attr('href'));
+	  });
+	});
+  </script>
+  </body>
+  </html>

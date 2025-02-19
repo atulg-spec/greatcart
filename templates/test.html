@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tailwind CSS Scroll Animations</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- AOS CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+</head>
+<body class="bg-gray-100">
+
+    <!-- Navbar -->
+    <nav class="bg-blue-600 text-white p-4 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold">My Website</h1>
+            <ul class="flex space-x-4">
+                <li><a href="#" class="hover:text-gray-300">Home</a></li>
+                <li><a href="#" class="hover:text-gray-300">About</a></li>
+                <li><a href="#" class="hover:text-gray-300">Services</a></li>
+                <li><a href="#" class="hover:text-gray-300">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="h-screen flex flex-col justify-center items-center text-center bg-cover bg-center" style="background-image: url('https://source.unsplash.com/1600x900/?nature,water');">
+        <h1 class="text-5xl text-white font-bold" data-aos="fade-down">Welcome to My Website</h1>
+        <p class="text-lg text-white mt-4" data-aos="fade-up" data-aos-delay="300">Scroll down to see animations in action</p>
+    </section>
+
+    <!-- Features Section -->
+    <section class="container mx-auto p-10">
+        <h2 class="text-4xl font-bold text-center mb-10" data-aos="fade-in">Our Features</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-white p-6 rounded-lg shadow-lg text-center" data-aos="fade-up">
+                <h3 class="text-2xl font-semibold mb-2">Fast Performance</h3>
+                <p>Optimized for speed and smooth user experience.</p>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-lg text-center" data-aos="fade-up" data-aos-delay="200">
+                <h3 class="text-2xl font-semibold mb-2">SEO Optimized</h3>
+                <p>Rank better on search engines with our SEO features.</p>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-lg text-center" data-aos="fade-up" data-aos-delay="400">
+                <h3 class="text-2xl font-semibold mb-2">Responsive Design</h3>
+                <p>Works perfectly on all devices and screen sizes.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="bg-gray-200 py-20">
+        <div class="container mx-auto text-center">
+            <h2 class="text-4xl font-bold mb-6" data-aos="zoom-in">About Us</h2>
+            <p class="text-lg max-w-3xl mx-auto" data-aos="fade-up" data-aos-delay="200">
+                We are a team of passionate developers, designers, and marketers, dedicated to providing the best digital solutions for your business.
+            </p>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="container mx-auto p-10">
+        <h2 class="text-4xl font-bold text-center mb-10" data-aos="fade-in">Our Services</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-blue-500 text-white p-6 rounded-lg shadow-lg text-center" data-aos="flip-left">
+                <h3 class="text-2xl font-semibold mb-2">Web Development</h3>
+                <p>Custom websites tailored to your needs.</p>
+            </div>
+
+            <div class="bg-green-500 text-white p-6 rounded-lg shadow-lg text-center" data-aos="flip-right" data-aos-delay="200">
+                <h3 class="text-2xl font-semibold mb-2">SEO & Marketing</h3>
+                <p>Boost your business with advanced marketing strategies.</p>
+            </div>
+
+            <div class="bg-red-500 text-white p-6 rounded-lg shadow-lg text-center" data-aos="flip-up" data-aos-delay="400">
+                <h3 class="text-2xl font-semibold mb-2">Graphic Design</h3>
+                <p>Creative designs to make your brand stand out.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="bg-gray-800 text-white py-20">
+        <div class="container mx-auto text-center">
+            <h2 class="text-4xl font-bold mb-6" data-aos="fade-in">Get in Touch</h2>
+            <p class="text-lg max-w-2xl mx-auto mb-6" data-aos="fade-up">Have a project in mind? Let's discuss how we can help.</p>
+            <a href="#" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg" data-aos="zoom-in">Contact Us</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-300 text-center p-6">
+        <p>&copy; 2025 My Website. All rights reserved.</p>
+    </footer>
+
+    <!-- AOS JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script>
+      AOS.init();
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,102 @@
+{% load static %}
+
+<header class="bg-white shadow-sm">
+  <!-- Top Navbar -->
+  <nav class="border-b py-2">
+    <div class="container mx-auto px-4">
+      <div class="flex justify-between items-center">
+        <!-- Left Side: Language & Currency Dropdowns -->
+        <div class="flex space-x-4">
+          <div class="relative group">
+            <a href="#" class="text-gray-700 hover:text-primary">English</a>
+            <ul class="absolute hidden group-hover:block bg-white border rounded-lg shadow-lg mt-2 py-2">
+              <li><a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">English</a></li>
+              <li><a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Spanish</a></li>
+            </ul>
+          </div>
+          <div class="relative group">
+            <a href="#" class="text-gray-700 hover:text-primary">USD</a>
+            <ul class="absolute hidden group-hover:block bg-white border rounded-lg shadow-lg mt-2 py-2">
+              <li><a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">EUR</a></li>
+              <li><a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">AED</a></li>
+              <li><a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">RUBL</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Right Side: Email & Call -->
+        <div class="flex space-x-4">
+          <a href="#" class="text-gray-700 hover:text-primary"><i class="fas fa-envelope"></i> Email</a>
+          <a href="#" class="text-gray-700 hover:text-primary"><i class="fas fa-phone"></i> Call us</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Navbar -->
+  <section class="py-4 border-b">
+    <div class="container mx-auto px-4">
+      <div class="flex items-center justify-between">
+        <!-- Logo -->
+        <div class="w-1/6">
+          <a href="{% url 'home' %}" class="brand-wrap">
+            <img class="logo" src="{% static './images/logo.png' %}" alt="The Zainly Logo">
+          </a>
+        </div>
+
+        <!-- Category Dropdown -->
+        <div class="relative group">
+          <button class="bg-primary text-white px-4 py-2 rounded-lg flex items-center">
+            <i class="fas fa-bars mr-2"></i> All category
+          </button>
+          <div class="absolute hidden group-hover:block bg-white border rounded-lg shadow-lg mt-2 py-2 w-48">
+            <a href="{% url 'store' %}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">All Products</a>
+            {% for category in links %}
+              <a href="{{ category.get_url }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">{{ category.category_name }}</a>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- Store Link -->
+        <a href="{% url 'store' %}" class="text-primary border border-primary px-4 py-2 rounded-lg hover:bg-primary hover:text-white">Store</a>
+
+        <!-- Search Bar -->
+        <form action="{% url 'search' %}" method="GET" class="flex-grow mx-4">
+          <div class="flex">
+            <input type="text" name="keyword" placeholder="Search" class="w-full px-4 py-2 border rounded-l-lg focus:outline-none focus:ring-2 focus:ring-primary">
+            <button type="submit" class="bg-primary text-white px-4 py-2 rounded-r-lg hover:bg-primary-dark">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+        </form>
+
+        <!-- User & Cart Section -->
+        <div class="flex items-center space-x-4">
+          {% if user.id is None %}
+            <div class="text-right">
+              <small class="text-gray-500">Welcome guest!</small>
+              <div>
+                <a href="{% url 'login' %}" class="text-primary hover:underline">Sign in</a>
+                <span class="text-gray-500"> | </span>
+                <a href="{% url 'register' %}" class="text-primary hover:underline">Register</a>
+              </div>
+            </div>
+          {% else %}
+            <div class="text-right">
+              <small class="text-gray-500">Welcome {{ user.first_name }}!</small>
+              <div>
+                <a href="{% url 'dashboard' %}" class="text-primary hover:underline">Dashboard</a>
+                <span class="text-gray-500"> | </span>
+                <a href="{% url 'logout' %}" class="text-primary hover:underline">Logout</a>
+              </div>
+            </div>
+          {% endif %}
+          <a href="{% url 'cart' %}" class="relative">
+            <i class="fas fa-shopping-cart text-2xl text-primary"></i>
+            <span class="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full px-1">{{ cart_count }}</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</header>
