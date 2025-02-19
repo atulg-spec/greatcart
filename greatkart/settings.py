@@ -1,12 +1,7 @@
 from pathlib import Path
-# from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
-
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "django-insecure-7gnr974ckmmmh0l(l&ru^x3@ig)nxxbz85#1%kvrkxq=2baa19"
@@ -141,6 +136,7 @@ from django.contrib.messages import constants as messages
 MESSAGE_TAGS = {
     messages.ERROR: 'danger',
 }
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 # SMTP configuration
