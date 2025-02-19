@@ -4,15 +4,12 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-7gnr974ckmmmh0l(l&ru^x3@ig)nxxbz85#1%kvrkxq=2baa19"
+SECRET_KEY = "django-insecure-$=z-*)!)e-%056aypw6$!q-#(1l+19i&d@)i!&%qdn)e*p@vu%"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
 ALLOWED_HOSTS = ['*']
-
-
-# Application definition
 
 INSTALLED_APPS = [
     'jazzmin',
