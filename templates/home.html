@@ -29,7 +29,7 @@
   <div id="section-{{ category.name|slugify }}" class="product-section {% if not forloop.first %}hidden{% endif %} mt-6"
     data-aos="fade-up">
 
-    <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+    <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 px-2 md:px-1">
       {% for product in category.products.all %}
       <div class="group relative" data-aos="fade-up">
         <a href="{{ product.get_url }}">
@@ -91,7 +91,7 @@
 <section class="my-8" data-aos="fade-up">
   <h2 class="text-3xl font-bold text-center text-gray-800 mb-4">Categories</h2>
   <div>
-    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-6">
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-6 px-2 md:px-1">
       {% for category in categories %}
       <div data-aos="fade-up">
         <a href="{{ category.get_url }}" title="{{ category.category_name }}" class="relative group block">
@@ -186,7 +186,7 @@
       <a href="{% url 'store' %}" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-dark">See all</a>
     </header>
 
-    <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+    <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 px-2 md:px-1">
       {% for product in products %}
       <div class="group relative" data-aos="fade-up">
         <a href="{{ product.get_url }}">
