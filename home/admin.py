@@ -129,7 +129,7 @@ admin.site.register(ProductByCategory, ProductByCategoryAdmin)
 
 @admin.register(Slider)
 class SliderAdmin(admin.ModelAdmin):
-    list_display = ('image_preview', 'url')
+    list_display = ('image_preview', 'url', 'is_mobile')
     search_fields = ('url',)
     readonly_fields = ('image_preview',)
 

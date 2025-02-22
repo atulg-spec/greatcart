@@ -2,53 +2,32 @@
 {% load static %}
 
 {% block meta %}
-    <title>{{ head.site_title }}</title>
-    <meta name="title" content="{{ head.meta_title }}">
-    <meta name="description" content="{{ head.meta_description }}">
-    <meta name="keywords" content="{{ head.meta_keywords }}">
+<title>{{ head.site_title }}</title>
+<meta name="title" content="{{ head.meta_title }}">
+<meta name="description" content="{{ head.meta_description }}">
+<meta name="keywords" content="{{ head.meta_keywords }}">
 {% endblock meta %}
 
+{% block slider %}
+{% include 'includes/home/slider.html' %}
+{% endblock %}
+
 {% block content %}
-<br><br>
-<!-- ========================= SECTION MAIN ========================= -->
-<div class="relative w-full overflow-hidden" data-aos="fade-in">
-  <div class="flex transition-transform duration-500 ease-in-out" id="carousel">
-    {% for slider in sliders %}
-    <img src="{{slider.image.url}}" class="w-full flex-shrink-0" />
-    {% endfor %}
-  </div>
-
-  <!-- Previous and Next Buttons -->
-  <button id="prev"
-    class="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white px-1">&#10094;</button>
-  <button id="next"
-    class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white px-1">&#10095;</button>
-
-  <!-- Dots Container -->
-  <div class="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-2" id="dots">
-    {% for slider in sliders %}
-    <span class="dot w-1 h-1 rounded-full bg-gray-400 cursor-pointer"></span>
-    {% endfor %}
-  </div>
-</div>
-<!-- ========================= SECTION MAIN END// ========================= -->
-<section class="container mx-auto my-8 px-4">
+<section class="container mx-auto">
   <!-- Category Buttons -->
-  <div class="flex justify-center flex-wrap gap-3" data-aos="fade-up">
+  <div class="flex space-x-4 overflow-x-auto scrollbar-hide" data-aos="fade-up">
     {% for category in sections %}
-    <button type="button" onclick="showSection('{{ category.name|slugify }}')"
-      data-section="{{ category.name|slugify }}"
-      class="category-btn bg-white border border-gray-400 transition duration-300 font-medium rounded-full px-6 py-1 font-mono">
-      {{ category.name }}
-    </button>
+      <button type="button" onclick="showSection('{{ category.name|slugify }}')"
+        data-section="{{ category.name|slugify }}"
+        class="category-btn bg-white border border-gray-400 transition duration-300 font-medium px-2 py-1 text-sm font-mono whitespace-nowrap">
+        {{ category.name }}
+      </button>
     {% endfor %}
   </div>
-
   <!-- Product Sections -->
   {% for category in sections %}
   <div id="section-{{ category.name|slugify }}" class="product-section {% if not forloop.first %}hidden{% endif %} mt-6"
     data-aos="fade-up">
-    <h2 class="text-2xl font-bold text-center text-gray-800 mb-4">{{ category.name }}</h2>
 
     <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
       {% for product in category.products.all %}
@@ -258,78 +237,7 @@
   </div>
 </section>
 <!-- ========================= SECTION POPULAR PRODUCTS END// ========================= -->
-<script>
-  const carousel = document.getElementById('carousel');
-  const images = carousel.children;
-  const dots = document.querySelectorAll('.dot');
-  let index = 0;
-  let intervalTime = 3000; // Change slide every 3 seconds
-  let autoSlide;
 
-  function updateDots() {
-    dots.forEach((dot, i) => {
-      dot.classList.toggle('bg-black', i === index);
-      dot.classList.toggle('bg-gray-400', i !== index);
-    });
-  }
-
-  function nextSlide() {
-    index = (index + 1) % images.length;
-    carousel.style.transform = `translateX(-${index * 100}%)`;
-    updateDots();
-  }
-
-  function prevSlide() {
-    index = (index - 1 + images.length) % images.length;
-    carousel.style.transform = `translateX(-${index * 100}%)`;
-    updateDots();
-  }
-
-  document.getElementById('next').addEventListener('click', () => {
-    nextSlide();
-    resetAutoSlide();
-  });
-
-  document.getElementById('prev').addEventListener('click', () => {
-    prevSlide();
-    resetAutoSlide();
-  });
-
-  // Add click event to dots
-  dots.forEach((dot, i) => {
-    dot.addEventListener('click', () => {
-      index = i;
-      carousel.style.transform = `translateX(-${index * 100}%)`;
-      updateDots();
-      resetAutoSlide();
-    });
-  });
-
-  function startAutoSlide() {
-    autoSlide = setInterval(nextSlide, intervalTime);
-  }
-
-  function resetAutoSlide() {
-    clearInterval(autoSlide);
-    startAutoSlide();
-  }
-
-  // Start auto sliding
-  startAutoSlide();
-
-  // Pause auto-slide when mouse is over the carousel
-  document.querySelector('.relative').addEventListener('mouseenter', () => {
-    clearInterval(autoSlide);
-  });
-
-  // Resume auto-slide when mouse leaves the carousel
-  document.querySelector('.relative').addEventListener('mouseleave', () => {
-    startAutoSlide();
-  });
-
-  // Initialize the first dot as active
-  updateDots();
-</script>
 
 <script>
   function showSection(sectionId) {

@@ -43,6 +43,7 @@ class SiteSettings(models.Model):
 class Slider(models.Model):
     image = models.ImageField(upload_to='slider_images/', blank=True, null=True)
     url = models.URLField(blank=True)
+    is_mobile = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = "Slider"

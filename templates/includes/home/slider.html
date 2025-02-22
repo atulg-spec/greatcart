@@ -1,0 +1,219 @@
+<div class="md:hidden">
+  <!-- Mobile Sliders -->
+  <div class="relative w-full overflow-hidden" data-aos="fade-in">
+    <div class="flex transition-transform duration-500 ease-in-out" id="carousel-mobile">
+      {% for slider in mobile_sliders reversed %}
+      <img src="{{ slider.image.url }}" class="w-full flex-shrink-0" height="20%" />
+      {% endfor %}
+    </div>
+
+    <!-- Previous and Next Buttons -->
+    <button id="prev-mobile"
+      class="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white px-1">&#10094;</button>
+    <button id="next-mobile"
+      class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white px-1">&#10095;</button>
+
+    <!-- Search Container -->
+    <div class="absolute top-20 left-1/2 transform -translate-x-1/2 w-full">
+      <div class="relative mt-4 px-4">
+        <div class="relative w-full">
+          <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-white">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+              id="Search--Streamline-Rounded-Material" height="24" width="24">
+              <desc>Search Streamline Icon: https://streamlinehq.com</desc>
+              <path fill="#FFFFFF"
+                d="M9.45 15.775c-1.80265 0 -3.32835 -0.625 -4.577 -1.875C3.624335 12.65 3 11.14165 3 9.375c0 -1.7667 0.625 -3.275 1.875 -4.525025 1.25 -1.25 2.7625 -1.875 4.5375 -1.875 1.775 0 3.28335 0.625 4.525 1.875C15.17915 6.1 15.8 7.60955 15.8 9.37875c0 0.71415 -0.11665 1.40455 -0.35 2.07125 -0.23335 0.66665 -0.58335 1.29165 -1.05 1.875l6.05 6c0.15 0.14265 0.225 0.32415 0.225 0.5445 0 0.2203 -0.075 0.4055 -0.225 0.5555 -0.15 0.15 -0.33515 0.225 -0.5555 0.225s-0.40185 -0.075 -0.5445 -0.225L13.325 14.4c-0.5 0.4333 -1.083 0.7708 -1.749 1.0125 -0.666 0.24165 -1.37465 0.3625 -2.126 0.3625Zm-0.025 -1.5c1.35415 0 2.50525 -0.4792 3.45325 -1.4375C13.8261 11.87915 14.3 10.725 14.3 9.375s-0.4739 -2.5042 -1.42175 -3.4625c-0.948 -0.95836 -2.0991 -1.437525 -3.45325 -1.437525 -1.368 0 -2.53085 0.479165 -3.4885 1.437525C4.978835 6.8708 4.5 8.025 4.5 9.375s0.478835 2.50415 1.4365 3.4625c0.95765 0.9583 2.1205 1.4375 3.4885 1.4375Z"
+                stroke-width="0.5"></path>
+            </svg>
+          </span>
+          <input type="text" placeholder='Search "Sweaters"'
+            class="w-full bg-transparent border border-white text-white py-2 pl-14 pr-4 focus:outline-none placeholder-white">
+        </div>
+      </div>
+    </div>
+    <!-- Dots Container -->
+    <div class="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-2" id="dots-mobile">
+      {% for slider in mobile_sliders %}
+      <span class="dot w-1 h-1 rounded-full bg-gray-400 cursor-pointer"></span>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<div class="hidden md:block my-10">
+  <!-- Desktop Sliders -->
+  <div class="relative w-full overflow-hidden" data-aos="fade-in">
+    <div class="flex transition-transform duration-500 ease-in-out" id="carousel-desktop">
+      {% for slider in desktop_sliders %}
+      <img src="{{ slider.image.url }}" class="w-full flex-shrink-0" />
+      {% endfor %}
+    </div>
+
+    <!-- Previous and Next Buttons -->
+    <button id="prev-desktop"
+      class="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white px-1">&#10094;</button>
+    <button id="next-desktop"
+      class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white px-1">&#10095;</button>
+
+    <!-- Dots Container -->
+    <div class="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-2" id="dots-desktop">
+      {% for slider in desktop_sliders %}
+      <span class="dot w-1 h-1 rounded-full bg-gray-400 cursor-pointer"></span>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<script>
+  const intervalTime = 3000; // Set the interval time for auto-sliding (in milliseconds)
+
+  // JavaScript for mobile sliders
+  const carouselMobile = document.getElementById('carousel-mobile');
+  const imagesMobile = carouselMobile.children;
+  const dotsMobile = document.querySelectorAll('#dots-mobile .dot');
+  let indexMobile = 0;
+  let autoSlideMobile;
+
+  // Update dots function for mobile sliders
+  function updateDotsMobile() {
+    dotsMobile.forEach((dot, i) => {
+      dot.classList.toggle('bg-black', i === indexMobile);
+      dot.classList.toggle('bg-gray-400', i !== indexMobile);
+    });
+  }
+
+  // Next slide function for mobile sliders
+  function nextSlideMobile() {
+    indexMobile = (indexMobile + 1) % imagesMobile.length;
+    carouselMobile.style.transform = `translateX(-${indexMobile * 100}%)`;
+    updateDotsMobile();
+  }
+
+  // Previous slide function for mobile sliders
+  function prevSlideMobile() {
+    indexMobile = (indexMobile - 1 + imagesMobile.length) % imagesMobile.length;
+    carouselMobile.style.transform = `translateX(-${indexMobile * 100}%)`;
+    updateDotsMobile();
+  }
+
+  // Click event listeners for next and previous buttons on mobile sliders
+  document.getElementById('next-mobile').addEventListener('click', () => {
+    nextSlideMobile();
+    resetAutoSlideMobile();
+  });
+
+  document.getElementById('prev-mobile').addEventListener('click', () => {
+    prevSlideMobile();
+    resetAutoSlideMobile();
+  });
+
+  // Click event listeners for dots on mobile sliders
+  dotsMobile.forEach((dot, i) => {
+    dot.addEventListener('click', () => {
+      indexMobile = i;
+      carouselMobile.style.transform = `translateX(-${indexMobile * 100}%)`;
+      updateDotsMobile();
+      resetAutoSlideMobile();
+    });
+  });
+
+  // Start auto sliding for mobile sliders
+  function startAutoSlideMobile() {
+    autoSlideMobile = setInterval(nextSlideMobile, intervalTime);
+  }
+
+  // Reset auto slide for mobile sliders
+  function resetAutoSlideMobile() {
+    clearInterval(autoSlideMobile);
+    startAutoSlideMobile();
+  }
+
+  // Initialize the first dot as active for mobile sliders
+  updateDotsMobile();
+  startAutoSlideMobile();
+
+  // Pause auto-slide when mouse is over the carousel for mobile sliders
+  carouselMobile.addEventListener('mouseenter', () => {
+    clearInterval(autoSlideMobile);
+  });
+
+  // Resume auto-slide when mouse leaves the carousel for mobile sliders
+  carouselMobile.addEventListener('mouseleave', () => {
+    startAutoSlideMobile();
+  });
+
+  // JavaScript for desktop sliders
+  const carouselDesktop = document.getElementById('carousel-desktop');
+  const imagesDesktop = carouselDesktop.children;
+  const dotsDesktop = document.querySelectorAll('#dots-desktop .dot');
+  let indexDesktop = 0;
+  let autoSlideDesktop;
+
+  // Update dots function for desktop sliders
+  function updateDotsDesktop() {
+    dotsDesktop.forEach((dot, i) => {
+      dot.classList.toggle('bg-black', i === indexDesktop);
+      dot.classList.toggle('bg-gray-400', i !== indexDesktop);
+    });
+  }
+
+  // Next slide function for desktop sliders
+  function nextSlideDesktop() {
+    indexDesktop = (indexDesktop + 1) % imagesDesktop.length;
+    carouselDesktop.style.transform = `translateX(-${indexDesktop * 100}%)`;
+    updateDotsDesktop();
+  }
+
+  // Previous slide function for desktop sliders
+  function prevSlideDesktop() {
+    indexDesktop = (indexDesktop - 1 + imagesDesktop.length) % imagesDesktop.length;
+    carouselDesktop.style.transform = `translateX(-${indexDesktop * 100}%)`;
+    updateDotsDesktop();
+  }
+
+  // Click event listeners for next and previous buttons on desktop sliders
+  document.getElementById('next-desktop').addEventListener('click', () => {
+    nextSlideDesktop();
+    resetAutoSlideDesktop();
+  });
+
+  document.getElementById('prev-desktop').addEventListener('click', () => {
+    prevSlideDesktop();
+    resetAutoSlideDesktop();
+  });
+
+  // Click event listeners for dots on desktop sliders
+  dotsDesktop.forEach((dot, i) => {
+    dot.addEventListener('click', () => {
+      indexDesktop = i;
+      carouselDesktop.style.transform = `translateX(-${indexDesktop * 100}%)`;
+      updateDotsDesktop();
+      resetAutoSlideDesktop();
+    });
+  });
+
+  // Start auto sliding for desktop sliders
+  function startAutoSlideDesktop() {
+    autoSlideDesktop = setInterval(nextSlideDesktop, intervalTime);
+  }
+
+  // Reset auto slide for desktop sliders
+  function resetAutoSlideDesktop() {
+    clearInterval(autoSlideDesktop);
+    startAutoSlideDesktop();
+  }
+
+  // Initialize the first dot as active for desktop sliders
+  updateDotsDesktop();
+  startAutoSlideDesktop();
+
+  // Pause auto-slide when mouse is over the carousel for desktop sliders
+  carouselDesktop.addEventListener('mouseenter', () => {
+    clearInterval(autoSlideDesktop);
+  });
+
+  // Resume auto-slide when mouse leaves the carousel for desktop sliders
+  carouselDesktop.addEventListener('mouseleave', () => {
+    startAutoSlideDesktop();
+  });
+</script>
