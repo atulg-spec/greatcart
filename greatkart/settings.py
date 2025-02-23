@@ -16,7 +16,6 @@ INSTALLED_APPS = [
     'paper_admin.patches.django_money',
     'paper_admin.patches.django_solo',
     'paper_admin.patches.mptt',
-    'paper_admin.patches.tree_queries',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
