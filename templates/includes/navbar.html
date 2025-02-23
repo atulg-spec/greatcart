@@ -1,6 +1,6 @@
 <header>
   <!-- News Header -->
-  <div class="hidden md:block bg-black flex justify-center items-center p-2">
+  <div class="hidden md:flex bg-black justify-center items-center p-2">
     <div class="flex items-center justify-between w-full max-w-2xl" id="headline">
       <p class="text-xs text-center flex-grow">
         {{ settings.site_header_news|safe }}
@@ -85,29 +85,32 @@
 </header>
 
 
-<aside class="fixed left-0 top-0 h-full w-80 bg-white shadow-lg z-50 hidden" id="sideNav" onclick="document.getElementById('sideNav').classList.add('hidden')">
+<aside class="fixed left-0 top-0 h-full w-80 bg-white rounded-r-xl shadow-lg z-50 hidden" id="sideNav"
+  onclick="document.getElementById('sideNav').classList.add('hidden')">
   <div class="px-4 pt-4 flex justify-between items-center">
-    <div class="text-center w-full text-2xl">
-      {% if request.user.is_authenticated %}
-      <p>Hii {{request.user.first_name}} 😉</p>
-      {% else %}
-      <i class="fa fa-user-circle-o text-gray-900"></i>
-      <a href="/login?next={{request.path}}" class="text-blue-500">Login</a>
-      {% endif %}
+    <div class="flex justify-between items-center">
+      <div class="bg-gray-200 rounded-full p-3 mx-2">
+        <i data-feather="user" class="w-6 h-6 text-gray-800"></i>
+      </div>
+      <div class="mx-2">
+        <div class="font-semibold">Hey There!</div>
+        <div class="text-blue-800">Login/Sign Up</div>
+      </div>
     </div>
     <button class="text-gray-700 text-2xl" id="closeNav">&times;</button>
   </div>
   <hr class="border-gray-200 my-4" />
-  <nav class="space-y-4 px-6">
-    <a href="/search/new" class="block text-xl uppercase tracking-wider">New Arrivals</a>
-    <a href="/search/best" class="block text-xl uppercase tracking-wider">Best Selling</a>
-    <a href="/cart" class="block text-xl uppercase tracking-wider">Cart</a>
-    <a href="/orders" class="block text-xl uppercase tracking-wider">Orders</a>
-    <a href="/categories" class="block text-xl uppercase tracking-wider">Categories</a>
-    <a href="/about" class="block text-xl uppercase tracking-wider">About Us</a>
-    <a href="/contact" class="block text-xl uppercase tracking-wider">Help Center</a>
-    <a href="/contact" class="block text-xl uppercase tracking-wider">Customer Support</a>
-  </nav>
+
+  {% for nav in side_nav %}
+  <div class="flex items-center my-4">
+    <div class="bg-blue-50 rounded-full p-1 ml-4">
+      <img src="{{nav.logo.url}}" alt="{{nav.name}}" class="w-8 h-8">
+    </div>
+    <div class="mx-2">
+      <div class=""><a href="{{nav.url}}">{{nav.name}}</a></div>
+    </div>
+  </div>
+  {% endfor %}
   <hr class="border-gray-200 my-6" />
   <div class="w-full flex justify-center py-3">
     <img src="/static/img/payments.png" alt="payment" class="max-w-full">

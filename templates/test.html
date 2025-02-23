@@ -1,110 +1,196 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tailwind CSS Scroll Animations</title>
-    
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
+{% extends 'base.html' %}
+{% load static %}
 
-    <!-- AOS CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
-</head>
-<body class="bg-gray-100">
+{% block meta %}
+<title>{{ head.site_title }} {{ single_product.product_name }}</title>
+<meta name="title" content="{{ single_product.product_name }}">
+<meta name="description" content="{{ single_product.description }}">
+<meta name="keywords" content="{{ single_product.meta_keywords }}">
+{% endblock meta %}
 
-    <!-- Navbar -->
-    <nav class="bg-blue-600 text-white p-4 shadow-lg">
-        <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-2xl font-bold">My Website</h1>
-            <ul class="flex space-x-4">
-                <li><a href="#" class="hover:text-gray-300">Home</a></li>
-                <li><a href="#" class="hover:text-gray-300">About</a></li>
-                <li><a href="#" class="hover:text-gray-300">Services</a></li>
-                <li><a href="#" class="hover:text-gray-300">Contact</a></li>
-            </ul>
+{% block content %}
+
+<section class="py-8 bg-gray-100">
+    <div class="container mx-auto px-4">
+        <!-- ============================ COMPONENT 1 ================================= -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="flex flex-col lg:flex-row">
+                <!-- Product Images -->
+                <div class="lg:w-1/2 p-6">
+                    <div class="mb-6">
+                        <img id="mainImage" src="{{ single_product.images.url }}" class="w-full rounded-lg shadow-md">
+                    </div>
+                    <div class="flex space-x-4">
+                        <a href="{{ single_product.images.url }}" onclick="changeImage(event, 'mainImage')"
+                            class="w-16 h-16">
+                            <img src="{{ single_product.images.url }}"
+                                class="w-full h-full object-cover rounded-lg border hover:border-primary">
+                        </a>
+                        {% for i in product_gallery %}
+                        <a href="{{ i.image.url }}" onclick="changeImage(event, 'mainImage')" class="w-16 h-16">
+                            <img src="{{ i.image.url }}"
+                                class="w-full h-full object-cover rounded-lg border hover:border-primary">
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Product Details -->
+                <div class="lg:w-1/2 p-6 border-l">
+                    <form action="{% url 'add_cart' single_product.id %}" method="POST">
+                        {% csrf_token %}
+                        <h2 class="text-3xl font-bold mb-4">{{ single_product.product_name }}</h2>
+                        <div class="flex items-center mb-4">
+                            <!-- Star Rating -->
+                            <div class="flex space-x-1 text-yellow-400">
+                                {% for i in "12345" %}
+                                {% if single_product.averageReview >= forloop.counter %}
+                                <i class="fas fa-star"></i>
+                                {% elif single_product.averageReview|add:"0.5" >= forloop.counter %}
+                                <i class="fas fa-star-half-alt"></i>
+                                {% else %}
+                                <i class="far fa-star"></i>
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+                            <span class="ml-2 text-gray-600">{{ single_product.countReview }} reviews</span>
+                        </div>
+
+                        <div class="text-2xl font-bold mb-4">${{ single_product.price }}</div>
+                        <p class="text-gray-700 mb-6">{{ single_product.description }}</p>
+
+                        <hr class="my-6">
+
+                        <!-- Variations -->
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-gray-700 font-semibold mb-2">Choose Color</label>
+                                <select name="color"
+                                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                                    required>
+                                    <option value="" disabled selected>Select</option>
+                                    {% for i in single_product.variation_set.colors %}
+                                    <option value="{{ i.variation_value | lower }}">{{ i.variation_value | capfirst }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 font-semibold mb-2">Select Size</label>
+                                <select name="size"
+                                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+                                    <option value="" disabled selected>Select</option>
+                                    {% for i in single_product.variation_set.sizes %}
+                                    <option value="{{ i.variation_value | lower }}">{{ i.variation_value | capfirst }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <hr class="my-6">
+
+                        <!-- Add to Cart Button -->
+                        {% if single_product.stock <= 0 %} <div class="text-red-500 font-semibold mb-4">Out of Stock
+                </div>
+                {% else %}
+                <button type="submit" class="w-full bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary-dark">
+                    <i class="fas fa-shopping-cart mr-2"></i> Add to Cart
+                </button>
+                {% endif %}
+                </form>
+            </div>
         </div>
-    </nav>
+    </div>
+    <!-- ============================ COMPONENT 1 END .// ================================= -->
 
-    <!-- Hero Section -->
-    <section class="h-screen flex flex-col justify-center items-center text-center bg-cover bg-center" style="background-image: url('https://source.unsplash.com/1600x900/?nature,water');">
-        <h1 class="text-5xl text-white font-bold" data-aos="fade-down">Welcome to My Website</h1>
-        <p class="text-lg text-white mt-4" data-aos="fade-up" data-aos-delay="300">Scroll down to see animations in action</p>
-    </section>
+    <br>
 
-    <!-- Features Section -->
-    <section class="container mx-auto p-10">
-        <h2 class="text-4xl font-bold text-center mb-10" data-aos="fade-in">Our Features</h2>
+    <!-- Reviews Section -->
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <h3 class="text-2xl font-bold mb-6">Customer Reviews</h3>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="bg-white p-6 rounded-lg shadow-lg text-center" data-aos="fade-up">
-                <h3 class="text-2xl font-semibold mb-2">Fast Performance</h3>
-                <p>Optimized for speed and smooth user experience.</p>
+        <!-- Write Review Form -->
+        <form action="{% url 'submit_review' single_product.id %}" method="POST">
+            {% csrf_token %}
+            <h5 class="text-lg font-semibold mb-4">Write Your Review</h5>
+
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-2">Rating</label>
+                    <div class="flex space-x-2">
+                        {% for i in "54321" %}
+                        <input type="radio" name="rating" id="rating{{ i }}" value="{{ i }}" required class="hidden">
+                        <label for="rating{{ i }}" class="text-yellow-400 cursor-pointer">
+                            <i class="far fa-star"></i>
+                        </label>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-2">Review Title</label>
+                    <input type="text" name="subject"
+                        class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                        required>
+                </div>
+
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-2">Review</label>
+                    <textarea name="review" rows="4"
+                        class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                        required></textarea>
+                </div>
+
+                {% if user.is_authenticated %}
+                {% if orderproduct %}
+                <button type="submit" class="bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary-dark">Submit
+                    Review</button>
+                {% else %}
+                <p class="text-gray-600">You must purchase this product to post a review.</p>
+                {% endif %}
+                {% else %}
+                <p class="text-gray-600">You must be logged in to post a review. <a href="{% url 'login' %}"
+                        class="text-primary hover:underline">Login now</a></p>
+                {% endif %}
             </div>
+        </form>
 
-            <div class="bg-white p-6 rounded-lg shadow-lg text-center" data-aos="fade-up" data-aos-delay="200">
-                <h3 class="text-2xl font-semibold mb-2">SEO Optimized</h3>
-                <p>Rank better on search engines with our SEO features.</p>
-            </div>
+        <hr class="my-6">
 
-            <div class="bg-white p-6 rounded-lg shadow-lg text-center" data-aos="fade-up" data-aos-delay="400">
-                <h3 class="text-2xl font-semibold mb-2">Responsive Design</h3>
-                <p>Works perfectly on all devices and screen sizes.</p>
+        <!-- Customer Reviews -->
+        {% for review in reviews %}
+        <div class="mb-6">
+            <div class="flex justify-between items-center">
+                <h6 class="font-semibold">{{ review.user.full_name }}</h6>
+                <span class="text-sm text-gray-500">{{ review.updated_at }}</span>
             </div>
+            <div class="flex space-x-1 text-yellow-400 mb-2">
+                {% for i in "12345" %}
+                {% if review.rating >= forloop.counter %}
+                <i class="fas fa-star"></i>
+                {% elif review.rating|add:"0.5" >= forloop.counter %}
+                <i class="fas fa-star-half-alt"></i>
+                {% else %}
+                <i class="far fa-star"></i>
+                {% endif %}
+                {% endfor %}
+            </div>
+            <h6 class="font-semibold">{{ review.subject }}</h6>
+            <p class="text-gray-700">{{ review.review }}</p>
         </div>
-    </section>
+        {% endfor %}
+    </div>
+</section>
 
-    <!-- About Section -->
-    <section class="bg-gray-200 py-20">
-        <div class="container mx-auto text-center">
-            <h2 class="text-4xl font-bold mb-6" data-aos="zoom-in">About Us</h2>
-            <p class="text-lg max-w-3xl mx-auto" data-aos="fade-up" data-aos-delay="200">
-                We are a team of passionate developers, designers, and marketers, dedicated to providing the best digital solutions for your business.
-            </p>
-        </div>
-    </section>
+<!-- JavaScript for Image Swapping -->
+<script>
+    function changeImage(event, targetId) {
+        event.preventDefault(); // Prevent the default link behavior
+        const mainImage = document.getElementById(targetId); // Get the main image element
+        const newImageSrc = event.currentTarget.getAttribute('href'); // Get the new image URL from the clicked link
+        mainImage.src = newImageSrc; // Update the main image source
+    }
+</script>
 
-    <!-- Services Section -->
-    <section class="container mx-auto p-10">
-        <h2 class="text-4xl font-bold text-center mb-10" data-aos="fade-in">Our Services</h2>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="bg-blue-500 text-white p-6 rounded-lg shadow-lg text-center" data-aos="flip-left">
-                <h3 class="text-2xl font-semibold mb-2">Web Development</h3>
-                <p>Custom websites tailored to your needs.</p>
-            </div>
-
-            <div class="bg-green-500 text-white p-6 rounded-lg shadow-lg text-center" data-aos="flip-right" data-aos-delay="200">
-                <h3 class="text-2xl font-semibold mb-2">SEO & Marketing</h3>
-                <p>Boost your business with advanced marketing strategies.</p>
-            </div>
-
-            <div class="bg-red-500 text-white p-6 rounded-lg shadow-lg text-center" data-aos="flip-up" data-aos-delay="400">
-                <h3 class="text-2xl font-semibold mb-2">Graphic Design</h3>
-                <p>Creative designs to make your brand stand out.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section class="bg-gray-800 text-white py-20">
-        <div class="container mx-auto text-center">
-            <h2 class="text-4xl font-bold mb-6" data-aos="fade-in">Get in Touch</h2>
-            <p class="text-lg max-w-2xl mx-auto mb-6" data-aos="fade-up">Have a project in mind? Let's discuss how we can help.</p>
-            <a href="#" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg" data-aos="zoom-in">Contact Us</a>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-gray-900 text-gray-300 text-center p-6">
-        <p>&copy; 2025 My Website. All rights reserved.</p>
-    </footer>
-
-    <!-- AOS JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
-    <script>
-      AOS.init();
-    </script>
-
-</body>
-</html>
+{% endblock %}

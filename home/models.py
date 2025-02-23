@@ -2,12 +2,14 @@ from django.db import models
 from django_ckeditor_5.fields import CKEditor5Field
 from django.db import models
 from store.models import Product
+from django.utils.text import slugify
 
 class SiteSettings(models.Model):
     site_name = models.CharField(max_length=15, blank=True)
     site_header_news = CKEditor5Field('Text', config_name='extends')
 
     logo = models.ImageField(upload_to='logos/', blank=True, null=True)
+    preloader_img = models.ImageField(upload_to='logos/', blank=True, null=True)
     mobile_logo = models.ImageField(upload_to='logos/', blank=True, null=True)
     tagline = models.CharField(max_length=100, blank=True)
 
@@ -72,6 +74,15 @@ class HeadSection(models.Model):
         return "Custom Head Section"
 
 
+class SideNav(models.Model):
+    logo = models.ImageField(upload_to='logo/', blank=True, null=True)
+    name = models.CharField(default="",max_length=50)
+    url = models.URLField(blank=True)
+    class Meta:
+        verbose_name = "Side Navbar"
+        verbose_name_plural = "Side Navbars"
+    def __str__(self):
+      return f"Side Nav {self.name}"
 
 
 class homeSections(models.Model):
@@ -106,3 +117,120 @@ class ProductByCategory(models.Model):
 
     def __str__(self):
         return "Product By Category"
+    
+
+class Page(models.Model):
+    # Page URL (slug)
+    slug = models.SlugField(
+        max_length=200,
+        unique=True,
+        help_text="The URL of the page (e.g., 'about-us'). Automatically generated from the title if not provided.",
+        blank=True,
+    )
+
+    # Page title
+    title = models.CharField(
+        max_length=200,
+        help_text="The title of the page (e.g., 'About Us'). This will appear in the browser tab and as the H1 tag.",
+    )
+
+    # Meta description
+    meta_description = models.CharField(
+        max_length=300,
+        blank=True,
+        help_text="A brief description of the page for SEO purposes (160-300 characters recommended).",
+    )
+
+    # Meta keywords (less important for modern SEO, but still used by some search engines)
+    meta_keywords = models.CharField(
+        max_length=200,
+        blank=True,
+        help_text="Comma-separated keywords for SEO purposes (e.g., 'about us, company, history').",
+    )
+
+    # Page content
+    content = CKEditor5Field('Text', config_name='extends')
+
+    # Canonical URL (to avoid duplicate content issues)
+    canonical_url = models.URLField(
+        max_length=500,
+        blank=True,
+        help_text="The canonical URL of the page (e.g., 'https://example.com/about-us').",
+    )
+
+    # Open Graph (OG) tags for social media sharing
+    og_title = models.CharField(
+        max_length=200,
+        blank=True,
+        help_text="The title of the page for social media sharing (e.g., 'About Us | Company Name').",
+    )
+    og_description = models.CharField(
+        max_length=300,
+        blank=True,
+        help_text="The description of the page for social media sharing.",
+    )
+    og_image = models.URLField(
+        max_length=500,
+        blank=True,
+        help_text="The URL of the image to display when the page is shared on social media.",
+    )
+
+    # Twitter Card tags for Twitter sharing
+    twitter_card = models.CharField(
+        max_length=50,
+        blank=True,
+        help_text="The type of Twitter card to use (e.g., 'summary', 'summary_large_image').",
+    )
+    twitter_title = models.CharField(
+        max_length=200,
+        blank=True,
+        help_text="The title of the page for Twitter sharing.",
+    )
+    twitter_description = models.CharField(
+        max_length=300,
+        blank=True,
+        help_text="The description of the page for Twitter sharing.",
+    )
+    twitter_image = models.URLField(
+        max_length=500,
+        blank=True,
+        help_text="The URL of the image to display when the page is shared on Twitter.",
+    )
+
+    # Structured Data (JSON-LD for rich snippets)
+    structured_data = models.TextField(
+        blank=True,
+        help_text="JSON-LD structured data for rich snippets (e.g., FAQ, Article, Breadcrumb).",
+    )
+
+    # Robots meta tag (to control indexing)
+    robots_index = models.BooleanField(
+        default=True,
+        help_text="Whether search engines should index this page.",
+    )
+    robots_follow = models.BooleanField(
+        default=True,
+        help_text="Whether search engines should follow links on this page.",
+    )
+
+    # Additional fields
+    is_published = models.BooleanField(
+        default=True,
+        help_text="Whether the page is published and visible on the site.",
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def save(self, *args, **kwargs):
+        # Automatically generate the slug from the title if not provided
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = "Page"
+        verbose_name_plural = "Pages"
+        ordering = ['title']

@@ -2,175 +2,258 @@
 {% load static %}
 
 {% block meta %}
-    <title>{{ head.site_title }} {{ single_product.product_name }}</title>
-    <meta name="title" content="{{ single_product.product_name }}">
-    <meta name="description" content="{{ single_product.description }}">
-    <meta name="keywords" content="{{ single_product.meta_keywords }}">
+<title>{{ head.site_title }} {{ single_product.product_name }}</title>
+<meta name="title" content="{{ single_product.product_name }}">
+<meta name="description" content="{{ single_product.description }}">
+<meta name="keywords" content="{{ single_product.meta_keywords }}">
 {% endblock meta %}
 
 {% block content %}
 
-<section class="py-8 bg-gray-100">
-  <div class="container mx-auto px-4">
-    <!-- ============================ COMPONENT 1 ================================= -->
-    <div class="bg-white rounded-lg shadow-md overflow-hidden">
-      <div class="flex flex-col lg:flex-row">
+<section class="my-6 md:my-8">
+  <div class="">
+    <div class="rounded-lg overflow-hidden">
+      <div class="flex flex-col md:flex-row md:px-8">
         <!-- Product Images -->
-        <div class="lg:w-1/2 p-6">
-          <div class="mb-6">
-            <img id="mainImage" src="{{ single_product.images.url }}" class="w-full rounded-lg shadow-md">
-          </div>
-          <div class="flex space-x-4">
-            <a href="{{ single_product.images.url }}" onclick="changeImage(event, 'mainImage')" class="w-16 h-16">
-              <img src="{{ single_product.images.url }}" class="w-full h-full object-cover rounded-lg border hover:border-primary">
+        <div class="lg:w-1/2 py-6 px-1 flex flex-col lg:flex-row">
+          <!-- Gallery Section -->
+          <div
+            class="hidden lg:flex lg:flex-col space-x-4 lg:space-x-0 lg:space-y-4 overflow-x-auto lg:overflow-y-auto lg:w-24 scrollbar-hide aos-init aos-animate">
+            <a href="{{ single_product.images.url }}" onclick="changeImage(event, 'mainImage')"
+              class="w-16 h-16 min-w-[64px]">
+              <img src="{{ single_product.images.url }}"
+                class="w-full h-full object-cover rounded-lg border hover:border-black hover:border-2 min-w-[64px]">
             </a>
             {% for i in product_gallery %}
-              <a href="{{ i.image.url }}" onclick="changeImage(event, 'mainImage')" class="w-16 h-16">
-                <img src="{{ i.image.url }}" class="w-full h-full object-cover rounded-lg border hover:border-primary">
-              </a>
+            <a href="{{ i.image.url }}" onclick="changeImage(event, 'mainImage')" class="w-16 h-16 min-w-[64px]">
+              <img src="{{ i.image.url }}"
+                class="w-full h-full object-cover rounded-lg border hover:border-black hover:border-2 min-w-[64px]">
+            </a>
+            {% endfor %}
+          </div>
+          <!-- End Gallery Section -->
+
+          <!-- Main Image -->
+          <div class="mb-6 lg:ml-4">
+            <img id="mainImage" src="{{ single_product.images.url }}" class="w-full rounded-lg shadow-md">
+          </div>
+
+          <div class="flex space-x-4 overflow-x-auto scrollbar-hide aos-init aos-animate md:hidden">
+            <a href="{{ single_product.images.url }}" onclick="changeImage(event, 'mainImage')"
+              class="w-16 h-16 min-w-[64px]">
+              <img src="{{ single_product.images.url }}"
+                class="w-full h-full object-cover rounded-lg border hover:border-black hover:border-2 min-w-[64px]">
+            </a>
+            {% for i in product_gallery %}
+            <a href="{{ i.image.url }}" onclick="changeImage(event, 'mainImage')" class="w-16 h-16 min-w-[64px]">
+              <img src="{{ i.image.url }}"
+                class="w-full h-full object-cover rounded-lg border hover:border-black hover:border-2 min-w-[64px]">
+            </a>
             {% endfor %}
           </div>
         </div>
 
         <!-- Product Details -->
+        <!-- Product Details -->
         <div class="lg:w-1/2 p-6 border-l">
           <form action="{% url 'add_cart' single_product.id %}" method="POST">
             {% csrf_token %}
-            <h2 class="text-3xl font-bold mb-4">{{ single_product.product_name }}</h2>
+            <h2 class="md:text-3xl font-bold">{{ single_product.product_name }}</h2>
             <div class="flex items-center mb-4">
               <!-- Star Rating -->
               <div class="flex space-x-1 text-yellow-400">
                 {% for i in "12345" %}
-                  {% if single_product.averageReview >= forloop.counter %}
-                    <i class="fas fa-star"></i>
-                  {% elif single_product.averageReview|add:"0.5" >= forloop.counter %}
-                    <i class="fas fa-star-half-alt"></i>
-                  {% else %}
-                    <i class="far fa-star"></i>
-                  {% endif %}
+                {% if single_product.averageReview >= forloop.counter %}
+                <i class="fas fa-star"></i>
+                {% elif single_product.averageReview|add:"0.5" >= forloop.counter %}
+                <i class="fas fa-star-half-alt"></i>
+                {% else %}
+                <i class="far fa-star"></i>
+                {% endif %}
                 {% endfor %}
               </div>
-              <span class="ml-2 text-gray-600">{{ single_product.countReview }} reviews</span>
             </div>
-
-            <div class="text-2xl font-bold mb-4">${{ single_product.price }}</div>
-            <p class="text-gray-700 mb-6">{{ single_product.description }}</p>
-
-            <hr class="my-6">
+            <div class="flex justify-between">
+              <div class="mb-4">
+                <span class="">
+                  <p>
+                    <span class="text-1xl">₹ </span>
+                    <span class="text-2xl font-semibold">{{ single_product.price }}</span>
+                  </p>
+                  <p class="text-gray-500 text-sm">inclusive of all taxes</p>
+                </span>
+              </div>
+              <div>
+                <span class="ml-2 text-gray-600">⭐ {{ single_product.countReview }} reviews</span>
+              </div>
+            </div>
 
             <!-- Variations -->
             <div class="space-y-4">
               <div>
-                <label class="block text-gray-700 font-semibold mb-2">Choose Color</label>
-                <select name="color" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" required>
-                  <option value="" disabled selected>Select</option>
-                  {% for i in single_product.variation_set.colors %}
-                    <option value="{{ i.variation_value | lower }}">{{ i.variation_value | capfirst }}</option>
+                <label class="block text-gray-700 font-semibold mb-2">Select Size</label>
+                <div class="flex space-x-2">
+                  {% for i in single_product.variation_set.sizes %}
+                  <button type="button" class="px-4 py-2 border rounded-lg hover:border-black focus:outline-none"
+                    onclick="selectSize('{{ i.variation_value | lower }}')" data-size="{{ i.variation_value | lower }}">
+                    {{ i.variation_value | capfirst }}
+                  </button>
                   {% endfor %}
-                </select>
+                </div>
+                <input type="hidden" name="size" id="selectedSize" required>
               </div>
               <div>
-                <label class="block text-gray-700 font-semibold mb-2">Select Size</label>
-                <select name="size" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
-                  <option value="" disabled selected>Select</option>
-                  {% for i in single_product.variation_set.sizes %}
-                    <option value="{{ i.variation_value | lower }}">{{ i.variation_value | capfirst }}</option>
+                <label class="block text-gray-700 font-semibold mb-2">Choose Color</label>
+                <div class="flex space-x-2">
+                  {% for i in single_product.variation_set.colors %}
+                  <div class="w-8 h-8 rounded-full cursor-pointer border-2 border-gray-300 hover:border-black"
+                    style="background-color: {{ i.variation_value | lower }};"
+                    onclick="selectColor('{{ i.variation_value | lower }}')"
+                    data-color="{{ i.variation_value | lower }}">
+                  </div>
                   {% endfor %}
-                </select>
+                </div>
+                <input type="hidden" name="color" id="selectedColor" required>
               </div>
             </div>
-
+            <hr class="my-6">
+            <p class="text-gray-700 mb-6">{{ single_product.description }}</p>
             <hr class="my-6">
 
             <!-- Add to Cart Button -->
-            {% if single_product.stock <= 0 %}
-              <div class="text-red-500 font-semibold mb-4">Out of Stock</div>
-            {% else %}
-              <button type="submit" class="w-full bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary-dark">
-                <i class="fas fa-shopping-cart mr-2"></i> Add to Cart
-              </button>
-            {% endif %}
-          </form>
+            {% if single_product.stock <= 0 %} <div class="text-red-500 font-semibold mb-4">Out of Stock
         </div>
+        {% else %}
+        <button type="submit" class="w-full bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-900">
+          <div class="flex justify-center items-center space-x-4">
+            <p>
+              <svg viewBox="-0.5 -0.5 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"
+                id="Underline-Square--Streamline-Iconoir" height="22" width="22">
+                <desc>Underline Square Streamline Icon: https://streamlinehq.com</desc>
+                <path
+                  d="M0.7153750000000001 13.832312499999999V1.1676875c0 -0.2498125 0.2025 -0.4523125 0.4523125 -0.4523125h12.664625000000001c0.2498125 0 0.4523125 0.2025 0.4523125 0.4523125v12.664625000000001c0 0.2498125 -0.2025 0.4523125 -0.4523125 0.4523125H1.1676875c-0.2498125 0 -0.4523125 -0.2025 -0.4523125 -0.4523125Z"
+                  stroke="#FFFFFF" stroke-width="1"></path>
+                <path
+                  d="M10.515375 2.9769375v3.015375c0 1.6653125 -1.3500625 3.015375 -3.015375 3.015375h0c-1.665375 0 -3.015375 -1.3500625 -3.015375 -3.015375V2.9769375"
+                  stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"></path>
+                <path d="M2.9769375 12.023062499999998h9.046125" stroke="#FFFFFF" stroke-linecap="round"
+                  stroke-linejoin="round" stroke-width="1"></path>
+              </svg>
+            </p>
+            <p>
+              ADD TO BAG
+            </p>
+          </div>
+        </button>
+
+        <div class="fixed bottom-0 left-0 w-full bg-white p-2 shadow-lg md:hidden">
+          <button type="submit" class="w-full bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-900">
+            <div class="flex justify-center items-center space-x-4">
+              <p>
+                <svg viewBox="-0.5 -0.5 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"
+                  id="Underline-Square--Streamline-Iconoir" height="22" width="22">
+                  <desc>Underline Square Streamline Icon: https://streamlinehq.com</desc>
+                  <path
+                    d="M0.7153750000000001 13.832312499999999V1.1676875c0 -0.2498125 0.2025 -0.4523125 0.4523125 -0.4523125h12.664625000000001c0.2498125 0 0.4523125 0.2025 0.4523125 0.4523125v12.664625000000001c0 0.2498125 -0.2025 0.4523125 -0.4523125 0.4523125H1.1676875c-0.2498125 0 -0.4523125 -0.2025 -0.4523125 -0.4523125Z"
+                    stroke="#FFFFFF" stroke-width="1"></path>
+                  <path
+                    d="M10.515375 2.9769375v3.015375c0 1.6653125 -1.3500625 3.015375 -3.015375 3.015375h0c-1.665375 0 -3.015375 -1.3500625 -3.015375 -3.015375V2.9769375"
+                    stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"></path>
+                  <path d="M2.9769375 12.023062499999998h9.046125" stroke="#FFFFFF" stroke-linecap="round"
+                    stroke-linejoin="round" stroke-width="1"></path>
+                </svg>
+              </p>
+              <p>ADD TO BAG</p>
+            </div>
+          </button>
+        </div>
+        {% endif %}
+        </form>
       </div>
     </div>
-    <!-- ============================ COMPONENT 1 END .// ================================= -->
+  </div>
+  <!-- ============================ COMPONENT 1 END .// ================================= -->
 
-    <br>
+  <br>
 
-    <!-- Reviews Section -->
-    <div class="bg-white rounded-lg shadow-md p-6">
-      <h3 class="text-2xl font-bold mb-6">Customer Reviews</h3>
+  <!-- Reviews Section -->
+  <div class="bg-white rounded-lg shadow-md p-6">
+    <h3 class="text-2xl font-bold mb-6">Customer Reviews</h3>
 
-      <!-- Write Review Form -->
-      <form action="{% url 'submit_review' single_product.id %}" method="POST">
-        {% csrf_token %}
-        <h5 class="text-lg font-semibold mb-4">Write Your Review</h5>
+    <!-- Write Review Form -->
+    <form action="{% url 'submit_review' single_product.id %}" method="POST">
+      {% csrf_token %}
+      <h5 class="text-lg font-semibold mb-4">Write Your Review</h5>
 
-        <div class="space-y-4">
-          <div>
-            <label class="block text-gray-700 font-semibold mb-2">Rating</label>
-            <div class="flex space-x-2">
-              {% for i in "54321" %}
-                <input type="radio" name="rating" id="rating{{ i }}" value="{{ i }}" required class="hidden">
-                <label for="rating{{ i }}" class="text-yellow-400 cursor-pointer">
-                  <i class="far fa-star"></i>
-                </label>
-              {% endfor %}
-            </div>
-          </div>
-
-          <div>
-            <label class="block text-gray-700 font-semibold mb-2">Review Title</label>
-            <input type="text" name="subject" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" required>
-          </div>
-
-          <div>
-            <label class="block text-gray-700 font-semibold mb-2">Review</label>
-            <textarea name="review" rows="4" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" required></textarea>
-          </div>
-
-          {% if user.is_authenticated %}
-            {% if orderproduct %}
-              <button type="submit" class="bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary-dark">Submit Review</button>
-            {% else %}
-              <p class="text-gray-600">You must purchase this product to post a review.</p>
-            {% endif %}
-          {% else %}
-            <p class="text-gray-600">You must be logged in to post a review. <a href="{% url 'login' %}" class="text-primary hover:underline">Login now</a></p>
-          {% endif %}
-        </div>
-      </form>
-
-      <hr class="my-6">
-
-      <!-- Customer Reviews -->
-      {% for review in reviews %}
-        <div class="mb-6">
-          <div class="flex justify-between items-center">
-            <h6 class="font-semibold">{{ review.user.full_name }}</h6>
-            <span class="text-sm text-gray-500">{{ review.updated_at }}</span>
-          </div>
-          <div class="flex space-x-1 text-yellow-400 mb-2">
-            {% for i in "12345" %}
-              {% if review.rating >= forloop.counter %}
-                <i class="fas fa-star"></i>
-              {% elif review.rating|add:"0.5" >= forloop.counter %}
-                <i class="fas fa-star-half-alt"></i>
-              {% else %}
-                <i class="far fa-star"></i>
-              {% endif %}
+      <div class="space-y-4">
+        <div>
+          <label class="block text-gray-700 font-semibold mb-2">Rating</label>
+          <div class="flex space-x-2">
+            {% for i in "54321" %}
+            <input type="radio" name="rating" id="rating{{ i }}" value="{{ i }}" required class="hidden">
+            <label for="rating{{ i }}" class="text-yellow-400 cursor-pointer">
+              <i class="far fa-star"></i>
+            </label>
             {% endfor %}
           </div>
-          <h6 class="font-semibold">{{ review.subject }}</h6>
-          <p class="text-gray-700">{{ review.review }}</p>
         </div>
-      {% endfor %}
+
+        <div>
+          <label class="block text-gray-700 font-semibold mb-2">Review Title</label>
+          <input type="text" name="subject"
+            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" required>
+        </div>
+
+        <div>
+          <label class="block text-gray-700 font-semibold mb-2">Review</label>
+          <textarea name="review" rows="4"
+            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+            required></textarea>
+        </div>
+
+        {% if user.is_authenticated %}
+        {% if orderproduct %}
+        <button type="submit" class="bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary-dark">Submit
+          Review</button>
+        {% else %}
+        <p class="text-gray-600">You must purchase this product to post a review.</p>
+        {% endif %}
+        {% else %}
+        <p class="text-gray-600">You must be logged in to post a review. <a href="{% url 'login' %}"
+            class="text-primary hover:underline">Login now</a></p>
+        {% endif %}
+      </div>
+    </form>
+
+    <hr class="my-6">
+
+    <!-- Customer Reviews -->
+    {% for review in reviews %}
+    <div class="mb-6">
+      <div class="flex justify-between items-center">
+        <h6 class="font-semibold">{{ review.user.full_name }}</h6>
+        <span class="text-sm text-gray-500">{{ review.updated_at }}</span>
+      </div>
+      <div class="flex space-x-1 text-yellow-400 mb-2">
+        {% for i in "12345" %}
+        {% if review.rating >= forloop.counter %}
+        <i class="fas fa-star"></i>
+        {% elif review.rating|add:"0.5" >= forloop.counter %}
+        <i class="fas fa-star-half-alt"></i>
+        {% else %}
+        <i class="far fa-star"></i>
+        {% endif %}
+        {% endfor %}
+      </div>
+      <h6 class="font-semibold">{{ review.subject }}</h6>
+      <p class="text-gray-700">{{ review.review }}</p>
     </div>
+    {% endfor %}
+  </div>
   </div>
 </section>
 
-<!-- JavaScript for Image Swapping -->
+<!-- JavaScript for Image Swapping and Color Selection -->
 <script>
   function changeImage(event, targetId) {
     event.preventDefault(); // Prevent the default link behavior
@@ -178,6 +261,30 @@
     const newImageSrc = event.currentTarget.getAttribute('href'); // Get the new image URL from the clicked link
     mainImage.src = newImageSrc; // Update the main image source
   }
+
+  function selectColor(color) {
+    const selectedColorInput = document.getElementById('selectedColor');
+    selectedColorInput.value = color; // Set the selected color value
+    const colorSwatches = document.querySelectorAll('[data-color]');
+    colorSwatches.forEach(swatch => {
+      swatch.classList.remove('border-black'); // Remove the border from all swatches
+    });
+    event.currentTarget.classList.add('border-black'); // Add a border to the selected swatch
+  }
+  function selectSize(size) {
+    const selectedSizeInput = document.getElementById('selectedSize');
+    selectedSizeInput.value = size; // Set the selected size value
+    const sizeButtons = document.querySelectorAll('[data-size]');
+    sizeButtons.forEach(button => {
+      button.classList.remove('border-black'); // Remove the border from all buttons
+      button.classList.remove('text-white'); // Remove the border from all buttons
+      button.classList.remove('bg-black'); // Remove the border from all buttons
+    });
+    event.currentTarget.classList.add('border-black'); // Add a border to the selected button
+    event.currentTarget.classList.add('text-white'); // Add a border to the selected button
+    event.currentTarget.classList.add('bg-black'); // Add a border to the selected button
+  }
+
 </script>
 
 {% endblock %}

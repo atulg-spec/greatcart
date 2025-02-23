@@ -1,0 +1,61 @@
+<style>
+    /* Fade Out Animation */
+    @keyframes fadeOut {
+        0% {
+            opacity: 1;
+        }
+
+        100% {
+            opacity: 0;
+        }
+    }
+
+    .fade-out {
+        animation: fadeOut 0.5s ease-in-out forwards;
+    }
+
+    #preloader .relative {
+        position: relative;
+    }
+
+    #preloader img {
+        filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.8));
+        /* Black neon glow effect */
+    }
+
+    /* Add a subtle border glow to the preloader container */
+    #preloader::before {
+        content: '';
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        border: 2px solid rgba(0, 0, 0, 0.5);
+        /* Black border */
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 0, 0, 0.3);
+        /* Black glow */
+        pointer-events: none;
+    }
+</style>
+
+<div id="preloader" class="fixed inset-0 bg-white/50 flex items-center justify-center z-50">
+    <div class="relative">
+        <img src="{{settings.preloader_img.url}}" alt="Loading" class="mx-auto">
+    </div>
+</div>
+
+<script>
+    window.addEventListener('load', function () {
+        const preloader = document.getElementById('preloader');
+
+        // Add fade-out animation to the preloader
+        preloader.classList.add('fade-out');
+
+        // Remove the preloader from the DOM after the animation ends
+        preloader.addEventListener('animationend', function () {
+            preloader.style.display = 'none';
+        });
+    });
+</script>

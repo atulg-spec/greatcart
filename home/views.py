@@ -75,6 +75,9 @@ def search(request,search):
     return render(request,'home/search.html',context)
 
 
+
+
+
 def product_view(request, slug):
     # Fetch the product using the slug
     product = get_object_or_404(Product, slug=slug)

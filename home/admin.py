@@ -27,6 +27,20 @@ class HomeSectionsAdmin(admin.ModelAdmin):
     def has_delete_permission(self, request, obj=None):
         return True  # Change to False if you want to prevent deletion
 
+@admin.register(SideNav)
+class SideNavAdmin(admin.ModelAdmin):
+    list_display = ('name', 'url')  # Fields to display in the list view
+    search_fields = ('name',)  # Fields to search by in the admin
+    list_filter = ('name',)  # Fields to filter by in the admin
+    ordering = ('name',)  # Default ordering of the list view
+
+    # Optional: Customize the form in the admin
+    fieldsets = (
+        (None, {
+            'fields': ('logo', 'name', 'url')
+        }),
+    )
+
 @admin.register(HeadSection)
 class HeadSectionAdmin(admin.ModelAdmin):
     list_display = ('preview_logo', 'preview_favicon', 'site_title', 'meta_title')
@@ -63,7 +77,7 @@ class SiteSettingsAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ('Main Settings', {
-            'fields': ('site_name', 'site_header_news', 'logo', 'mobile_logo', 'tagline', 'font_style')
+            'fields': ('site_name', 'site_header_news', 'preloader_img','logo', 'mobile_logo', 'tagline', 'font_style')
         }),
         ('Index Page Banner', {
             'fields': ('main_page_image',)
@@ -138,3 +152,31 @@ class SliderAdmin(admin.ModelAdmin):
             return format_html('<img src="{}" width="100" style="border-radius:5px;" />', obj.image.url)
         return "No Image"
     image_preview.short_description = "Preview"
+
+
+@admin.register(Page)
+class PageAdmin(admin.ModelAdmin):
+    list_display = ('title', 'slug', 'is_published', 'created_at')
+    list_filter = ('is_published',)
+    search_fields = ('title', 'slug', 'meta_description')
+    prepopulated_fields = {'slug': ('title',)}
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('title', 'slug', 'content', 'is_published'),
+        }),
+        ('SEO Metadata', {
+            'fields': ('meta_description', 'meta_keywords', 'canonical_url'),
+        }),
+        ('Open Graph (Social Media)', {
+            'fields': ('og_title', 'og_description', 'og_image'),
+        }),
+        ('Twitter Card', {
+            'fields': ('twitter_card', 'twitter_title', 'twitter_description', 'twitter_image'),
+        }),
+        ('Structured Data', {
+            'fields': ('structured_data',),
+        }),
+        ('Robots Meta Tag', {
+            'fields': ('robots_index', 'robots_follow'),
+        }),
+    )

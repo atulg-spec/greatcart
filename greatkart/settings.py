@@ -7,12 +7,16 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 SECRET_KEY = "django-insecure-$=z-*)!)e-%056aypw6$!q-#(1l+19i&d@)i!&%qdn)e*p@vu%"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
-    'jazzmin',
+    'paper_admin',
+    'paper_admin.patches.django_money',
+    'paper_admin.patches.django_solo',
+    'paper_admin.patches.mptt',
+    'paper_admin.patches.tree_queries',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -144,6 +148,14 @@ EMAIL_HOST_PASSWORD = "config('EMAIL_HOST_PASSWORD')"
 EMAIL_USE_TLS = "config('EMAIL_USE_TLS', cast=bool)"
 
 
+TINYMCE_DEFAULT_CONFIG = {
+    'height': 500,
+    'width': '100%',
+    'plugins': 'advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code fullscreen insertdatetime media table paste code help wordcount',
+    'toolbar': 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
+}
+
+
 customColorPalette = [
       {
           'color': 'hsl(4, 90%, 58%)',
@@ -230,3 +242,4 @@ CKEDITOR_5_CONFIGS = {
     }
 }
 }
+

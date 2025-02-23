@@ -1,6 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from store.models import Product, ReviewRating
-from home.models import Slider, homeSections
+from home.models import Slider, homeSections, Page
 
 def home(request):
     products = Product.objects.all().filter(is_available=True).order_by('created_date')
@@ -21,3 +21,14 @@ def home(request):
         'reviews': reviews,
     }
     return render(request, 'home.html', context)
+
+
+def page_view(request, slug):
+    # Fetch the product using the slug
+    page = get_object_or_404(Page, slug=slug)
+    context = {
+        'page': page,
+    }
+
+    # Render the template with the context
+    return render(request, 'page-view.html', context)
