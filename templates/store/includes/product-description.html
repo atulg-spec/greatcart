@@ -1,0 +1,151 @@
+<div class="my-8 md:px-2">
+    <hr class="my-4">
+    <div class="section">
+        <div class="flex justify-between cursor-pointer">
+            <div class="text-sm font-semibold transition-all duration-300 ease-in-out">
+                DETAILS
+            </div>
+            <div>
+                <i data-feather="plus" class="w-5 h-5"></i>
+            </div>
+        </div>
+        <!-- desc div -->
+        <div id="details-content" class="hidden py-4 text-sm">{{single_product.description|safe}}</div>
+        <!-- desc div -->
+    </div>
+    <hr class="my-4">
+    <div class="section">
+        <div class="flex justify-between cursor-pointer">
+            <div class="text-sm font-semibold transition-all duration-300 ease-in-out">
+                OFFERS
+            </div>
+            <div>
+                <i data-feather="plus" class="w-5 h-5"></i>
+            </div>
+        </div>
+        <div id="offers-content" class="hidden py-4 text-sm px-2">
+            {% if single_product.coupons.exists %}
+            <div>
+                {% for coupon in single_product.coupons.all %}
+                <p class="text-sm">
+                    Flat {{coupon.discount_percentage}}% off on minimum purchase of ₹{{coupon.minimum_shopping_amount}}
+                </p>
+                <div class="font-semibold flex space-x-3 my-2">
+                    <div class="mt-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14"
+                            id="Discount-Percent-Badge--Streamline-Core" height="14" width="14">
+                            <desc>Discount Percent Badge Streamline Icon: https://streamlinehq.com</desc>
+                            <g id="discount-percent-badge--shop-shops-stores-discount-coupon">
+                                <path id="Subtract" fill="#000000" fill-rule="evenodd"
+                                    d="M5.514 0.61a2.395 2.395 0 0 1 3.023 0l0.16 0.13 0.202 -0.033a2.395 2.395 0 0 1 2.618 1.512l0.073 0.191 0.191 0.073a2.395 2.395 0 0 1 1.512 2.618l-0.033 0.203 0.13 0.159 -0.341 0.277 0.34 -0.277c0.717 0.88 0.717 2.142 0 3.023l-0.129 0.159 0.033 0.202a2.395 2.395 0 0 1 -1.512 2.618l-0.191 0.073 -0.073 0.192a2.395 2.395 0 0 1 -2.618 1.511l-0.203 -0.032 -0.159 0.129a2.395 2.395 0 0 1 -3.023 0l0.316 -0.388 -0.316 0.388 -0.159 -0.13 -0.202 0.033a2.395 2.395 0 0 1 -2.618 -1.511l-0.073 -0.192 -0.192 -0.073A2.395 2.395 0 0 1 0.76 8.847l0.033 -0.202 -0.13 -0.16a2.395 2.395 0 0 1 0 -3.022l0.13 -0.16 -0.033 -0.202a2.395 2.395 0 0 1 1.51 -2.618l0.192 -0.073 0.073 -0.191A2.395 2.395 0 0 1 5.153 0.707l0.202 0.033 0.16 -0.13Zm4.454 3.422a0.625 0.625 0 0 0 -0.884 0l-5 5a0.625 0.625 0 1 0 0.884 0.884l5 -5a0.625 0.625 0 0 0 0 -0.884Zm-4.942 -0.058a1 1 0 1 0 0 2 1 1 0 0 0 0 -2Zm4 4a1 1 0 1 0 0 2 1 1 0 0 0 0 -2Z"
+                                    clip-rule="evenodd" stroke-width="1"></path>
+                            </g>
+                        </svg>
+                    </div>
+                    <div>CODE: {{coupon.code}}</div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="flex justify-center my-4 text-sm">No offers available on this Product</div>
+            {% endif %}
+        </div>
+    </div>
+    <hr class="my-4">
+    <div class="section">
+        <div class="flex justify-between cursor-pointer">
+            <div class="text-sm font-semibold transition-all duration-300 ease-in-out">
+                REVIEWS
+            </div>
+            <div>
+                <i data-feather="plus" class="w-5 h-5"></i>
+            </div>
+        </div>
+        <div id="reviews-content" class="hidden py-4 text-sm">
+            {% if reviews %}
+            <p class="text-lg font-bold transition-all duration-300 ease-in-out">Customer Reviews</p>
+            {% for review in reviews %}
+            <div class="my-3">
+                <div class="flex justify-between items-center">
+                    <div class="flex space-x-2">
+                        <div class="bg-black px-2 text-white text-xs flex space-x-2">
+                            <span>{{review.rating}}</span>
+                            <i data-feather="star" class="mt-1 text-white w-3 h-3"></i>
+                        </div>
+                        <h6 class="font-semibold">
+                            {{ review.user.full_name }}
+                        </h6>
+                    </div>
+                </div>
+                <p class="text-gray-700 px-2">{{ review.review }}</p>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="flex justify-center my-4 text-sm">No Reviews</div>
+            {% endif %}
+        </div>
+    </div>
+    <hr class="my-4">
+    <!-- <div class="section">
+        <div class="flex justify-between cursor-pointer">
+            <div class="text-sm font-semibold transition-all duration-300 ease-in-out">
+                DELIVERY
+            </div>
+            <div>
+                <i data-feather="plus" class="w-5 h-5"></i>
+            </div>
+        </div>
+        <div id="delivery-content" class="hidden py-4 text-sm">some content of delivery</div>
+    </div> -->
+    <!-- <hr class="my-4"> -->
+    <div class="section">
+        <div class="flex justify-between cursor-pointer">
+            <div class="text-sm font-semibold transition-all duration-300 ease-in-out">
+                RETURNS
+            </div>
+            <div>
+                <i data-feather="plus" class="w-5 h-5"></i>
+            </div>
+        </div>
+        <div id="returns-content" class="hidden py-4 text-sm">
+            <div class="">
+                <ol class="list-decimal list-inside space-y-2 text-gray-700">
+                    <li>Hassle-free returns within 7 days under specific product and promotion conditions.</li>
+                    <li>Refunds for prepaid orders revert to the original payment method, while COD orders receive a wallet refund.</li>
+                    <li>Report defective, incorrect, or damaged items within 24 hours of delivery.</li>
+                    <li>Products bought during special promotions like BOGO are not eligible for returns.</li>
+                    <li>For excessive returns, reverse shipment fee up to Rs 100 can be charged, which will be deducted from the refund.</li>
+                    <li>Non-returnable items include accessories, sunglasses, perfumes, masks, and innerwear due to hygiene concerns.</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+    <hr class="my-4">
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Initialize Feather Icons
+        feather.replace();
+
+        // Get all section headers
+        const sectionHeaders = document.querySelectorAll('.section .flex');
+
+        sectionHeaders.forEach(header => {
+            header.addEventListener('click', function () {
+                // Toggle the content visibility
+                const content = header.nextElementSibling;
+                content.classList.toggle('hidden');
+
+                // Get the current SVG icon
+                let iconContainer = header.querySelector('svg');
+
+                // Toggle between plus and minus
+                if (iconContainer.getAttribute('class').includes('feather-plus')) {
+                    iconContainer.outerHTML = feather.icons.minus.toSvg({ class: "feather feather-minus w-5 h-5" });
+                } else {
+                    iconContainer.outerHTML = feather.icons.plus.toSvg({ class: "feather feather-plus w-5 h-5" });
+                }
+            });
+        });
+    });
+</script>

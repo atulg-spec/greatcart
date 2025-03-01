@@ -41,7 +41,7 @@ class ProductAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ('Product Information', {
-            'fields': ('product_name', 'slug', 'description', 'meta_keywords', 'category', 'price', 'discount_percent', 'before_discount_price', 'stock', 'is_available')
+            'fields': ('product_name', 'slug', 'description', 'coupons', 'size_chart', 'meta_keywords', 'category', 'price', 'discount_percent', 'before_discount_price', 'stock', 'is_available')
         }),
         ('Images', {
             'fields': ('images', 'secondary_image', 'image_preview')

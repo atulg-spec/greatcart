@@ -3,15 +3,18 @@ from category.models import Category
 from django.urls import reverse
 from accounts.models import Account
 from django.db.models import Avg, Count
-
+from django_ckeditor_5.fields import CKEditor5Field
+from coupons.models import Coupon
 # Create your models here.
 
 class Product(models.Model):
     product_name    = models.CharField(max_length=200, unique=True)
     slug            = models.SlugField(max_length=200, unique=True)
-    description     = models.TextField(max_length=500, blank=True)
-    meta_keywords = models.CharField(max_length=400, default="", help_text="Comma(,) Seperated Keywords")
+    description     = CKEditor5Field('Text', config_name='extends')
+    coupons         = models.ManyToManyField(Coupon, blank=True)
+    meta_keywords   = models.CharField(max_length=400, default="", help_text="Comma(,) Seperated Keywords")
     price           = models.IntegerField()
+    size_chart      = models.ImageField(upload_to='photos/products',null=True,blank=True)
     images          = models.ImageField(upload_to='photos/products')
     secondary_image = models.ImageField(upload_to='photos/products',null=True,blank=True)
     stock           = models.IntegerField()
