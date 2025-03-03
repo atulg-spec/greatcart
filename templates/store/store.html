@@ -37,6 +37,7 @@
     const productGrid = document.getElementById('product-grid');
 
     // Load saved layout from local storage
+    document.getElementById('subnavbar').classList.remove('hidden');
     const savedLayout = localStorage.getItem('gridLayout');
     if (savedLayout) {
       productGrid.classList.add(savedLayout);
