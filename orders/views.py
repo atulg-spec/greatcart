@@ -3,11 +3,14 @@ from django.http import HttpResponse, JsonResponse
 from carts.models import CartItem
 from .forms import OrderForm
 import datetime
-from .models import Order, Payment, OrderProduct
+from .models import Order, Payment, OrderProduct, PaymentGateway
 import json
 from store.models import Product
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
+from django.contrib.auth.decorators import login_required
+import hashlib
+from django.views.decorators.csrf import csrf_exempt
 
 
 def payments(request):
@@ -74,7 +77,9 @@ def payments(request):
     }
     return JsonResponse(data)
 
+@login_required
 def place_order(request, total=0, quantity=0,):
+    assigned_tax = 2
     current_user = request.user
 
     # If the cart count is less than or equal to 0, then redirect back to shop
@@ -88,7 +93,7 @@ def place_order(request, total=0, quantity=0,):
     for cart_item in cart_items:
         total += (cart_item.product.price * cart_item.quantity)
         quantity += cart_item.quantity
-    tax = (2 * total)/100
+    tax = (assigned_tax * total)/100
     grand_total = total + tax
 
     if request.method == 'POST':
@@ -132,6 +137,120 @@ def place_order(request, total=0, quantity=0,):
             return render(request, 'orders/payments.html', context)
     else:
         return redirect('checkout')
+
+
+
+@login_required
+def proceed_payment(request,orderid):
+    gateway = PaymentGateway.objects.all().first()
+    order = Order.objects.get(user=request.user, is_ordered=False, order_number=orderid)
+    if gateway.use == 'PAYU':
+        payu_url = "https://secure.payu.in/_payment"  # Default to LIVE mode
+        if gateway.mode == "TEST":
+            payu_url = "https://test.payu.in/_payment"
+        userid = request.user.first_name
+        amount = order.order_total
+        MERCHANT_KEY = gateway.payu_marchent_key
+        SALT = gateway.payu_marchent_salt
+        txnid = order.order_number
+        productInfo = f'{order.user.first_name} order'
+        firstname = request.user.first_name
+        email = request.user.email
+        phone = request.user.phone_number
+        # Create the hash_string exactly as in PHP
+        hash_string = f"{MERCHANT_KEY}|{txnid}|{amount}|{productInfo}|{firstname}|{email}|{userid}||||||||||{SALT}"
+        # Generate the hash using SHA-512 and convert to lowercase
+        hash_value = hashlib.sha512(hash_string.encode('utf-8')).hexdigest().lower()
+        # Print the redirection message
+        html_form = f"""
+        <body>
+        <form action="{payu_url}" method="post" name="payuForm">
+              <input type="hidden" name="key" value="{MERCHANT_KEY}" />
+             <input type="hidden" name="hash" value="{hash_value}"/>
+             <input type="hidden" name="txnid" value="{txnid}" />
+            <input type="hidden" name="amount" value="{amount}">
+            <input type="hidden" name="productinfo" value="{productInfo}">
+            <input type="hidden" name="firstname" value="{firstname}">
+            <input type="hidden" name="email" value="{email}">
+            <input type="hidden" name="phone" value="{phone}">
+            <input type="hidden" name="mobile" value="{phone}">
+            <input type="hidden" name="surl" value="{request.scheme}://{request.get_host()}/orders/payu_success/">
+            <input type="hidden" name="furl" value="{request.scheme}://{request.get_host()}/orders/payu_failure/">
+            <input type="hidden" name="udf1" value="{userid}">
+            <input type="hidden" name="service_provider" value="payu_paisa" size="64" />
+            <script>
+            document.body.onload = function(ev){{
+                 document.payuForm.submit();
+            }}
+            </script>
+        </form>
+        </body>
+        """
+        payment = Payment(
+            user = request.user,
+            payment_id = order.order_number,
+            payment_method = gateway.use,
+            amount_paid = order.order_total,
+            status = 'pending',
+        )
+        payment.save()
+
+        order.payment = payment
+        order.is_ordered = True
+        order.save()
+
+        cart_items = CartItem.objects.filter(user=request.user)
+
+        for item in cart_items:
+            orderproduct = OrderProduct()
+            orderproduct.order_id = order.id
+            orderproduct.payment = payment
+            orderproduct.user_id = request.user.id
+            orderproduct.product_id = item.product_id
+            orderproduct.quantity = item.quantity
+            orderproduct.product_price = item.product.price
+            orderproduct.ordered = True
+            orderproduct.save()
+    
+            cart_item = CartItem.objects.get(id=item.id)
+            product_variation = cart_item.variations.all()
+            orderproduct = OrderProduct.objects.get(id=orderproduct.id)
+            orderproduct.variations.set(product_variation)
+            orderproduct.save()
+    
+    
+            # Reduce the quantity of the sold products
+            product = Product.objects.get(id=item.product_id)
+            product.stock -= item.quantity
+            product.save()
+
+        # CartItem.objects.filter(user=request.user).delete()
+        return HttpResponse(html_form)
+
+@csrf_exempt
+def payu_success(request):
+    try:
+        order_id = request.POST.get('txnid')
+        pay = Payment.objects.filter(payment_id=order_id).first()
+        pay.status = 'completed'
+        pay.save()
+    except Exception as e:
+        print(f'success {e}')
+    return redirect("/orders/order_complete/")
+
+
+@csrf_exempt
+def payu_failure(request):
+    print(request.POST)
+    try:
+        order_id = request.POST.get('txnid')
+        pay = Payment.objects.filter(payment_id=order_id).first()
+        pay.status = 'failed'
+        pay.save()
+    except Exception as e:
+        print(f'fail {e}')
+    return redirect("/orders/order_complete/")
+
 
 
 def order_complete(request):

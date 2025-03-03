@@ -84,12 +84,9 @@
           <img src="{% static './images/misc/payments.png' %}" class="h-8 mx-auto" alt="Payment Methods">
         </div>
         <div class="w-full text-white font-semibold py-2 my-2 text-sm bg-black text-center">
-          <button type="submit" name="submit" class="w-full">
+          <a href="/orders/proceed_payment/{{order.order_number}}" class="w-full">
             Continue
-          </button>
-        </div>
-        <div id="paypal-button-container">
-          <!-- PayPal Button Will Load -->
+          </a>
         </div>
       </div>
     </div>

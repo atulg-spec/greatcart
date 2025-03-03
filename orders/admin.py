@@ -2,9 +2,46 @@ from django.contrib import admin
 from django.utils.html import format_html
 from django.urls import reverse
 from django.utils.safestring import mark_safe
-from .models import Payment, Order, OrderProduct
+from .models import Payment, Order, OrderProduct, PaymentGateway
 
 # Register your models here.
+@admin.register(PaymentGateway)
+class PaymentGatewayAdmin(admin.ModelAdmin):
+    list_display = ('use', 'mode', 'razorpay_id', 'payu_marchent_key')
+    list_filter = ('use', 'mode')
+    search_fields = ('use', 'mode', 'razorpay_id', 'payu_marchent_key')
+    fieldsets = (
+        ('General Information', {
+            'fields': ('use', 'mode'),
+            'description': "Basic information about the payment gateway settings."
+        }),
+        ('Razorpay Configuration', {
+            'fields': ('razorpay_id', 'razorpay_secret'),
+            'description': "Configuration details for Razorpay payment gateway."
+        }),
+        ('PayU Configuration', {
+            'fields': ('payu_marchent_key', 'payu_marchent_salt'),
+            'description': "Configuration details for PayU payment gateway."
+        }),
+    )
+
+    def has_add_permission(self, request):
+        # Allow only one instance of PaymentGateway
+        if PaymentGateway.objects.count() >= 1:
+            return False
+        return super().has_add_permission(request)
+
+    def has_delete_permission(self, request, obj=None):
+        # Prevent deletion of the PaymentGateway instance
+        return False
+
+    def get_actions(self, request):
+        # Remove the delete action from the admin interface
+        actions = super().get_actions(request)
+        if 'delete_selected' in actions:
+            del actions['delete_selected']
+        return actions
+
 
 @admin.register(Payment)
 class PaymentAdmin(admin.ModelAdmin):

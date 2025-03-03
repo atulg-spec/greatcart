@@ -3,6 +3,28 @@ from accounts.models import Account
 from store.models import Product, Variation
 
 
+class PaymentGateway(models.Model):
+    USE = (
+        ('PAYU', 'PAYU'),
+        ('RAZORPAY', 'RAZORPAY'),
+    )
+
+    use = models.CharField(choices=USE,max_length=10)
+    razorpay_id = models.CharField(max_length=500,default="")
+    razorpay_secret = models.CharField(max_length=500,default="")
+
+    payu_marchent_key = models.CharField(max_length=500,default="")
+    payu_marchent_salt = models.CharField(max_length=500,default="")
+
+    mode = models.CharField(max_length=10,help_text="LIVE or TEST")
+
+    class Meta:
+        verbose_name = "Payment Setting"
+        verbose_name_plural = "Payment Settings"
+    def __str__(self):
+      return "Payment Settings"
+    
+    
 
 class Payment(models.Model):
     user = models.ForeignKey(Account, on_delete=models.CASCADE)

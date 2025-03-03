@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.utils.html import format_html
 from django.urls import reverse
 from django.utils.safestring import mark_safe
-from .models import Product, Variation, ProductGallery, ReviewRating
+from .models import Product, Variation, ProductGallery, ReviewRating, RecentlyStalked
 
 # Register your models here.
 
@@ -120,3 +120,8 @@ class ReviewRatingAdmin(admin.ModelAdmin):
             'fields': ('ip', 'created_at', 'updated_at')
         }),
     )
+
+@admin.register(RecentlyStalked)
+class RecentlyStalkedAdmin(admin.ModelAdmin):
+    list_display = ('user', 'product')  # Adjust fields as necessary
+    search_fields = ('user__first_name', 'product__title')  # Enable searching by user first name and product title

@@ -1,0 +1,130 @@
+<div id="product-grid" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 px-2 md:px-1" data-aos="fade-up">
+{% for product in products %}
+<div class="group relative">
+    <a href="{{ product.get_url }}">
+        <div>
+            <img src="{{ product.images.url }}" alt="{{ product.product_name }}"
+                class="block w-full h-auto transition-opacity duration-300 group-hover:opacity-0">
+            {% if product.secondary_image %}
+            <img src="{{ product.secondary_image.url }}" alt="{{ product.product_name }}"
+                class="absolute inset-0 w-full h-auto opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+            {% endif %}
+        </div>
+    </a>
+    <div class="mt-1">
+        <a href="{{ product.get_url }}">
+            <h3 class="text-lg font-semibold text-gray-900 hover:text-gray-600 line-clamp-custom">
+                {{ product.product_name }}
+            </h3>
+        </a>
+        <div>
+            <span class="text-gray-900 font-bold">
+                ₹{{ product.price }}
+            </span>
+            <span class="text-gray-600 font-bold line-through">
+                ₹{{ product.before_discount_price }}
+            </span>
+        </div>
+
+        <p class="my-1">
+            {% for size in product.get_sizes %}
+            <span class="text-gray-800 bg-gray-100 p-1 text-xs">{{ size|upper }}</span>
+            {% endfor %}
+        </p>
+
+        <!-- Stock Availability -->
+        <p class="text-sm {% if product.stock > 0 %}text-green-600{% else %}text-red-600{% endif %}">
+            {% if product.stock > 0 %}
+            In Stock ({{ product.stock }})
+            {% else %}
+            Out of Stock
+            {% endif %}
+        </p>
+    </div>
+</div>
+{% empty %}
+<p class="col-span-full text-center">No products available in this section.</p>
+{% endfor %}
+</div>
+
+
+<!-- Infinite Scroll Script -->
+<script>
+    let page = 2; // Start from page 2 (since page 1 is already loaded)
+    let isLoading = false;
+
+    window.addEventListener('scroll', () => {
+        const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+        if (scrollTop + clientHeight >= scrollHeight - 1000 && !isLoading) {
+            loadMoreProducts();
+        }
+    });
+
+    function loadMoreProducts() {
+        isLoading = true;
+        document.getElementById('loading-spinner').style.display = 'block';
+
+        fetch(`?page=${page}`, {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.products.length > 0) {
+                    const productGrid = document.getElementById('product-grid');
+                    data.products.forEach((product) => {
+                        const productHtml = `
+              <div class="group relative" data-aos="fade-up">
+                <a href="${product.url}">
+                  <div>
+                    <img src="${product.image}" alt="${product.name}"
+                      class="block w-full h-auto transition-opacity duration-300 group-hover:opacity-0">
+                    ${product.secondary_image ? `
+                      <img src="${product.secondary_image}" alt="${product.name}"
+                        class="absolute inset-0 w-full h-auto opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                    ` : ''}
+                  </div>
+                </a>
+                <div class="mt-1">
+                  <a href="${product.url}">
+                    <h3 class="text-lg font-semibold text-gray-900 hover:text-gray-600 line-clamp-custom">
+                      ${product.name}
+                    </h3>
+                  </a>
+                  <div>
+                    <span class="text-gray-900 font-bold">
+                      ₹${product.price}
+                    </span>
+                    ${product.before_discount_price ? `
+                      <span class="text-gray-600 font-bold line-through">
+                        ₹${product.before_discount_price}
+                      </span>
+                    ` : ''}
+                  </div>
+                    <p class="my-1">
+                      ${product.sizes ? product.sizes.map(size => `
+                        <span class="text-gray-800 bg-gray-100 p-1 text-xs">${size.toUpperCase()}</span>
+                      `).join('') : ''}
+                    </p>                
+                    <p class="text-sm ${product.stock > 0 ? 'text-green-600' : 'text-red-600'}">
+                    ${product.stock > 0 ? `In Stock (${product.stock})` : 'Out of Stock'}
+                  </p>
+                </div>
+              </div>
+            `;
+                        productGrid.insertAdjacentHTML('beforeend', productHtml);
+                    });
+                    page++;
+                }
+                if (!data.has_next) {
+                    // No more products to load
+                    window.removeEventListener('scroll', loadMoreProducts);
+                }
+            })
+            .finally(() => {
+                isLoading = false;
+                document.getElementById('loading-spinner').style.display = 'none';
+            });
+    }
+</script>

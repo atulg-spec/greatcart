@@ -1,8 +1,11 @@
 from django.shortcuts import render, get_object_or_404
-from store.models import Product, ReviewRating
+from store.models import Product, ReviewRating, RecentlyStalked
 from home.models import Slider, homeSections, Page
 
 def home(request):
+    recently_stalked = None
+    if request.user.is_authenticated:
+        recently_stalked = RecentlyStalked.objects.filter(user=request.user)
     products = Product.objects.all().filter(is_available=True).order_by('created_date')
     mobile_sliders = Slider.objects.filter(is_mobile=True)
     desktop_sliders = Slider.objects.filter(is_mobile=False)
@@ -17,6 +20,7 @@ def home(request):
         'mobile_sliders': mobile_sliders,
         'desktop_sliders': desktop_sliders,
         'sections': sections,
+        'recently_stalked': recently_stalked,
         'products': products,
         'reviews': reviews,
     }

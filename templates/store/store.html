@@ -2,155 +2,94 @@
 {% load static %}
 
 {% block content %}
-<!-- ========================= SECTION PAGETOP ========================= -->
-<section class="py-8 bg-gray-100">
-  <div class="container mx-auto px-4">
-    {% if 'search' in request.path %}
-      <h2 class="text-2xl font-bold">Search Result</h2>
-    {% else %}
-      <h2 class="text-2xl font-bold">Our Store</h2>
-    {% endif %}
-  </div>
-</section>
-<!-- ========================= SECTION INTRO END// ========================= -->
-
 <!-- ========================= SECTION CONTENT ========================= -->
-<section class="py-8">
+
+
+
+<section class="py-24 md:py-14">
   <div class="container mx-auto px-4">
     <div class="flex flex-col lg:flex-row gap-8">
-      <!-- Sidebar -->
-      <aside class="lg:w-1/4">
-        <div class="bg-white rounded-lg shadow-md p-6">
-          <!-- Categories -->
-          <div class="mb-6">
-            <h6 class="text-lg font-semibold mb-4">Categories</h6>
-            <ul class="space-y-2">
-              <li><a href="{% url 'store' %}" class="text-gray-700 hover:text-primary">All Products</a></li>
-              {% for category in links %}
-                <li><a href="{{ category.get_url }}" class="text-gray-700 hover:text-primary">{{ category.category_name }}</a></li>
-              {% endfor %}
-            </ul>
-          </div>
+      <div class="hidden lg:block lg:w-1/4">
 
-          <!-- Sizes -->
-          <div class="mb-6">
-            <h6 class="text-lg font-semibold mb-4">Sizes</h6>
-            <div class="flex flex-wrap gap-2">
-              <label class="inline-flex items-center">
-                <input type="checkbox" class="form-checkbox">
-                <span class="ml-2">XS</span>
-              </label>
-              <label class="inline-flex items-center">
-                <input type="checkbox" class="form-checkbox">
-                <span class="ml-2">SM</span>
-              </label>
-              <label class="inline-flex items-center">
-                <input type="checkbox" class="form-checkbox">
-                <span class="ml-2">LG</span>
-              </label>
-              <label class="inline-flex items-center">
-                <input type="checkbox" class="form-checkbox">
-                <span class="ml-2">XXL</span>
-              </label>
-            </div>
-          </div>
-
-          <!-- Price Range -->
-          <div class="mb-6">
-            <h6 class="text-lg font-semibold mb-4">Price Range</h6>
-            <div class="grid grid-cols-2 gap-4">
-              <div>
-                <label class="block text-gray-700 font-semibold mb-2">Min</label>
-                <select class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
-                  <option value="0">$0</option>
-                  <option value="50">$50</option>
-                  <option value="100">$100</option>
-                  <option value="150">$150</option>
-                  <option value="200">$200</option>
-                  <option value="500">$500</option>
-                  <option value="1000">$1000</option>
-                </select>
-              </div>
-              <div>
-                <label class="block text-gray-700 font-semibold mb-2">Max</label>
-                <select class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
-                  <option value="50">$50</option>
-                  <option value="100">$100</option>
-                  <option value="150">$150</option>
-                  <option value="200">$200</option>
-                  <option value="500">$500</option>
-                  <option value="1000">$1000</option>
-                  <option value="2000">$2000+</option>
-                </select>
-              </div>
-            </div>
-            <button class="w-full bg-primary text-white px-6 py-2 rounded-lg mt-4 hover:bg-primary-dark">Apply</button>
-          </div>
-        </div>
-      </aside>
+      </div>
 
       <!-- Main Content -->
       <main class="lg:w-3/4">
-        <header class="border-b pb-4 mb-6">
-          <div class="flex justify-between items-center">
-            <span class="text-gray-700"><b>{{ product_count }}</b> items found</span>
-          </div>
-        </header>
-
         <!-- Product Grid -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {% if products %}
-            {% for product in products %}
-              <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                <div class="relative">
-                  <a href="{{ product.get_url }}">
-                    <img src="{{ product.images.url }}" class="w-full h-48 object-cover">
-                  </a>
-                </div>
-                <div class="p-4">
-                  <a href="{{ product.get_url }}" class="text-lg font-semibold hover:text-primary">{{ product.product_name }}</a>
-                  <div class="text-xl font-bold mt-2">${{ product.price }}</div>
-                  <a href="{{ product.get_url }}" class="block w-full bg-primary text-white text-center px-6 py-2 rounded-lg mt-4 hover:bg-primary-dark">View Details</a>
-                </div>
-              </div>
-            {% endfor %}
-          {% else %}
-            <div class="col-span-3 text-center">
-              <h2 class="text-2xl font-bold">No result found. Please try again.</h2>
-            </div>
-          {% endif %}
+        {% include 'store/includes/product_list.html' %}
+
+        <!-- Loading Spinner -->
+        <div id="loading-spinner" class="text-center my-8 hidden">
+          <div class="spinner-border text-primary" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
         </div>
-
-        <!-- Pagination -->
-        <nav class="mt-8">
-          {% if products.has_other_pages %}
-            <ul class="flex justify-center space-x-2">
-              {% if products.has_previous %}
-                <li><a href="?page={{ products.previous_page_number }}" class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">Previous</a></li>
-              {% else %}
-                <li><span class="px-4 py-2 bg-gray-200 rounded-lg cursor-not-allowed">Previous</span></li>
-              {% endif %}
-
-              {% for i in products.paginator.page_range %}
-                {% if products.number == i %}
-                  <li><span class="px-4 py-2 bg-primary text-white rounded-lg">{{ i }}</span></li>
-                {% else %}
-                  <li><a href="?page={{ i }}" class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">{{ i }}</a></li>
-                {% endif %}
-              {% endfor %}
-
-              {% if products.has_next %}
-                <li><a href="?page={{ products.next_page_number }}" class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">Next</a></li>
-              {% else %}
-                <li><span class="px-4 py-2 bg-gray-200 rounded-lg cursor-not-allowed">Next</span></li>
-              {% endif %}
-            </ul>
-          {% endif %}
-        </nav>
       </main>
     </div>
   </div>
 </section>
 <!-- ========================= SECTION CONTENT END// ========================= -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const gridView2Col = document.getElementById('grid-view-2-col');
+    const gridView1Col = document.getElementById('grid-view-1-col');
+    const gridView1ColAlt = document.getElementById('grid-view-3-col');
+    const productGrid = document.getElementById('product-grid');
 
+    // Load saved layout from local storage
+    const savedLayout = localStorage.getItem('gridLayout');
+    if (savedLayout) {
+      productGrid.classList.add(savedLayout);
+      updateGridLayout(savedLayout);
+      updateIconColors(savedLayout);
+    }
+
+    // Event listeners for icon clicks
+    gridView2Col.addEventListener('click', () => {
+      updateGridLayout('grid-cols-2');
+    });
+
+    gridView1Col.addEventListener('click', () => {
+      updateGridLayout('grid-cols-1');
+    });
+
+    gridView1ColAlt.addEventListener('click', () => {
+      updateGridLayout('grid-cols-3');
+    });
+
+    // Function to update grid layout
+    function updateGridLayout(layout) {
+      // Remove existing grid classes
+      productGrid.classList.remove('grid-cols-1', 'grid-cols-2', 'grid-cols-3');
+      // Add the new grid class
+      productGrid.classList.add(layout);
+      // Save the layout to local storage
+      localStorage.setItem('gridLayout', layout);
+      // Update icon colors
+      updateIconColors(layout);
+    }
+
+    // Function to update icon colors based on active layout
+    function updateIconColors(layout) {
+      const icons = [gridView2Col, gridView1Col, gridView1ColAlt];
+      icons.forEach(icon => {
+        const path = icon.querySelector('path');
+        path.setAttribute('fill', '#808080');
+      });
+
+      if (layout === 'grid-cols-2') {
+        const path = gridView2Col.querySelector('path');
+        path.setAttribute('fill', '#000000');
+      }
+      else if (layout === 'grid-cols-1') {
+        const path = gridView1Col.querySelector('path');
+        path.setAttribute('fill', '#000000');
+      }
+      else if (layout === 'grid-cols-3') {
+        const path = gridView1ColAlt.querySelector('path');
+        path.setAttribute('fill', '#000000');
+      }
+    }
+  });
+</script>
 {% endblock %}

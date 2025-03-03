@@ -84,6 +84,7 @@
       </div>
     </div>
   </div>
+  {% include 'includes/subnavbar.html' %}
 </header>
 
 
@@ -198,4 +199,11 @@
     document.getElementById('headline').classList.add('hidden');
     document.getElementById('navbar').classList.add('top-0');
   }
+  let lastScroll = 0;
+  window.addEventListener('scroll', () => {
+    let currScroll = window.scrollY;
+    document.getElementById('subnavbar').classList.toggle('hidden', currScroll > lastScroll);
+    lastScroll = currScroll;
+  });
+
 </script>

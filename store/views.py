@@ -1,15 +1,15 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Product, ReviewRating, ProductGallery
+from .models import Product, ReviewRating, ProductGallery, RecentlyStalked
 from category.models import Category
 from carts.models import CartItem
 from django.db.models import Q
-
 from carts.views import _cart_id
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from .forms import ReviewForm
 from django.contrib import messages
 from orders.models import OrderProduct
+
 
 
 def store(request, category_slug=None):
@@ -19,22 +19,41 @@ def store(request, category_slug=None):
     if category_slug != None:
         categories = get_object_or_404(Category, slug=category_slug)
         products = Product.objects.filter(category=categories, is_available=True)
-        paginator = Paginator(products, 1)
-        page = request.GET.get('page')
-        paged_products = paginator.get_page(page)
-        product_count = products.count()
     else:
         products = Product.objects.all().filter(is_available=True).order_by('id')
-        paginator = Paginator(products, 3)
-        page = request.GET.get('page')
-        paged_products = paginator.get_page(page)
-        product_count = products.count()
+
+    # Pagination
+    paginator = Paginator(products, 30)  # Show 10 products per page
+    page = request.GET.get('page', 1)
+    paged_products = paginator.get_page(page)
+
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        # If it's an AJAX request, return JSON data
+        data = {
+            'products': [
+                {
+                    'id': product.id,
+                    'name': product.product_name,
+                    'price': product.price,
+                    'sizes': [size for size in product.get_sizes()],  # Return a list of size names
+                    'before_discount_price': product.before_discount_price,
+                    'image': product.images.url,
+                    'stock': product.stock,
+                    'secondary_image': product.secondary_image.url,
+                    'url': product.get_url(),
+                }
+                for product in paged_products
+            ],
+            'has_next': paged_products.has_next(),
+        }
+        return JsonResponse(data)
 
     context = {
         'products': paged_products,
-        'product_count': product_count,
+        'product_count': products.count(),
     }
     return render(request, 'store/store.html', context)
+
 
 
 def product_detail(request, category_slug, product_slug):
@@ -46,6 +65,7 @@ def product_detail(request, category_slug, product_slug):
 
     if request.user.is_authenticated:
         try:
+            RecentlyStalked.objects.create(user=request.user,product=single_product)
             orderproduct = OrderProduct.objects.filter(user=request.user, product_id=single_product.id).exists()
         except OrderProduct.DoesNotExist:
             orderproduct = None

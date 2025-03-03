@@ -243,3 +243,16 @@ CKEDITOR_5_CONFIGS = {
 }
 }
 
+# settings.py
+
+# Payment Gateway Configuration
+PAYMENT_GATEWAY = 'razorpay'  # or 'payu'
+
+# Razorpay Configuration
+RAZORPAY_KEY_ID = 'your_razorpay_key_id'
+RAZORPAY_KEY_SECRET = 'your_razorpay_key_secret'
+
+# PayU Configuration
+PAYU_MERCHANT_KEY = 'your_payu_merchant_key'
+PAYU_MERCHANT_SALT = 'your_payu_merchant_salt'
+PAYU_MODE = 'TEST'  # or 'LIVE' for production
