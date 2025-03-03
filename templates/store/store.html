@@ -92,5 +92,10 @@
       }
     }
   });
+  window.addEventListener('scroll', () => {
+    let currScroll = window.scrollY;
+    document.getElementById('subnavbar').classList.toggle('hidden', currScroll > lastScroll);
+    lastScroll = currScroll;
+  });
 </script>
 {% endblock %}
