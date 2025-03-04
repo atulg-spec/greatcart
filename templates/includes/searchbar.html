@@ -1,0 +1,37 @@
+<header>
+    <!-- SEARCH NAVBAR -->
+    <div id="searchbar" class="bg-white w-full fixed left-0 transition-all duration-300 z-50 px-2 py-2">
+        <form action="/store/" method="get">
+            <div class="flex space-x-2">
+                <div class="w-1/8 py-2">
+                    <a href="{{ request.META.HTTP_REFERER }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="-0.5 -0.5 16 16"
+                            id="Alt-Arrow-Left--Streamline-Solar" height="26" width="26">
+                            <desc>Alt Arrow Left Streamline Icon: https://streamlinehq.com</desc>
+                            <g id="Line Duotone/Arrows/Alt Arrow Left">
+                                <path id="Vector" stroke="#000000" stroke-linecap="round" stroke-linejoin="round"
+                                    d="m9.375 3.125 -3.75 4.375 3.75 4.375" stroke-width="1"></path>
+                            </g>
+                        </svg>
+                    </a>
+                </div>
+                <div class="w-full">
+                    <div class="flex items-center w-full border border-black h-full">
+                        <!-- Icon -->
+                        <span class="text-black pl-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="feather feather-search">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="30" y1="30" x2="16.65" y2="16.65"></line>
+                            </svg>
+                        </span>
+                        <!-- Input Field -->
+                        <input type="text" placeholder="Search what you love !" id="search" name="keyword"
+                            class="flex-1 bg-white text-black px-4 focus:outline-none" required="">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</header>

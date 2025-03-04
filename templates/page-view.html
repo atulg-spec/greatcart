@@ -5,7 +5,8 @@
 <title>{{ page.title }}</title>
 <meta name="description" content="{{ page.meta_description }}">
 <meta name="keywords" content="{{ page.meta_keywords }}">
-<meta name="robots" content="{% if page.robots_index %}index{% else %}noindex{% endif %}, {% if page.robots_follow %}follow{% else %}nofollow{% endif %}">
+<meta name="robots"
+    content="{% if page.robots_index %}index{% else %}noindex{% endif %}, {% if page.robots_follow %}follow{% else %}nofollow{% endif %}">
 <link rel="canonical" href="{{ page.canonical_url }}">
 
 <!-- Open Graph -->
@@ -26,9 +27,15 @@
 {% endblock meta %}
 
 {% block content %}
-<section class="my-14 w-full max-w-screen-xl mx-auto px-6">
-    <div class="prose prose-lg mx-auto w-full text-center">
-        {{ page.content|safe }}
-    </div>
-</section>
+{% include 'includes/navbar.html' %}
+{% include 'includes/home/slider.html' %}
+
+<main class="container mx-auto md:px-2 py-8">
+
+    <section class="my-14 w-full max-w-screen-xl mx-auto px-6">
+        <div class="prose prose-lg mx-auto w-full text-center">
+            {{ page.content|safe }}
+        </div>
+    </section>
+</main>
 {% endblock content %}

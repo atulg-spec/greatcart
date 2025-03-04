@@ -72,18 +72,11 @@
 <body class="bg-white {{settings.font_style}}">
     <!-- Navbar -->
     {% include 'includes/preloader.html' %}
-    {% include 'includes/navbar.html' %}
 
-    {% block slider %}
-    <!-- Slider goes here -->
+
+    {% block content %}
+    <!-- Content goes here -->
     {% endblock %}
-
-    <!-- Content -->
-    <main class="container mx-auto px-2 py-8">
-        {% block content %}
-        <!-- Content goes here -->
-        {% endblock %}
-    </main>
 
     <div class="w-full bg-red-500 flex justify-center items-center content-center py-2">
         <div>

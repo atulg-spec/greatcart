@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- ========================= SECTION CONTENT ========================= -->
+{% include 'includes/searchbar.html' %}
+<section class="container md:px-2 py-14">
+    <!-- Category Buttons -->
+    <div class="bg-white px-2 shadow-md pt-2 pb-4 z-50 w-full" id="category-bar">
+        <div class="flex space-x-4 overflow-x-auto scrollbar-hide" style="max-width: 100vw;">
+            {% for category in sections %}
+            <button type="button" onclick="showSection('{{ category.name|slugify }}')"
+                data-section="{{ category.name|slugify }}"
+                class="category-btn bg-white border border-gray-400 transition duration-300 font-medium px-2 py-1 text-sm font-mono whitespace-nowrap">
+                {{ category.name }}
+            </button>
+            {% endfor %}
+        </div>
+    </div>
+    <!-- Product Sections -->
+    <div class="">
+        {% for category in sections %}
+        <div id="section-{{ category.name|slugify }}"
+            class="product-section {% if not forloop.first %}hidden{% endif %} mt-3" data-aos="fade-up">
+
+            <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 md:gap-6 px-2 md:px-1">
+                {% for product in category.products.all %}
+                <div class="group relative" data-aos="fade-up">
+                    <a href="{{ product.get_url }}">
+                        <div>
+                            <img src="{{ product.images.url }}" alt="{{ product.product_name }}"
+                                class="block w-full h-auto transition-opacity duration-300 group-hover:opacity-0">
+                            {% if product.secondary_image %}
+                            <img src="{{ product.secondary_image.url }}" alt="{{ product.product_name }}"
+                                class="absolute inset-0 w-full h-auto opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                            {% endif %}
+                        </div>
+                    </a>
+                    <div class="mt-1">
+                        <a href="{{ product.get_url }}">
+                            <h3 class="text-sm font-semibold text-gray-900 hover:text-gray-600 line-clamp-custom">
+                                {{ product.product_name }}
+                            </h3>
+                        </a>
+                        <div>
+                            <span class="text-gray-900 font-bold">
+                                ₹{{ product.price }}
+                            </span>
+                            <span class="text-gray-600 font-bold line-through">
+                                ₹{{ product.before_discount_price }}
+                            </span>
+                        </div>
+
+                        <p class="my-1">
+                            {% for size in product.get_sizes %}
+                            <span class="text-gray-800 bg-gray-100 p-1 text-xs">{{ size|upper }}</span>
+                            {% endfor %}
+                        </p>
+
+                        <!-- Stock Availability -->
+                        <p class="text-sm {% if product.stock > 0 %}text-green-600{% else %}text-red-600{% endif %}">
+                            {% if product.stock > 0 %}
+                            In Stock ({{ product.stock }})
+                            {% else %}
+                            Out of Stock
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+                {% empty %}
+                <p class="col-span-full text-center">No products available in this section.</p>
+                {% endfor %}
+            </div>
+            <div class="flex justify-center my-6">
+                <a href="{{category.url}}" class="px-4 py-2 bg-black text-white">View All</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+<main class="container mx-auto md:px-2 py-8">
+    <section class="py-24 md:py-14">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col lg:flex-row gap-8">
+                <div class="hidden lg:block lg:w-1/4">
+
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<script>
+    function showSection(sectionId) {
+        // Hide all product sections
+        document.querySelectorAll('.product-section').forEach(section => {
+            section.classList.add('hidden');
+        });
+
+        // Show the selected section
+        document.getElementById('section-' + sectionId).classList.remove('hidden');
+
+        // Reset all buttons to default (white background)
+        document.querySelectorAll('.category-btn').forEach(button => {
+            button.classList.remove('bg-black', 'text-white');
+            button.classList.add('bg-white', 'text-black', 'border-gray-400');
+        });
+
+        // Set the active button to black background
+        document.querySelector(`button[data-section="${sectionId}"]`).classList.remove('bg-white', 'text-black');
+        document.querySelector(`button[data-section="${sectionId}"]`).classList.add('bg-black', 'text-white');
+    }
+
+    // Set the first button as active by default on page load
+    document.addEventListener("DOMContentLoaded", function () {
+        let firstButton = document.querySelector('.category-btn');
+        if (firstButton) {
+            firstButton.classList.add('bg-black', 'text-white');
+        }
+    });
+
+    window.addEventListener("scroll", function () {
+    let catbar = document.getElementById("category-bar");
+    if (window.scrollY > 1) {
+      catbar.classList.add("fixed");
+    } else {
+      catbar.classList.remove("fixed");
+    }
+  });
+</script>
+<!-- ========================= SECTION CONTENT END// ========================= -->
+{% endblock %}

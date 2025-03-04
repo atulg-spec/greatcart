@@ -9,51 +9,77 @@ from django.http import HttpResponse, JsonResponse
 from .forms import ReviewForm
 from django.contrib import messages
 from orders.models import OrderProduct
-
+from home.models import homeSections
 
 
 def store(request, category_slug=None):
     categories = None
     products = None
 
-    if category_slug != None:
+    # Filter products based on category
+    if category_slug is not None:
         categories = get_object_or_404(Category, slug=category_slug)
         products = Product.objects.filter(category=categories, is_available=True)
     else:
-        products = Product.objects.all().filter(is_available=True).order_by('id')
+        products = Product.objects.filter(is_available=True).order_by('id')
+
+    # Filter products based on keyword
+    keyword = request.GET.get('keyword', '')
+    if keyword:
+        products = products.filter(
+            Q(description__icontains=keyword) | Q(product_name__icontains=keyword)
+        ).order_by('-created_date')
 
     # Pagination
-    paginator = Paginator(products, 30)  # Show 10 products per page
+    paginator = Paginator(products, 30)  # Show 30 products per page
     page = request.GET.get('page', 1)
-    paged_products = paginator.get_page(page)
 
+    try:
+        paged_products = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver the first page
+        paged_products = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g., 9999), deliver the last page
+        paged_products = []
+
+    # Handle AJAX requests
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-        # If it's an AJAX request, return JSON data
         data = {
             'products': [
                 {
                     'id': product.id,
                     'name': product.product_name,
                     'price': product.price,
-                    'sizes': [size for size in product.get_sizes()],  # Return a list of size names
+                    'sizes': [size for size in product.get_sizes()],
                     'before_discount_price': product.before_discount_price,
                     'image': product.images.url,
                     'stock': product.stock,
-                    'secondary_image': product.secondary_image.url,
+                    'secondary_image': product.secondary_image.url if product.secondary_image else None,
                     'url': product.get_url(),
                 }
-                for product in paged_products
+                for product in paged_products.reverse()
             ],
             'has_next': paged_products.has_next(),
+            'category_slug': category_slug,
+            'keyword': keyword,
         }
         return JsonResponse(data)
 
+    # Render the template for non-AJAX requests
     context = {
         'products': paged_products,
-        'product_count': products.count(),
+        'category_slug': category_slug,
+        'keyword': keyword,
     }
     return render(request, 'store/store.html', context)
 
+def search(request):
+    sections = homeSections.objects.all()
+    context = {
+        'sections': sections,
+    }
+    return render(request, 'store/search.html',context)
 
 
 def product_detail(request, category_slug, product_slug):
@@ -88,17 +114,6 @@ def product_detail(request, category_slug, product_slug):
     return render(request, 'store/product_detail.html', context)
 
 
-def search(request):
-    if 'keyword' in request.GET:
-        keyword = request.GET['keyword']
-        if keyword:
-            products = Product.objects.order_by('-created_date').filter(Q(description__icontains=keyword) | Q(product_name__icontains=keyword))
-            product_count = products.count()
-    context = {
-        'products': products,
-        'product_count': product_count,
-    }
-    return render(request, 'store/store.html', context)
 
 
 def submit_review(request, product_id):

@@ -4,30 +4,31 @@
 {% block content %}
 <!-- ========================= SECTION CONTENT ========================= -->
 
+{% include 'includes/navbar.html' %}
+{% include 'includes/home/slider.html' %}
 
-
-<section class="py-24 md:py-14">
-  <div class="container mx-auto px-4">
-    <div class="flex flex-col lg:flex-row gap-8">
-      <div class="hidden lg:block lg:w-1/4">
-
-      </div>
-
-      <!-- Main Content -->
-      <main class="lg:w-3/4">
-        <!-- Product Grid -->
-        {% include 'store/includes/product_list.html' %}
-
-        <!-- Loading Spinner -->
-        <div id="loading-spinner" class="text-center my-8 hidden">
-          <div class="spinner-border text-primary" role="status">
-            <span class="sr-only">Loading...</span>
-          </div>
+<main class="container mx-auto md:px-2 py-8">
+  <section class="py-24 md:py-14">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col lg:flex-row gap-8">
+        <div class="hidden lg:block lg:w-1/4">
         </div>
-      </main>
+        <!-- Main Content -->
+        <main class="lg:w-3/4">
+          <!-- Product Grid -->
+          {% include 'store/includes/product_list.html' %}
+
+          <!-- Loading Spinner -->
+          <div id="loading-spinner" class="text-center my-8 hidden">
+            <div class="spinner-border text-primary" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+          </div>
+        </main>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
+</main>
 <!-- ========================= SECTION CONTENT END// ========================= -->
 <script>
   document.addEventListener('DOMContentLoaded', function () {
