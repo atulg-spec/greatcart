@@ -11,14 +11,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
     <meta name="theme-color" content="#000000">
 
-    {{head.links|safe}}        
+    {{head.links|safe}}
 
     {% block meta %}
     {% endblock meta %}
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Favicon -->
     {% if head.favicon %}
-        <link rel="icon" href="{{ head.favicon.url }}" type="image/x-icon">
+    <link rel="icon" href="{{ head.favicon.url }}" type="image/x-icon">
     {% endif %}
 
     <!-- Tailwind CSS CDN -->
@@ -61,11 +61,17 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
+
         .scrollbar-hide {
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
-        {{head.custom_styles|safe}}
+
+            {
+                {
+                head.custom_styles|safe
+            }
+        }
     </style>
 </head>
 
@@ -85,7 +91,7 @@
             </h2>
         </div>
     </div>
-    
+
     <div class="w-full flex justify-center items-center content-center py-2 my-4 sm:my-6 md:my-8">
         <div>
             <h2 class="font-semibold text-2xl sm:text-3xl md:text-4xl text-black text-center">
@@ -100,7 +106,48 @@
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
     <script>
-      AOS.init();
+        AOS.init();
+    </script>
+    <script>
+        // Function to measure load time and identify slow-loading resources
+        function measureLoadTime() {
+            // Record the start time
+            const startTime = performance.now();
+
+            // Wait until the page is fully loaded
+            window.addEventListener('load', () => {
+                // Calculate the time taken to load the entire page
+                const loadTime = performance.now() - startTime;
+                console.log(`Page load time: ${loadTime.toFixed(2)} milliseconds`);
+
+                // Get all resource load times
+                const resources = performance.getEntriesByType('resource');
+
+                if (resources.length === 0) {
+                    console.log("No resource load time data available.");
+                    return;
+                }
+
+                // Create an array to store load times for each resource
+                const loadTimes = resources.map(resource => ({
+                    name: resource.name,
+                    type: resource.initiatorType,
+                    loadTime: resource.duration
+                }));
+
+                // Sort by load time in descending order
+                loadTimes.sort((a, b) => b.loadTime - a.loadTime);
+
+                // Output the slowest loading resources
+                console.log("Slowest loading resources:");
+                loadTimes.forEach(resource => {
+                    console.log(`${resource.type}: ${resource.name} - ${resource.loadTime.toFixed(2)} ms`);
+                });
+            });
+        }
+
+        // Call the function to measure load time and identify slow-loading resources
+        measureLoadTime();
     </script>
 </body>
 

@@ -23,18 +23,22 @@
       <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 md:gap-6 px-2 md:px-1">
         {% for product in recently_stalked %}
         <div class="group relative" data-aos="fade-up">
-          <a href="{{ product.product.get_url }}">
+          <a href="{{ product.product.get_url }}" aria-label="{{ product.product.product_name }}">
             <div>
+              <!-- Primary Image -->
               <img src="{{ product.product.images.url }}" alt="{{ product.product.product_name }}"
-                class="block w-full h-auto transition-opacity duration-300 group-hover:opacity-0">
+                class="block w-full h-auto transition-opacity duration-300 group-hover:opacity-0" loading="lazy"
+                width="300" height="400" />
+              <!-- Secondary Image (if available) -->
               {% if product.product.secondary_image %}
               <img src="{{ product.product.secondary_image.url }}" alt="{{ product.product.product_name }}"
-                class="absolute inset-0 w-full h-auto opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                class="absolute inset-0 w-full h-auto opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                loading="lazy" width="300" height="400" />
               {% endif %}
             </div>
           </a>
           <div class="mt-1">
-            <a href="{{ product.product.get_url }}">
+            <a href="{{ product.product.get_url }}" aria-label="{{ product.product.product_name }}">
               <h3 class="text-lg font-semibold text-gray-900 hover:text-gray-600 line-clamp-custom">
                 {{ product.product.product_name }}
               </h3>
@@ -48,6 +52,7 @@
               </span>
             </div>
 
+            <!-- Sizes -->
             <p class="my-1">
               {% for size in product.product.get_sizes %}
               <span class="text-gray-800 bg-gray-100 p-1 text-xs">{{ size|upper }}</span>
@@ -79,31 +84,35 @@
       {% for category in sections %}
       <button type="button" onclick="showSection('{{ category.name|slugify }}')"
         data-section="{{ category.name|slugify }}"
-        class="category-btn bg-white border border-gray-400 transition duration-300 font-medium px-2 py-1 text-sm font-mono whitespace-nowrap">
+        class="category-btn bg-white border border-gray-400 font-medium px-2 py-1 text-sm font-mono whitespace-nowrap min-w-[120px] text-center"
+        aria-label="Show {{ category.name }} section" aria-expanded="false" role="tab">
         {{ category.name }}
       </button>
       {% endfor %}
     </div>
+
     <!-- Product Sections -->
     {% for category in sections %}
     <div id="section-{{ category.name|slugify }}"
       class="product-section {% if not forloop.first %}hidden{% endif %} mt-6" data-aos="fade-up">
-
       <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 md:gap-6 px-2 md:px-1">
         {% for product in category.products.all %}
         <div class="group relative" data-aos="fade-up">
-          <a href="{{ product.get_url }}">
+          <a href="{{ product.get_url }}" aria-label="{{ product.product_name }}">
             <div>
+              <!-- Primary Image -->
               <img src="{{ product.images.url }}" alt="{{ product.product_name }}"
-                class="block w-full h-auto transition-opacity duration-300 group-hover:opacity-0">
+                class="block w-full h-auto transition-opacity duration-300 group-hover:opacity-0" loading="lazy"
+                width="300" height="400" />
               {% if product.secondary_image %}
               <img src="{{ product.secondary_image.url }}" alt="{{ product.product_name }}"
-                class="absolute inset-0 w-full h-auto opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                class="absolute inset-0 w-full h-auto opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                loading="lazy" width="300" height="400" />
               {% endif %}
             </div>
           </a>
           <div class="mt-1">
-            <a href="{{ product.get_url }}">
+            <a href="{{ product.get_url }}" aria-label="{{ product.product_name }}">
               <h3 class="text-sm font-semibold text-gray-900 hover:text-gray-600 line-clamp-custom">
                 {{ product.product_name }}
               </h3>
@@ -117,6 +126,7 @@
               </span>
             </div>
 
+            <!-- Sizes -->
             <p class="my-1">
               {% for size in product.get_sizes %}
               <span class="text-gray-800 bg-gray-100 p-1 text-xs">{{ size|upper }}</span>
@@ -138,14 +148,19 @@
         {% endfor %}
       </div>
       <div class="flex justify-center my-6">
-        <a href="{{category.url}}" class="px-4 py-2 bg-black text-white">View All</a>
+        <a href="{{ category.url }}" class="px-4 py-2 bg-black text-white"
+          aria-label="View all {{ category.name }} products">
+          View All
+        </a>
       </div>
     </div>
     {% endfor %}
   </section>
 
+
   <section data-aos="fade-up">
-    <img src="{{settings.main_page_image.url}}" alt="">
+    <img src="{{ settings.main_page_image.url }}" alt="{{ settings.site_name }} Main Page Image" loading="lazy"
+      width="1200" height="600" class="w-full h-auto" />
   </section>
 
   <section class="my-8" data-aos="fade-up">
@@ -154,12 +169,13 @@
       <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-6 px-2 md:px-1">
         {% for category in categories %}
         <div data-aos="fade-up">
-          <a href="{{ category.get_url }}" title="{{ category.category_name }}" class="relative group block">
+          <a href="{{ category.get_url }}" title="{{ category.category_name }}" class="relative group block"
+            aria-label="{{ category.category_name }}">
             <figure class="overflow-hidden rounded-lg shadow-md relative">
               {% if category.cat_image %}
               <img src="{{ category.cat_image.url }}" alt="{{ category.category_name }}"
                 class="w-full h-auto rounded-lg shadow-md transition-transform duration-300 group-hover:scale-125 group-hover:shadow-xl"
-                loading="lazy">
+                loading="lazy" width="300" height="200" />
               <div
                 class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-opacity duration-300 flex items-center justify-center">
                 <span
@@ -183,24 +199,27 @@
     </div>
   </section>
 
+
+
   <div class="relative overflow-hidden" data-aos="fade-up">
     <section
-      class="flex justify-center items-center py-10 transform -rotate-45 {{settings.main_page_timer_strap_classes}}">
+      class="flex justify-center items-center py-10 transform -rotate-45 {{ settings.main_page_timer_strap_classes }}">
       <div class="flex flex-col md:flex-row items-center gap-10 w-full px-5 space-x-4 transform rotate-45">
         <!-- Image Section -->
         <div class="w-full md:w-1/2 flex justify-center items-center" data-aos="fade-up">
-          <img src="{{settings.main_page_timer_thumbnail.url}}" alt="Match Timer Thumbnail"
-            class="w-auto h-auto transition-transform duration-300 hover:scale-105">
+          <img src="{{ settings.main_page_timer_thumbnail.url }}" alt="Match Timer Thumbnail"
+            class="w-auto h-auto transition-transform duration-300 hover:scale-105" loading="lazy" width="400"
+            height="300" />
         </div>
+
         <!-- Countdown Section -->
         <div class="w-full md:w-1/2 text-center flex flex-col items-center gap-6" data-aos="fade-up">
-
           <!-- Title & Description -->
           <h2 class="text-5xl md:text-6xl font-bold font-manrope tracking-widest drop-shadow-2xl">
-            {{settings.main_page_timer_heading}}
+            {{ settings.main_page_timer_heading }}
           </h2>
           <p class="text-base font-normal leading-relaxed">
-            {{settings.main_page_timer_caption}}
+            {{ settings.main_page_timer_caption }}
           </p>
 
           <!-- Countdown Timer -->
@@ -227,8 +246,9 @@
           </div>
 
           <!-- Register Button -->
-          <a href="{{settings.main_page_timer_url}}"
-            class="text-lg sm:w-fit w-full px-12 py-3 bg-black text-white transition-all duration-500 ease-in-out shadow-lg flex justify-center items-center hover:scale-105 animate-bounce">
+          <a href="{{ settings.main_page_timer_url }}"
+            class="text-lg sm:w-fit w-full px-12 py-3 bg-black text-white transition-all duration-500 ease-in-out shadow-lg flex justify-center items-center hover:scale-105 animate-bounce"
+            aria-label="Shop Now">
             Shop Now
           </a>
         </div>
@@ -249,18 +269,22 @@
       <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 md:gap-6 px-2 md:px-1">
         {% for product in products %}
         <div class="group relative" data-aos="fade-up">
-          <a href="{{ product.get_url }}">
+          <a href="{{ product.get_url }}" aria-label="{{ product.product_name }}">
             <div>
+              <!-- Primary Image -->
               <img src="{{ product.images.url }}" alt="{{ product.product_name }}"
-                class="block w-full h-auto transition-opacity duration-300 group-hover:opacity-0">
+                class="block w-full h-auto transition-opacity duration-300 group-hover:opacity-0" loading="lazy"
+                width="300" height="400" />
+              <!-- Secondary Image (if available) -->
               {% if product.secondary_image %}
               <img src="{{ product.secondary_image.url }}" alt="{{ product.product_name }}"
-                class="absolute inset-0 w-full h-auto opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                class="absolute inset-0 w-full h-auto opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                loading="lazy" width="300" height="400" />
               {% endif %}
             </div>
           </a>
           <div class="mt-1">
-            <a href="{{ product.get_url }}">
+            <a href="{{ product.get_url }}" aria-label="{{ product.product_name }}">
               <h3 class="text-sm font-semibold text-gray-900 hover:text-gray-600 line-clamp-custom">
                 {{ product.product_name }}
               </h3>
@@ -274,6 +298,7 @@
               </span>
             </div>
 
+            <!-- Sizes -->
             <p class="my-1">
               {% for size in product.get_sizes %}
               <span class="text-gray-800 bg-gray-100 p-1 text-xs">{{ size|upper }}</span>
