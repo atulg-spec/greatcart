@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Product, ReviewRating, ProductGallery, RecentlyStalked
+from .models import Product, ReviewRating, ProductGallery, RecentlyStalked, Variation
 from category.models import Category
 from carts.models import CartItem
 from django.db.models import Q
@@ -14,36 +14,60 @@ from home.models import homeSections
 
 def store(request, category_slug=None):
     categories = None
-    products = None
+    products = Product.objects.filter(is_available=True)
 
-    # Filter products based on category
+    # Filter by Category
     if category_slug is not None:
         categories = get_object_or_404(Category, slug=category_slug)
-        products = Product.objects.filter(category=categories, is_available=True)
-    else:
-        products = Product.objects.filter(is_available=True).order_by('id')
+        products = products.filter(category=categories)
 
-    # Filter products based on keyword
+    # Get available filter values
+    sizes = Variation.objects.filter(
+        product__in=products, variation_category='size', is_active=True
+    ).values_list('variation_value', flat=True).distinct()
+
+    colors = Variation.objects.filter(
+        product__in=products, variation_category='color', is_active=True
+    ).values_list('variation_value', flat=True).distinct()
+
+    # Apply Filters based on user selection
+    selected_size = request.GET.get('size')
+    selected_color = request.GET.get('color')
+    sort_by = request.GET.get('sort_by', '')
+
+    if selected_size:
+        products = products.filter(variation__variation_category='size', variation__variation_value=selected_size)
+
+    if selected_color:
+        products = products.filter(variation__variation_category='color', variation__variation_value=selected_color)
+
+    # Apply Sorting
+    if sort_by == 'popular':
+        products = products.order_by('-views')  # Assuming you track product views
+    elif sort_by == 'new':
+        products = products.order_by('-created_date')
+    elif sort_by == 'price_high_to_low':
+        products = products.order_by('-price')
+    elif sort_by == 'price_low_to_high':
+        products = products.order_by('price')
+
+    # Keyword Search
     keyword = request.GET.get('keyword', '')
     if keyword:
-        products = products.filter(
-            Q(description__icontains=keyword) | Q(product_name__icontains=keyword)
-        ).order_by('-created_date')
+        products = products.filter(Q(description__icontains=keyword) | Q(product_name__icontains=keyword))
 
     # Pagination
-    paginator = Paginator(products, 30)  # Show 30 products per page
+    paginator = Paginator(products, 30)  
     page = request.GET.get('page', 1)
 
     try:
         paged_products = paginator.page(page)
     except PageNotAnInteger:
-        # If page is not an integer, deliver the first page
         paged_products = paginator.page(1)
     except EmptyPage:
-        # If page is out of range (e.g., 9999), deliver the last page
         paged_products = []
 
-    # Handle AJAX requests
+    # Handle AJAX filter requests
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         data = {
             'products': [
@@ -66,11 +90,15 @@ def store(request, category_slug=None):
         }
         return JsonResponse(data)
 
-    # Render the template for non-AJAX requests
     context = {
         'products': paged_products,
+        'sizes': sizes,
+        'colors': colors,
         'category_slug': category_slug,
         'keyword': keyword,
+        'selected_size': selected_size,
+        'selected_color': selected_color,
+        'sort_by': sort_by,
     }
     return render(request, 'store/store.html', context)
 

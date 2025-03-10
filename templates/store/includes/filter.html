@@ -1,0 +1,285 @@
+<div class="fixed bottom-0 left-0 w-full bg-white p-2 z-10 rounded-t-xl border shadow-xl drop-shadow-[0_4px_10px_rgba(0,0,0,0.5)] hidden"
+    id="filter-tab">
+    <div class="w-12 rounded-xl h-1 mt-2 bg-black mx-auto"></div>
+    <div class="px-2 mt-6 overflow-y-auto h-38">
+        <div class="section">
+            <div class="flex justify-between cursor-pointer">
+                <div class="text-sm font-bold transition-all duration-300 ease-in-out">
+                    SORT BY
+                </div>
+                <div>
+                    <i data-feather="plus" class="w-5 h-5"></i>
+                </div>
+            </div>
+            <div id="sort-by" class="hidden py-4 text-sm">
+                <div class="flex flex-wrap justify-center gap-2">
+                    <div class="category-btn bg-white border border-black font-medium px-3 py-1 text-sm font-mono text-center"
+                        aria-label="POPULAR" aria-expanded="false" role="tab">
+                        POPULAR
+                    </div>
+                    <div class="category-btn bg-white border border-black font-medium px-3 py-1 text-sm font-mono text-center"
+                        aria-label="NEW" aria-expanded="false" role="tab">
+                        NEW
+                    </div>
+                    <div class="category-btn bg-white border border-black font-medium px-3 py-1 text-sm font-mono text-center"
+                        aria-label="PRICE: HIGH TO LOW" aria-expanded="false" role="tab">
+                        PRICE: HIGH TO LOW
+                    </div>
+                    <div class="category-btn bg-white border border-black font-medium px-3 py-1 text-sm font-mono text-center"
+                        aria-label="PRICE: LOW TO HIGH" aria-expanded="false" role="tab">
+                        PRICE: LOW TO HIGH
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr class="my-4">
+        <div class="section">
+            <div class="flex justify-between cursor-pointer">
+                <div class="text-sm font-bold transition-all duration-300 ease-in-out">
+                    SIZE
+                </div>
+                <div>
+                    <i data-feather="plus" class="w-5 h-5"></i>
+                </div>
+            </div>
+            <div id="size-content" class="hidden py-4 text-sm px-2">
+                <div class="flex flex-wrap justify-center gap-2">
+                    {% for size in sizes %}
+                    <div class="category-btn bg-white border border-black font-medium px-3 py-1 text-sm font-mono text-center"
+                        aria-label="{{size}}" aria-expanded="false" role="tab">
+                        {{size}}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <hr class="my-4">
+        <div class="section">
+            <div class="flex justify-between cursor-pointer">
+                <div class="text-sm font-bold transition-all duration-300 ease-in-out">
+                    COLOR
+                </div>
+                <div>
+                    <i data-feather="plus" class="w-5 h-5"></i>
+                </div>
+            </div>
+            <div id="color-content" class="hidden py-4 text-sm">
+                <div class="flex flex-wrap justify-center gap-2">
+                    {% for color in colors %}
+                    <div class="category-btn border border-black font-medium px-3 py-1 text-sm font-mono text-center"
+                        aria-label="{{color}}" aria-expanded="false" role="tab">
+                        {{color}}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <hr class="my-4">
+    </div>
+
+    <div class="flex space-x-2 bottom-0 left-0 w-full bg-white p-2 shadow-lg">
+        <button type="submit" class="w-full bg-white border border-black text-black px-6 py-3 hover:bg-gray-100"
+            id="clear-button">
+            <div class="flex justify-center items-center space-x-4">
+                <p>CLEAR</p>
+            </div>
+        </button>
+        <button type="submit" class="w-full bg-black text-white px-6 py-3 hover:bg-gray-900" id="apply-button">
+            <div class="flex justify-center items-center space-x-4">
+                <p>APPLY</p>
+            </div>
+        </button>
+    </div>
+
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Initialize Feather Icons
+        feather.replace();
+
+        // Get all section headers
+        const sectionHeaders = document.querySelectorAll('.section .flex');
+
+        sectionHeaders.forEach(header => {
+            header.addEventListener('click', function () {
+                // Toggle the content visibility
+                const content = header.nextElementSibling;
+                if (content) {
+                    content.classList.toggle('hidden');
+                }
+
+                // Get the current SVG icon
+                let iconContainer = header.querySelector('svg');
+                if (iconContainer) {
+                    // Toggle between plus and minus
+                    if (iconContainer.getAttribute('class').includes('feather-plus')) {
+                        iconContainer.outerHTML = feather.icons.minus.toSvg({ class: "feather feather-minus w-5 h-5" });
+                    } else {
+                        iconContainer.outerHTML = feather.icons.plus.toSvg({ class: "feather feather-plus w-5 h-5" });
+                    }
+                }
+            });
+        });
+
+        // Track selected filters
+        let selectedFilters = {
+            size: null,
+            color: null,
+            sortBy: null
+        };
+
+        // Function to set default selected filters based on URL
+        function setDefaultFiltersFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+
+            // Set size filter
+            const sizeParam = urlParams.get('size');
+            if (sizeParam) {
+                const sizeButton = document.querySelector(`.category-btn[aria-label="${sizeParam}"]`);
+                if (sizeButton) {
+                    sizeButton.classList.add('bg-black', 'text-white');
+                    selectedFilters.size = sizeParam;
+                }
+            }
+
+            // Set color filter
+            const colorParam = urlParams.get('color');
+            if (colorParam) {
+                const colorButton = document.querySelector(`.category-btn[aria-label="${colorParam}"]`);
+                if (colorButton) {
+                    colorButton.classList.add('bg-black', 'text-white');
+                    selectedFilters.color = colorParam;
+                }
+            }
+
+            // Set sortBy filter
+            const sortByParam = urlParams.get('sort_by');
+            if (sortByParam) {
+                let sortByValue = '';
+                switch (sortByParam) {
+                    case 'popular':
+                        sortByValue = 'POPULAR';
+                        break;
+                    case 'new':
+                        sortByValue = 'NEW';
+                        break;
+                    case 'price_high_to_low':
+                        sortByValue = 'PRICE: HIGH TO LOW';
+                        break;
+                    case 'price_low_to_high':
+                        sortByValue = 'PRICE: LOW TO HIGH';
+                        break;
+                }
+                const sortByButton = document.querySelector(`.category-btn[aria-label="${sortByValue}"]`);
+                if (sortByButton) {
+                    sortByButton.classList.add('bg-black', 'text-white');
+                    selectedFilters.sortBy = sortByParam;
+                }
+            }
+        }
+
+        // Set default filters on page load
+        setDefaultFiltersFromURL();
+
+        // Handle filter selection
+        document.querySelectorAll('.category-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                // Check if the button is already selected
+                const isSelected = this.classList.contains('bg-black');
+
+                // Remove selected class from all buttons in the same section
+                const section = this.closest('.section');
+                if (section) {
+                    section.querySelectorAll('.category-btn').forEach(btn => {
+                        btn.classList.remove('bg-black');
+                        btn.classList.remove('text-white');
+                    });
+                }
+
+                // Toggle selected class on the clicked button
+                if (!isSelected) {
+                    this.classList.add('bg-black');
+                    this.classList.add('text-white');
+                }
+
+                let filterType = this.closest('.section').querySelector('.text-sm.font-bold').textContent.trim();
+                let filterValue = this.getAttribute('aria-label');
+
+                if (filterType === "SIZE") {
+                    selectedFilters.size = isSelected ? null : filterValue;
+                } else if (filterType === "COLOR") {
+                    selectedFilters.color = isSelected ? null : filterValue;
+                } else if (filterType === "SORT BY") {
+                    if (!isSelected) {
+                        if (filterValue === "POPULAR") selectedFilters.sortBy = 'popular';
+                        if (filterValue === "NEW") selectedFilters.sortBy = 'new';
+                        if (filterValue === "PRICE: HIGH TO LOW") selectedFilters.sortBy = 'price_high_to_low';
+                        if (filterValue === "PRICE: LOW TO HIGH") selectedFilters.sortBy = 'price_low_to_high';
+                    } else {
+                        selectedFilters.sortBy = null;
+                    }
+                }
+            });
+        });
+
+        // Apply Filters
+        document.querySelector('button[type="submit"]:not(#clear-button)').addEventListener('click', function (event) {
+            event.preventDefault();
+
+            let currentUrl = new URL(window.location.href);
+            let params = currentUrl.searchParams;
+
+            if (selectedFilters.size) {
+                params.set('size', selectedFilters.size);
+            } else {
+                params.delete('size');
+            }
+
+            if (selectedFilters.color) {
+                params.set('color', selectedFilters.color);
+            } else {
+                params.delete('color');
+            }
+
+            if (selectedFilters.sortBy) {
+                params.set('sort_by', selectedFilters.sortBy);
+            } else {
+                params.delete('sort_by');
+            }
+
+            window.location.href = currentUrl.toString();  // Reload with filters applied
+        });
+
+        // Clear Filters
+        document.getElementById('clear-button').addEventListener('click', function (event) {
+            event.preventDefault();
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const keyword = urlParams.get('keyword'); // Get existing keyword
+
+            urlParams.delete('size');
+            urlParams.delete('color');
+            urlParams.delete('sort_by');
+
+            if (keyword) {
+                urlParams.set('keyword', keyword); // Retain the keyword
+            }
+
+            // Clear selected filters
+            selectedFilters = {
+                size: null,
+                color: null,
+                sortBy: null
+            };
+
+            // Remove selected class from all buttons
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('bg-black');
+                btn.classList.remove('text-white');
+            });
+
+            window.location.search = urlParams.toString();
+        });
+    });
+</script>
