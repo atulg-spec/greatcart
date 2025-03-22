@@ -91,6 +91,9 @@ class SiteSettingsAdmin(admin.ModelAdmin):
         ('Social Media', {
             'fields': ('instagram_page', 'facebook_handle', 'twitter_handle', 'youtube_handle')
         }),
+        ('Login/SignUp', {
+            'fields': ('login_banner', 'login_banner_desktop')
+        }),
     )
 
     def has_add_permission(self, request):

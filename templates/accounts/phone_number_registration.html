@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block page %}Login or Signup{% endblock page %}
+{% block content %}
+<div class="flex items-center justify-center bg-gray-100">
+    <div class="w-full md:max-w-md bg-white h-screen shadow-sm">
+        <div class="flex py-4 shadow-sm px-4">
+            <a href="{{ request.META.HTTP_REFERER }}" class="flex items-center text-black hover:text-black">
+                <i data-feather="chevron-left" class="w-5 h-5"></i>
+            </a>
+            <h2 class="text-lg font-semibold text-center w-full">LOGIN OR SIGNUP</h2>
+        </div>
+        <div class="px-8 py-4">
+            <p class="text-center text-sm text-gray-500">Unlock coupons, profile and much more</p>
+            <form method="post" action="/accounts/phone-number-registration/">
+                {% csrf_token %}
+                <div class="mt-6">
+                    <label class="block text-sm font-medium text-gray-700">Phone Number</label>
+                    <div class="relative mt-2 flex items-center border">
+                        <span class="px-4 py-3 text-gray-700 font-medium rounded-l-lg">+91</span>
+                        <input type="tel" name="phone_number" required
+                            class="w-full p-3 border-l border-gray-300 focus:ring-black focus:border-black rounded-r-lg">
+                    </div>
+                </div>
+                <button type="submit" class="w-full mt-6 p-3 bg-black text-white font-semibold hover:bg-opacity-90">
+                    CONTINUE
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}

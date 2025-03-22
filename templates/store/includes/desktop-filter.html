@@ -1,0 +1,92 @@
+<div class="">
+    <p class="font-bold text-2xl">Filters</p>
+    <hr class="my-4">
+    <div class="px-2 mt-6 overflow-y-auto h-38">
+        <div class="section">
+            <div class="flex justify-between cursor-pointer">
+                <div class="text-sm font-bold transition-all duration-300 ease-in-out">
+                    SORT BY
+                </div>
+                <div>
+                    <i data-feather="minus" class="w-5 h-5"></i>
+                </div>
+            </div>
+            <div class="sort-by-content py-4 text-sm">
+                <div class="flex flex-wrap justify-center gap-2">
+                    <div class="category-btn w-full bg-white border border-black font-medium px-3 py-1 text-sm font-mono text-center"
+                        aria-label="POPULAR" aria-expanded="false" role="tab">
+                        POPULAR
+                    </div>
+                    <div class="category-btn w-full bg-white border border-black font-medium px-3 py-1 text-sm font-mono text-center"
+                        aria-label="NEW" aria-expanded="false" role="tab">
+                        NEW
+                    </div>
+                    <div class="category-btn w-full bg-white border border-black font-medium px-3 py-1 text-sm font-mono text-center"
+                        aria-label="PRICE: HIGH TO LOW" aria-expanded="false" role="tab">
+                        PRICE: HIGH TO LOW
+                    </div>
+                    <div class="category-btn w-full bg-white border border-black font-medium px-3 py-1 text-sm font-mono text-center"
+                        aria-label="PRICE: LOW TO HIGH" aria-expanded="false" role="tab">
+                        PRICE: LOW TO HIGH
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr class="my-4">
+        <div class="section">
+            <div class="flex justify-between cursor-pointer">
+                <div class="text-sm font-bold transition-all duration-300 ease-in-out">
+                    SIZE
+                </div>
+                <div>
+                    <i data-feather="minus" class="w-5 h-5"></i>
+                </div>
+            </div>
+            <div class="size-content py-4 text-sm px-2">
+                <div class="flex flex-wrap justify-center gap-2">
+                    {% for size in sizes %}
+                    <div class="category-btn bg-white border border-black font-medium px-3 py-1 text-sm font-mono text-center"
+                        aria-label="{{size}}" aria-expanded="false" role="tab">
+                        {{size}}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <hr class="my-4">
+        <div class="section">
+            <div class="flex justify-between cursor-pointer">
+                <div class="text-sm font-bold transition-all duration-300 ease-in-out">
+                    COLOR
+                </div>
+                <div>
+                    <i data-feather="minus" class="w-5 h-5"></i>
+                </div>
+            </div>
+            <div class="color-content py-4 text-sm">
+                <div class="flex flex-wrap justify-center gap-2">
+                    {% for color in colors %}
+                    <div class="category-btn border border-black font-medium px-3 py-1 text-sm font-mono text-center"
+                        aria-label="{{color}}" aria-expanded="false" role="tab">
+                        {{color}}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <hr class="my-4">
+    </div>
+
+    <div class="flex space-x-2 bottom-0 left-0 w-full bg-white p-2">
+        <button type="submit" class="w-full bg-white border border-black text-black px-6 py-3 hover:bg-gray-100 clear-button">
+            <div class="flex justify-center items-center space-x-4">
+                <p>CLEAR</p>
+            </div>
+        </button>
+        <button type="submit" class="w-full bg-black text-white px-6 py-3 hover:bg-gray-900 apply-button">
+            <div class="flex justify-center items-center space-x-4">
+                <p>APPLY</p>
+            </div>
+        </button>
+    </div>
+</div>

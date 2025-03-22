@@ -1,51 +1,196 @@
 {% extends 'base.html' %}
-
-
+{% load social_tags %}
 {% block content %}
-
-<section class="section-conten padding-y bg">
-
-{% include 'includes/alerts.html' %}
-<div class="container">
-	<div class="row">
-	{% include 'includes/dashboard_sidebar.html' %}
-	<main class="col-md-9">
-		<article class="card">
-		<header class="card-header">
-			<strong class="d-inline-block mr-3">Logged in as:</strong>
-			<span>{{user.full_name}}</span>
-		</header>
-		<div class="card-body">
-			<div class="row">
-
-			<div class="col-md-6">
-				<div class="card" style="text-align:center;">
-					<div class="card-body">
-						<h5 class="card-title">Total Orders</h5>
-						<h4>{{orders_count}}</h4>
-						<a href="{% url 'my_orders' %}">View Orders</a>
-					</div>
-				</div>
+{% include 'includes/navbar.html' %}
+{% include 'includes/bottomnav.html' %}
+<div class="py-24 md:px-8">
+	<div class="flex justify-between px-2">
+		<div class="text-lg font-semibold">
+			WELCOME,
+			<span class="font-bold">{{request.user.first_name|upper}}.</span>
+		</div>
+		<div class="text-lg font-bold">MY ACCOUNT</div>
+	</div>
+	<div class="flex flex-col lg:flex-row gap-8 py-8">
+		<div class="hidden lg:block lg:w-1/5">
+			<div class="w-full">
+				<a href="/accounts/"
+					class="block p-3 my-1 rounded-sm border {% if request.path == '/accounts/' %}bg-black text-white hover:bg-gray-800{% else %}bg-white text-black hover:text-white hover:bg-black{% endif %}">
+					DASHBOARD
+				</a>
+				<a href="/cart/"
+					class="block p-3 my-1 rounded-sm border {% if request.path == '/cart/' %}bg-black text-white hover:bg-gray-800{% else %}bg-white text-black hover:text-white hover:bg-black{% endif %}">
+					CART
+				</a>
+				<a href="/orders/"
+					class="block p-3 my-1 rounded-sm border {% if request.path == '/orders/' %}bg-black text-white hover:bg-gray-800{% else %}bg-white text-black hover:text-white hover:bg-black{% endif %}">
+					ORDERS
+				</a>
+				<a href="/accounts/edit_profile/"
+					class="block p-3 my-1 rounded-sm border {% if request.path == '/accounts/edit_profile/' %}bg-black text-white hover:bg-gray-800{% else %}bg-white text-black hover:text-white hover:bg-black{% endif %}">
+					PROFILE
+				</a>
 			</div>
-			<div class="col-md-6">
-				<div class="card" style="text-align:center;">
-					<div class="card-body">
-						<img src="{{userprofile.profile_picture.url}}" alt="User Profile Picture" width="50" height="50" style="border-radius:50%;">
-						<p class="mb-0">{{user.email}}</p>
-						<p>{{user.phone_number}}</p>
+		</div>
+		<div class="lg:w-4/5 md:px-4">
+			<div>
+				<section class="pt-2 pb-8 md:px-4">
+					<div class="container mx-auto">
+						<header class="items-center mb-2">
+							<h3 class="text-2xl font-bold px-2 md:px-0">Your Last Orders</h3>
+						</header>
+						{% if recently_stalke %}
+						<div
+							class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 md:gap-6 px-2 md:px-1">
+							{% for product in recently_stalked %}
+							<div class="group relative" data-aos="fade-up">
+								<a href="{{ product.product.get_url }}" aria-label="{{ product.product.product_name }}">
+									<div>
+										<!-- Primary Image -->
+										<img src="{{ product.product.images.url }}"
+											alt="{{ product.product.product_name }}"
+											class="block w-full h-auto transition-opacity duration-300 group-hover:opacity-0"
+											loading="lazy" width="300" height="400" />
+										<!-- Secondary Image (if available) -->
+										{% if product.product.secondary_image %}
+										<img src="{{ product.product.secondary_image.url }}"
+											alt="{{ product.product.product_name }}"
+											class="absolute inset-0 w-full h-auto opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+											loading="lazy" width="300" height="400" />
+										{% endif %}
+									</div>
+								</a>
+								<div class="mt-1">
+									<a href="{{ product.product.get_url }}"
+										aria-label="{{ product.product.product_name }}">
+										<h3
+											class="text-lg font-semibold text-gray-900 hover:text-gray-600 line-clamp-custom">
+											{{ product.product.product_name }}
+										</h3>
+									</a>
+									<div>
+										<span class="text-gray-900 font-bold">
+											₹{{ product.product.price }}
+										</span>
+										<span class="text-gray-600 font-bold line-through">
+											₹{{ product.product.before_discount_price }}
+										</span>
+									</div>
+
+									<!-- Sizes -->
+									<p class="my-1">
+										{% for size in product.product.get_sizes %}
+										<span class="text-gray-800 bg-gray-100 p-1 text-xs">{{ size|upper }}</span>
+										{% endfor %}
+									</p>
+
+									<!-- Stock Availability -->
+									<p
+										class="text-sm {% if product.product.stock > 0 %}text-green-600{% else %}text-red-600{% endif %}">
+										{% if product.product.stock > 0 %}
+										In Stock ({{ product.product.stock }})
+										{% else %}
+										Out of Stock
+										{% endif %}
+									</p>
+								</div>
+							</div>
+							{% empty %}
+							<p class="col-span-full text-center">No products available in this section.</p>
+							{% endfor %}
+						</div>
+						{% else %}
+						<div class="my-2">
+							{% include 'includes/notfound.html' %}
+						</div>
+						{% endif %}
 					</div>
-				</div>
+				</section>
 			</div>
+			<div>
+				{% if recently_stalked %}
+				<section class="pt-2 pb-8 md:px-4">
+					<div class="container mx-auto">
+						<header class="items-center mb-2">
+							<h3 class="text-2xl font-bold px-2 md:px-0">Recently Viewed Products</h3>
+						</header>
+						<div
+							class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 md:gap-6 px-2 md:px-1 justify-center items-center">
+							{% for product in recently_stalked %}
+							<div class="group relative" data-aos="fade-up">
+								<a href="{{ product.product.get_url }}" aria-label="{{ product.product.product_name }}">
+									<div>
+										<!-- Primary Image -->
+										<img src="{{ product.product.images.url }}"
+											alt="{{ product.product.product_name }}"
+											class="block w-full h-auto transition-opacity duration-300 group-hover:opacity-0"
+											loading="lazy" width="300" height="400" />
+										<!-- Secondary Image (if available) -->
+										{% if product.product.secondary_image %}
+										<img src="{{ product.product.secondary_image.url }}"
+											alt="{{ product.product.product_name }}"
+											class="absolute inset-0 w-full h-auto opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+											loading="lazy" width="300" height="400" />
+										{% endif %}
+									</div>
+								</a>
+								<div class="mt-1">
+									<a href="{{ product.product.get_url }}"
+										aria-label="{{ product.product.product_name }}">
+										<h3
+											class="text-lg font-semibold text-gray-900 hover:text-gray-600 line-clamp-custom">
+											{{ product.product.product_name }}
+										</h3>
+									</a>
+									<div>
+										<span class="text-gray-900 font-bold">
+											₹{{ product.product.price }}
+										</span>
+										<span class="text-gray-600 font-bold line-through">
+											₹{{ product.product.before_discount_price }}
+										</span>
+									</div>
 
-			</div> <!-- row.// -->
-		</div> <!-- card-body .// -->
+									<!-- Sizes -->
+									<p class="my-1">
+										{% for size in product.product.get_sizes %}
+										<span class="text-gray-800 bg-gray-100 p-1 text-xs">{{ size|upper }}</span>
+										{% endfor %}
+									</p>
 
-		</article> <!-- order-group.// -->
-	</main>
-</div> <!-- row.// -->
+									<!-- Stock Availability -->
+									<p
+										class="text-sm {% if product.product.stock > 0 %}text-green-600{% else %}text-red-600{% endif %}">
+										{% if product.product.stock > 0 %}
+										In Stock ({{ product.product.stock }})
+										{% else %}
+										Out of Stock
+										{% endif %}
+									</p>
+								</div>
+							</div>
+							{% empty %}
+							<p class="col-span-full text-center">No products available in this section.</p>
+							{% endfor %}
+						</div>
+					</div>
+				</section>
+				{% endif %}
+			</div>
+		</div>
+	</div>
 </div>
-
-
-</section>
+<div class="lg:hidden fixed bottom-0 left-0 w-full bg-white z-50 border">
+	<div class="flex justify-around p-2">
+		<a href="/accounts/"
+			class="text-center text-xs p-2 {% if request.path == '/accounts/' %}text-black font-bold{% else %}text-gray-600{% endif %}">DASHBOARD</a>
+		<a href="/cart/"
+			class="text-center text-xs p-2 {% if request.path == '/cart/' %}text-black font-bold{% else %}text-gray-600{% endif %}">CART</a>
+		<a href="/orders/"
+			class="text-center text-xs p-2 {% if request.path == '/orders/' %}text-black font-bold{% else %}text-gray-600{% endif %}">ORDERS</a>
+		<a href="/accounts/edit_profile/"
+			class="text-center text-xs p-2 {% if request.path == '/accounts/edit_profile/' %}text-black font-bold{% else %}text-gray-600{% endif %}">PROFILE</a>
+	</div>
+</div>
 
 {% endblock %}

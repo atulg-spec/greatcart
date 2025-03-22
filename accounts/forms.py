@@ -1,5 +1,8 @@
 from django import forms
-from .models import Account, UserProfile
+from .models import CustomUser
+
+class PhoneNumberForm(forms.Form):
+    phone_number = forms.IntegerField(label='Phone Number')
 
 
 class RegistrationForm(forms.ModelForm):
@@ -12,7 +15,7 @@ class RegistrationForm(forms.ModelForm):
     }))
 
     class Meta:
-        model = Account
+        model = CustomUser
         fields = ['first_name', 'last_name', 'phone_number', 'email', 'password']
 
     def clean(self):
@@ -37,7 +40,7 @@ class RegistrationForm(forms.ModelForm):
 
 class UserForm(forms.ModelForm):
     class Meta:
-        model = Account
+        model = CustomUser
         fields = ('first_name', 'last_name', 'phone_number')
 
     def __init__(self, *args, **kwargs):
@@ -48,7 +51,7 @@ class UserForm(forms.ModelForm):
 class UserProfileForm(forms.ModelForm):
     profile_picture = forms.ImageField(required=False, error_messages = {'invalid':("Image files only")}, widget=forms.FileInput)
     class Meta:
-        model = UserProfile
+        model = CustomUser
         fields = ('address_line_1', 'address_line_2', 'city', 'state', 'country', 'profile_picture')
 
     def __init__(self, *args, **kwargs):

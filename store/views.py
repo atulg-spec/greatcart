@@ -43,7 +43,7 @@ def store(request, category_slug=None):
 
     # Apply Sorting
     if sort_by == 'popular':
-        products = products.order_by('-views')  # Assuming you track product views
+        products = products.order_by('-stock')  # Assuming you track product views
     elif sort_by == 'new':
         products = products.order_by('-created_date')
     elif sort_by == 'price_high_to_low':

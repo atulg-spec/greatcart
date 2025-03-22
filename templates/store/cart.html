@@ -11,14 +11,7 @@
     <div class="container mx-auto md:px-36">
       <!-- ============================ COMPONENT 1 ================================= -->
       {% if not cart_items %}
-      <div class="text-center">
-        <h2 class="text-2xl font-bold mb-4">Your Shopping Cart is Empty</h2>
-        <a href="{% url 'store' %}"
-          class="inline-flex items-center bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary-dark transition duration-300">
-          <i data-feather="shopping-cart" class="mr-2"></i>
-          Continue Shopping
-        </a>
-      </div>
+      {% include 'includes/notfound.html' %}
       {% else %}
       <div class="flex flex-col lg:flex-row gap-8">
         <!-- Cart Items -->
@@ -36,7 +29,7 @@
                     <div>
                       <div>
                         <a href="{{ cart_item.product.get_url }}"
-                          class="text-sm font-semibold hover:text-primary transition duration-300">
+                          class="text-sm font-semibold hover:text-black transition duration-300">
                           {{ cart_item.product.product_name }}
                         </a>
                       </div>

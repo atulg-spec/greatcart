@@ -35,6 +35,9 @@ class SiteSettings(models.Model):
     
     font_style = models.CharField(max_length=80, default='font-sans', help_text="font-sans, font-serif, font-mono or any Custom Class")
 
+    login_banner = models.ImageField(upload_to='login/', blank=True, null=True)
+    login_banner_desktop = models.ImageField(upload_to='login/', blank=True, null=True)
+
     class Meta:
         verbose_name = "Site Settings"
         verbose_name_plural = "Site Settings"

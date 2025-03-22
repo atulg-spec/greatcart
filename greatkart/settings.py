@@ -22,11 +22,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'social_django',
     'django_ckeditor_5',
+    'accounts',
     'home',
     'category',
     'coupons',
-    'accounts',
     'store',
     'carts',
     'orders',
@@ -41,7 +42,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'django_session_timeout.middleware.SessionTimeoutMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 # SESSION_EXPIRE_SECONDS = 3600  # 1 hour
@@ -72,7 +73,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'greatkart.wsgi.application'
 
-AUTH_USER_MODEL = 'accounts.Account'
+AUTH_USER_MODEL = 'accounts.CustomUser'
 
 
 # Database
@@ -84,6 +85,31 @@ DATABASES = {
     }
 }
 
+AUTHENTICATION_BACKENDS = [
+    'social_core.backends.google.GoogleOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
+    'openid',
+    'email',
+    'profile'
+]
+SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = [
+    ('picture', 'picture'),
+]
+SOCIAL_AUTH_PIPELINE = (
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.auth_allowed',
+    'social_core.pipeline.social_auth.social_user',
+    'social_core.pipeline.user.get_username',
+    'social_core.pipeline.user.create_user',
+    'social_core.pipeline.social_auth.associate_user',
+    'social_core.pipeline.social_auth.load_extra_data',
+    'social_core.pipeline.user.user_details',
+)
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -118,8 +144,15 @@ USE_L10N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.1/howto/static-files/
+
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
+LOGIN_URL = '/social-auth/login/google-oauth2/'
+SOCIAL_AUTH_LOGIN_ERROR_URL = '/'
+SOCIAL_AUTH_RAISE_EXCEPTIONS = False
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '773078079533-piaelpbtihfitj6dig6d8mnefbis1dqv.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
 
 
 STATIC_URL = '/static/'

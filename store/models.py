@@ -1,9 +1,8 @@
 from django.db import models
 from category.models import Category
 from django.urls import reverse
-from accounts.models import Account
 from django.db.models import Avg, Count
-from accounts.models import Account
+from accounts.models import CustomUser
 from django_ckeditor_5.fields import CKEditor5Field
 from coupons.models import Coupon
 # Create your models here.
@@ -102,7 +101,7 @@ class ProductGallery(models.Model):
 
 class ReviewRating(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    user = models.ForeignKey(Account, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     subject = models.CharField(max_length=100, blank=True)
     review = models.TextField(max_length=500, blank=True)
     rating = models.FloatField()
@@ -117,13 +116,13 @@ class ReviewRating(models.Model):
 
 class RecentlyStalked(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    user = models.ForeignKey(Account, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
 
     class Meta:
         unique_together = ('user', 'product')  # Ensure unique user-product pairs
 
     def __str__(self):
-        return f"{self.user.first_name} recently watched {self.product.title}"
+        return f"{self.user.first_name} recently watched {self.product.product_name}"
 
     def save(self, *args, **kwargs):
         # Check if the user has already stalked this product

@@ -7,15 +7,15 @@
 {% include 'includes/navbar.html' %}
 {% include 'includes/home/slider.html' %}
 {% include 'store/includes/filter.html' %}
-
-<main class="container mx-auto md:px-2 py-8">
-  <section class="py-24 md:py-14">
+<main class="container mx-auto md:px-2 py-8 md:py-2">
+  <section class="py-24 md:py-0">
     <div class="container mx-auto px-4">
       <div class="flex flex-col lg:flex-row gap-8">
-        <div class="hidden lg:block lg:w-1/4">
+        <div class="hidden lg:block lg:w-1/5">
+          {% include 'store/includes/desktop-filter.html' %}
         </div>
         <!-- Main Content -->
-        <main class="lg:w-3/4">
+        <main class="lg:w-4/5">
           <!-- Product Grid -->
           {% include 'store/includes/product_list.html' %}
 

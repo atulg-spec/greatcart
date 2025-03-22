@@ -1,5 +1,4 @@
-<div class="fixed bottom-0 left-0 w-full bg-white p-2 z-10 rounded-t-xl border shadow-xl drop-shadow-[0_4px_10px_rgba(0,0,0,0.5)] hidden"
-    id="filter-tab">
+<div class="fixed bottom-0 left-0 w-full bg-white p-2 z-10 rounded-t-xl border shadow-xl drop-shadow-[0_4px_10px_rgba(0,0,0,0.5)] hidden filter-tab" id="filter-tab">
     <div class="w-12 rounded-xl h-1 mt-2 bg-black mx-auto"></div>
     <div class="px-2 mt-6 overflow-y-auto h-38">
         <div class="section">
@@ -11,7 +10,7 @@
                     <i data-feather="plus" class="w-5 h-5"></i>
                 </div>
             </div>
-            <div id="sort-by" class="hidden py-4 text-sm">
+            <div class="sort-by-content hidden py-4 text-sm">
                 <div class="flex flex-wrap justify-center gap-2">
                     <div class="category-btn bg-white border border-black font-medium px-3 py-1 text-sm font-mono text-center"
                         aria-label="POPULAR" aria-expanded="false" role="tab">
@@ -42,7 +41,7 @@
                     <i data-feather="plus" class="w-5 h-5"></i>
                 </div>
             </div>
-            <div id="size-content" class="hidden py-4 text-sm px-2">
+            <div class="size-content hidden py-4 text-sm px-2">
                 <div class="flex flex-wrap justify-center gap-2">
                     {% for size in sizes %}
                     <div class="category-btn bg-white border border-black font-medium px-3 py-1 text-sm font-mono text-center"
@@ -63,7 +62,7 @@
                     <i data-feather="plus" class="w-5 h-5"></i>
                 </div>
             </div>
-            <div id="color-content" class="hidden py-4 text-sm">
+            <div class="color-content hidden py-4 text-sm">
                 <div class="flex flex-wrap justify-center gap-2">
                     {% for color in colors %}
                     <div class="category-btn border border-black font-medium px-3 py-1 text-sm font-mono text-center"
@@ -78,19 +77,17 @@
     </div>
 
     <div class="flex space-x-2 bottom-0 left-0 w-full bg-white p-2 shadow-lg">
-        <button type="submit" class="w-full bg-white border border-black text-black px-6 py-3 hover:bg-gray-100"
-            id="clear-button">
+        <button type="submit" class="w-full bg-white border border-black text-black px-6 py-3 hover:bg-gray-100 clear-button">
             <div class="flex justify-center items-center space-x-4">
                 <p>CLEAR</p>
             </div>
         </button>
-        <button type="submit" class="w-full bg-black text-white px-6 py-3 hover:bg-gray-900" id="apply-button">
+        <button type="submit" class="w-full bg-black text-white px-6 py-3 hover:bg-gray-900 apply-button">
             <div class="flex justify-center items-center space-x-4">
                 <p>APPLY</p>
             </div>
         </button>
     </div>
-
 </div>
 
 <script>
@@ -136,21 +133,21 @@
             // Set size filter
             const sizeParam = urlParams.get('size');
             if (sizeParam) {
-                const sizeButton = document.querySelector(`.category-btn[aria-label="${sizeParam}"]`);
-                if (sizeButton) {
+                const sizeButtons = document.querySelectorAll(`.category-btn[aria-label="${sizeParam}"]`);
+                sizeButtons.forEach(sizeButton => {
                     sizeButton.classList.add('bg-black', 'text-white');
                     selectedFilters.size = sizeParam;
-                }
+                });
             }
 
             // Set color filter
             const colorParam = urlParams.get('color');
             if (colorParam) {
-                const colorButton = document.querySelector(`.category-btn[aria-label="${colorParam}"]`);
-                if (colorButton) {
+                const colorButtons = document.querySelectorAll(`.category-btn[aria-label="${colorParam}"]`);
+                colorButtons.forEach(colorButton => {
                     colorButton.classList.add('bg-black', 'text-white');
                     selectedFilters.color = colorParam;
-                }
+                });
             }
 
             // Set sortBy filter
@@ -171,11 +168,11 @@
                         sortByValue = 'PRICE: LOW TO HIGH';
                         break;
                 }
-                const sortByButton = document.querySelector(`.category-btn[aria-label="${sortByValue}"]`);
-                if (sortByButton) {
+                const sortByButtons = document.querySelectorAll(`.category-btn[aria-label="${sortByValue}"]`);
+                sortByButtons.forEach(sortByButton => {
                     sortByButton.classList.add('bg-black', 'text-white');
                     selectedFilters.sortBy = sortByParam;
-                }
+                });
             }
         }
 
@@ -224,62 +221,66 @@
         });
 
         // Apply Filters
-        document.querySelector('button[type="submit"]:not(#clear-button)').addEventListener('click', function (event) {
-            event.preventDefault();
+        document.querySelectorAll('.apply-button').forEach(button => {
+            button.addEventListener('click', function (event) {
+                event.preventDefault();
 
-            let currentUrl = new URL(window.location.href);
-            let params = currentUrl.searchParams;
+                let currentUrl = new URL(window.location.href);
+                let params = currentUrl.searchParams;
 
-            if (selectedFilters.size) {
-                params.set('size', selectedFilters.size);
-            } else {
-                params.delete('size');
-            }
+                if (selectedFilters.size) {
+                    params.set('size', selectedFilters.size);
+                } else {
+                    params.delete('size');
+                }
 
-            if (selectedFilters.color) {
-                params.set('color', selectedFilters.color);
-            } else {
-                params.delete('color');
-            }
+                if (selectedFilters.color) {
+                    params.set('color', selectedFilters.color);
+                } else {
+                    params.delete('color');
+                }
 
-            if (selectedFilters.sortBy) {
-                params.set('sort_by', selectedFilters.sortBy);
-            } else {
-                params.delete('sort_by');
-            }
+                if (selectedFilters.sortBy) {
+                    params.set('sort_by', selectedFilters.sortBy);
+                } else {
+                    params.delete('sort_by');
+                }
 
-            window.location.href = currentUrl.toString();  // Reload with filters applied
+                window.location.href = currentUrl.toString();  // Reload with filters applied
+            });
         });
 
         // Clear Filters
-        document.getElementById('clear-button').addEventListener('click', function (event) {
-            event.preventDefault();
+        document.querySelectorAll('.clear-button').forEach(button => {
+            button.addEventListener('click', function (event) {
+                event.preventDefault();
 
-            const urlParams = new URLSearchParams(window.location.search);
-            const keyword = urlParams.get('keyword'); // Get existing keyword
+                const urlParams = new URLSearchParams(window.location.search);
+                const keyword = urlParams.get('keyword'); // Get existing keyword
 
-            urlParams.delete('size');
-            urlParams.delete('color');
-            urlParams.delete('sort_by');
+                urlParams.delete('size');
+                urlParams.delete('color');
+                urlParams.delete('sort_by');
 
-            if (keyword) {
-                urlParams.set('keyword', keyword); // Retain the keyword
-            }
+                if (keyword) {
+                    urlParams.set('keyword', keyword); // Retain the keyword
+                }
 
-            // Clear selected filters
-            selectedFilters = {
-                size: null,
-                color: null,
-                sortBy: null
-            };
+                // Clear selected filters
+                selectedFilters = {
+                    size: null,
+                    color: null,
+                    sortBy: null
+                };
 
-            // Remove selected class from all buttons
-            document.querySelectorAll('.category-btn').forEach(btn => {
-                btn.classList.remove('bg-black');
-                btn.classList.remove('text-white');
+                // Remove selected class from all buttons
+                document.querySelectorAll('.category-btn').forEach(btn => {
+                    btn.classList.remove('bg-black');
+                    btn.classList.remove('text-white');
+                });
+
+                window.location.search = urlParams.toString();
             });
-
-            window.location.search = urlParams.toString();
         });
     });
 </script>

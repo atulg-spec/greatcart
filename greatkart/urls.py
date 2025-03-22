@@ -8,6 +8,7 @@ from django.conf import settings
 urlpatterns = [
     # path('admin/', include('admin_honeypot.urls', namespace='admin_honeypot')),
     path('admin/', admin.site.urls),
+    path('social-auth/', include('social_django.urls',namespace='social')),
     path("ckeditor5/", include('django_ckeditor_5.urls')),
     path('', views.home, name='home'),
     path('store/', include('store.urls')),

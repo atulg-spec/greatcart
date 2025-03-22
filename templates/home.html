@@ -11,6 +11,7 @@
 {% block content %}
 {% include 'includes/navbar.html' %}
 {% include 'includes/home/slider.html' %}
+{% include 'includes/bottomnav.html' %}
 
 <main class="container mx-auto md:px-2 py-8">
   {% if recently_stalked %}
@@ -448,5 +449,6 @@
     }
   }, 10);
 </script>
+{% include 'includes/footer.html' %}
 
 {% endblock %}
