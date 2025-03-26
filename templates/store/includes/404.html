@@ -1,0 +1,19 @@
+<div class="flex items-center justify-center w-full">
+    <div>
+        <div class="flex justify-center">
+            <img src="/static/img/empty.png" alt="Centered Image" class="max-w-full max-h-full">
+        </div>
+        <h2 class="py-8 text-center font-semibold text-sm">
+            Try a new keyword or explore our trending searches for some
+            stylish inspiration
+        </h2>
+        <div class="flex flex-wrap justify-center gap-2">
+            {% for search in notfoundsearches %}
+            <a href="{{search.url}}"
+                class="bg-white border border-gray-400 font-medium px-2 py-1 text-sm font-mono whitespace-nowrap text-center">
+                {{ search }}
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</div>

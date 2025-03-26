@@ -2,16 +2,49 @@
 {% load static %}
 
 {% block meta %}
-<title>{{ head.site_title }} {{ single_product.product_name }}</title>
-<meta name="title" content="{{ single_product.product_name }}">
-<meta name="description" content="{{ single_product.description }}">
+<title>{{ single_product.meta_title }}</title>
+<meta name="description" content="{{ single_product.meta_description }}">
 <meta name="keywords" content="{{ single_product.meta_keywords }}">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="{{ request.build_absolute_uri }}">
+<meta property="og:title" content="{{ single_product.meta_title }}">
+<meta property="og:description" content="{{ single_product.meta_description }}">
+<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ single_product.images.url }}">
+<meta property="og:url" content="{{ request.build_absolute_uri }}">
+<meta property="og:type" content="product">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ single_product.meta_title }}">
+<meta name="twitter:description" content="{{ single_product.meta_description }}">
+<meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{{ single_product.images.url }}">
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org/",
+    "@type": "Product",
+    "name": "{{ single_product.product_name }}",
+    "image": "{{ request.scheme }}://{{ request.get_host }}{{ single_product.images.url }}",
+    "description": "{{ single_product.meta_description }}",
+    "brand": {
+      "@type": "Brand",
+      "name": "{{ single_product.product_brand }}"
+    },
+    "sku": "{{ single_product.product_sku }}",
+    "mpn": "{{ single_product.product_mpn }}",
+    "gtin": "{{ single_product.product_gtin }}",
+    "offers": {
+      "@type": "Offer",
+      "url": "{{ request.build_absolute_uri }}",
+      "priceCurrency": "INR",
+      "price": "{{ single_product.price }}",
+      "availability": "https://schema.org/InStock",
+      "itemCondition": "https://schema.org/NewCondition"
+    }
+  }
+</script>
+
 {% endblock meta %}
 
 {% block content %}
 {% include 'includes/navbar.html' %}
-{% include 'includes/home/slider.html' %}
-
 <main class="container mx-auto px-2 py-6 md:py-1">
   <div class="fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center z-[60] hidden" id="sizeChart">
     <!-- Image Container with Relative Positioning -->
@@ -35,7 +68,7 @@
     </div>
   </div>
 
-  <section class="my-6 md:my-1">
+  <section class="my-6 md:my-24">
     <div class="">
       <div class="rounded-lg overflow-hidden">
         <div class="flex flex-col md:flex-row md:px-8">
@@ -77,6 +110,27 @@
               {% endfor %}
             </div>
           </div>
+
+          <!-- COLOR VARIATIONS -->
+          <div class="md:hidden">
+            <h1 class="flex justify-center font-extrabold mb-4">
+              COLORS
+            </h1>
+            <div class="flex justify-center">
+              <div class="flex space-x-4 overflow-x-auto scrollbar-hide aos-init aos-animate">
+                {% for i in single_product.variation_set.colors %}
+                {% if i.variation_image %}
+                <a href="{{ i.variation_image.url }}" onclick="changeImage(event, 'mainImage')"
+                  class="w-16 h-16 min-w-[64px]">
+                  <img src="{{ i.variation_image.url }}"
+                    class="w-full h-full object-cover rounded-lg border hover:border-black hover:border-2 min-w-[64px]">
+                </a>
+                {% endif %}
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+          <!-- END COLOR VARIATIONS -->
 
           <!-- Product Details -->
           <!-- Product Details -->
@@ -147,7 +201,29 @@
                   </div>
                   <input type="hidden" name="color" id="selectedColor" required>
                 </div>
+
+                <div>
+                  <span class="block text-gray-700 font-semibold mb-2">Available Colors</span>
+                  <div class="flex space-x-4 overflow-x-auto scrollbar-hide aos-init aos-animate">
+                    {% for i in single_product.variation_set.colors %}
+                    {% if i.variation_image %}
+                    <a href="{{ i.variation_image.url }}" onclick="changeImage(event, 'mainImage')"
+                      class="w-16 h-16 min-w-[64px]">
+                      <img src="{{ i.variation_image.url }}"
+                        class="w-full h-full object-cover rounded-lg border hover:border-black hover:border-2 min-w-[64px]">
+                    </a>
+                    {% endif %}
+                    {% endfor %}
+                  </div>
+                </div>
+
+
               </div>
+              <!-- COLOR VARIATIONS -->
+              <div class="">
+                {% include 'store/includes/variation-colors.html' %}
+              </div>
+              <!-- END COLOR VARIATIONS -->
 
               {% include 'store/includes/product-description.html' %}
 

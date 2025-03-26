@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from store.models import Product, ReviewRating, RecentlyStalked
-from home.models import Slider, homeSections, Page
+from home.models import Slider, homeSections, Page, featured_categories
 from accounts.utils import phone_number_required
 
 def home(request):
@@ -12,6 +12,7 @@ def home(request):
     products = Product.objects.all().filter(is_available=True).order_by('created_date')
     mobile_sliders = Slider.objects.filter(is_mobile=True)
     desktop_sliders = Slider.objects.filter(is_mobile=False)
+    features = featured_categories.objects.all()
     sections = homeSections.objects.all()
 
     # Get the reviews
@@ -24,6 +25,7 @@ def home(request):
         'desktop_sliders': desktop_sliders,
         'sections': sections,
         'recently_stalked': recently_stalked,
+        'features': features,
         'products': products,
         'reviews': reviews,
     }

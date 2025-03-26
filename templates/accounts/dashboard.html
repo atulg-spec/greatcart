@@ -72,7 +72,7 @@
 										<span class="text-gray-900 font-bold">
 											₹{{ product.product.price }}
 										</span>
-										<span class="text-gray-600 font-bold line-through">
+										<span class="text-red-500 font-bold line-through">
 											₹{{ product.product.before_discount_price }}
 										</span>
 									</div>
@@ -88,7 +88,7 @@
 									<p
 										class="text-sm {% if product.product.stock > 0 %}text-green-600{% else %}text-red-600{% endif %}">
 										{% if product.product.stock > 0 %}
-										In Stock ({{ product.product.stock }})
+										Stock Remaining ({{ product.product.stock }})
 										{% else %}
 										Out of Stock
 										{% endif %}
@@ -146,7 +146,7 @@
 										<span class="text-gray-900 font-bold">
 											₹{{ product.product.price }}
 										</span>
-										<span class="text-gray-600 font-bold line-through">
+										<span class="text-red-500 font-bold line-through">
 											₹{{ product.product.before_discount_price }}
 										</span>
 									</div>
@@ -162,7 +162,7 @@
 									<p
 										class="text-sm {% if product.product.stock > 0 %}text-green-600{% else %}text-red-600{% endif %}">
 										{% if product.product.stock > 0 %}
-										In Stock ({{ product.product.stock }})
+										Stock Remaining ({{ product.product.stock }})
 										{% else %}
 										Out of Stock
 										{% endif %}

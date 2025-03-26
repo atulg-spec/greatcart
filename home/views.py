@@ -2,13 +2,12 @@ from django.shortcuts import render
 from django.shortcuts import render,redirect
 from django.contrib import messages
 from django.contrib.auth import get_user_model
-from dashboard.models import *
 from home.models import *
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
-from dashboard.forms import ContactForm, CustomUserForm
+from search.models import search_categories, top_searches, not_found_searches
 import razorpay
 from django.conf import settings
 User = get_user_model()
@@ -62,6 +61,7 @@ def index(request):
 def search(request,search):
     query = search
     products = Product.objects.none()
+    topsearches = top_searches.objects.all()
     if query:
         products = Product.objects.filter(
             models.Q(category__category__icontains=query) |  # Correct usage for ManyToManyField
@@ -69,6 +69,7 @@ def search(request,search):
             models.Q(keywords__keyword__icontains=query)
         ).distinct()[:100] 
     context = {
+        'topsearches':topsearches,
         'products':products,
         'search':search,
     }

@@ -8,22 +8,31 @@ from coupons.models import Coupon
 # Create your models here.
 
 class Product(models.Model):
-    product_name    = models.CharField(max_length=200, unique=True)
-    slug            = models.SlugField(max_length=200, unique=True)
-    description     = CKEditor5Field('Text', config_name='extends')
-    coupons         = models.ManyToManyField(Coupon, blank=True)
-    meta_keywords   = models.CharField(max_length=400, default="", help_text="Comma(,) Seperated Keywords")
-    price           = models.IntegerField()
-    size_chart      = models.ImageField(upload_to='photos/products',null=True,blank=True)
-    images          = models.ImageField(upload_to='photos/products')
+    product_name = models.CharField(max_length=200, unique=True)
+    slug = models.SlugField(max_length=200, unique=True)
+    description = CKEditor5Field('Text', config_name='extends')
+    coupons = models.ManyToManyField(Coupon, blank=True)
+    price = models.IntegerField()
+    size_chart = models.ImageField(upload_to='photos/products',null=True,blank=True)
+    images = models.ImageField(upload_to='photos/products')
     secondary_image = models.ImageField(upload_to='photos/products',null=True,blank=True)
-    stock           = models.IntegerField()
-    is_available    = models.BooleanField(default=True)
-    category        = models.ForeignKey(Category, on_delete=models.CASCADE)
-    created_date    = models.DateTimeField(auto_now_add=True)
-    modified_date   = models.DateTimeField(auto_now=True)
+    stock = models.IntegerField()
+    is_available = models.BooleanField(default=True)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    created_date = models.DateTimeField(auto_now_add=True)
+    modified_date = models.DateTimeField(auto_now=True)
     before_discount_price = models.IntegerField(default=0)
     discount_percent = models.IntegerField(default=10)
+
+    meta_title = models.CharField(max_length=70, default="", help_text="Meta Title (Recommended: 60-70 characters)")
+    meta_description = models.TextField(max_length=320, default="", help_text="Meta Description (Recommended: 150-320 characters)")
+    meta_keywords = models.TextField(default="", help_text="Comma-separated keywords (Avoid keyword stuffing)")
+
+    # Product-Specific SEO Fields
+    product_sku = models.CharField(max_length=100, default="", help_text="Product SKU (Unique identifier for products)")
+    product_brand = models.CharField(max_length=100, default="", help_text="Brand name for the product")
+    product_mpn = models.CharField(max_length=100, default="", help_text="Manufacturer Part Number (MPN) for SEO")
+    product_gtin = models.CharField(max_length=100, default="", help_text="Global Trade Item Number (GTIN) for SEO")
 
     def save(self, *args, **kwargs):
         if self.discount_percent and self.price:
@@ -78,6 +87,7 @@ class Variation(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     variation_category = models.CharField(max_length=100, choices=variation_category_choice)
     variation_value     = models.CharField(max_length=100)
+    variation_image = models.ImageField(upload_to='photos/products',null=True,blank=True)
     is_active           = models.BooleanField(default=True)
     created_date        = models.DateTimeField(auto_now=True)
 

@@ -7,6 +7,7 @@ from django.utils.text import slugify
 class SiteSettings(models.Model):
     site_name = models.CharField(max_length=15, blank=True)
     site_header_news = CKEditor5Field('Text', config_name='extends')
+    slider_news = CKEditor5Field('Text', config_name='extends', null=True, blank=True)
 
     logo = models.ImageField(upload_to='logos/', blank=True, null=True)
     preloader_img = models.ImageField(upload_to='logos/', blank=True, null=True)
@@ -22,7 +23,6 @@ class SiteSettings(models.Model):
     main_page_timer_url = models.URLField(blank=True)
     main_page_timer_strap_classes = models.CharField(max_length=500, default="bg-red-500")
 
-
     instagram = models.CharField(max_length=50, blank=True)
     phone_number = models.CharField(max_length=50, blank=True)
     email = models.CharField(max_length=50, blank=True)
@@ -37,6 +37,9 @@ class SiteSettings(models.Model):
 
     login_banner = models.ImageField(upload_to='login/', blank=True, null=True)
     login_banner_desktop = models.ImageField(upload_to='login/', blank=True, null=True)
+
+    product_return_details = CKEditor5Field('Text', config_name='extends', null=True, blank=True)
+
 
     class Meta:
         verbose_name = "Site Settings"
@@ -56,7 +59,18 @@ class Slider(models.Model):
 
     def __str__(self):
       return "Slider"
+    
+class featured_categories(models.Model):
+    image = models.ImageField(upload_to='slider_images/', blank=True, null=True)
+    url = models.URLField(blank=True)
 
+    class Meta:
+        verbose_name = "Featured Category"
+        verbose_name_plural = "Featured Categories"
+
+    def __str__(self):
+      return "Featured Category"
+    
 
 class HeadSection(models.Model):
     logo = models.ImageField(upload_to='logos/', blank=True, null=True)
@@ -89,6 +103,7 @@ class SideNav(models.Model):
 
 
 class homeSections(models.Model):
+    heading = models.CharField(default="", max_length=50)
     name = models.CharField(default="", max_length=50)
     products = models.ManyToManyField(Product)
     url = models.URLField(blank=True)

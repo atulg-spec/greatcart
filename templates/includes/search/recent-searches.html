@@ -1,0 +1,28 @@
+<div class="container mx-auto mb-4 hidden" id="recent-searches-section">
+    <h1 class="flex justify-center font-extrabold mb-4">
+        RECENT SEARCHES
+    </h1>
+    <div class="flex space-x-4 overflow-x-auto scrollbar-hide px-2" data-aos="fade-up" id="recent-searches">
+       
+    </div>
+</div>
+<script>
+    const recentSearchesSection = document.getElementById("recent-searches-section");
+    const recentSearchesContainer = document.getElementById("recent-searches");
+    function loadRecentSearches() {
+        return JSON.parse(localStorage.getItem('recentSearches') || '[]');
+    }
+    function showRecentSearches() {
+        const searches = loadRecentSearches();
+        if (searches.length === 0) return;
+        recentSearchesSection.classList.remove("hidden");
+        searches.forEach(searchTerm => {
+            const searchItem = document.createElement("a");
+            searchItem.href = `/store/?keyword=${encodeURIComponent(searchTerm)}`;
+            searchItem.className = "bg-white border border-gray-400 font-medium px-2 py-1 text-sm font-mono whitespace-nowrap text-center";
+            searchItem.textContent = searchTerm;
+            recentSearchesContainer.appendChild(searchItem);
+        });
+    }
+    showRecentSearches();
+</script>

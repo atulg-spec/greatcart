@@ -16,7 +16,7 @@ class SiteSettingsForm(ModelForm):
 @admin.register(homeSections)
 class HomeSectionsAdmin(admin.ModelAdmin):
     filter_horizontal = ('products',)
-    list_display = ("name",)
+    list_display = ("name", 'heading')
     search_fields = ("name",)
     list_per_page = 20
     ordering = ("id",)
@@ -77,7 +77,7 @@ class SiteSettingsAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ('Main Settings', {
-            'fields': ('site_name', 'site_header_news', 'preloader_img','logo', 'mobile_logo', 'tagline', 'font_style')
+            'fields': ('site_name', 'site_header_news', 'slider_news', 'preloader_img','logo', 'mobile_logo', 'tagline', 'font_style')
         }),
         ('Index Page Banner', {
             'fields': ('main_page_image',)
@@ -93,6 +93,9 @@ class SiteSettingsAdmin(admin.ModelAdmin):
         }),
         ('Login/SignUp', {
             'fields': ('login_banner', 'login_banner_desktop')
+        }),
+        ('Product Return Description', {
+            'fields': ('product_return_details',)
         }),
     )
 
@@ -113,6 +116,37 @@ class SiteSettingsAdmin(admin.ModelAdmin):
     # Short descriptions for each image tag
     logo_tag.short_description = 'Logo'
     mobile_logo_tag.short_description = 'Mobile Logo'
+
+
+@admin.register(featured_categories)
+class FeaturedCategoriesAdmin(admin.ModelAdmin):
+    list_display = ('display_image', 'url')
+    readonly_fields = ('image_preview',)
+    list_display_links = ('display_image', 'url')
+    
+    fieldsets = (
+        (None, {
+            'fields': ('image', 'image_preview', 'url')
+        }),
+    )
+    
+    def display_image(self, obj):
+        if obj.image:
+            return format_html(
+                '<img src="{}" style="max-height: 50px; max-width: 100px;" />',
+                obj.image.url
+            )
+        return "-"
+    display_image.short_description = 'Image Preview'
+    
+    def image_preview(self, obj):
+        if obj.image:
+            return format_html(
+                '<img src="{}" style="max-height: 300px; max-width: 100%;" />',
+                obj.image.url
+            )
+        return "No image uploaded yet."
+    image_preview.short_description = 'Large Preview'    
 
 
 

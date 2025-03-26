@@ -23,7 +23,7 @@
         <span class="text-gray-900 font-bold">
           ₹{{ product.price }}
         </span>
-        <span class="text-gray-600 font-bold line-through">
+        <span class="text-red-500 font-bold line-through">
           ₹{{ product.before_discount_price }}
         </span>
       </div>
@@ -37,7 +37,7 @@
       <!-- Stock Availability -->
       <p class="text-sm {% if product.stock > 0 %}text-green-600{% else %}text-red-600{% endif %}">
         {% if product.stock > 0 %}
-        In Stock ({{ product.stock }})
+        Stock Remaining ({{ product.stock }})
         {% else %}
         Out of Stock
         {% endif %}
@@ -47,12 +47,7 @@
   {% endfor %}
 </div>
 {% else %}
-<div class="flex items-center justify-center h-screen w-full">
-  <div>
-    <img src="https://www.breathearomatherapy.com/assets/images/global/no-product.png" alt="Centered Image" class="max-w-full max-h-full">
-    <h2 class="py-8 text-center">Oops! No Products Found.</h2>
-  </div>
-</div>  
+{% include 'store/includes/404.html' %}
 {% endif %}
 
 
@@ -71,7 +66,7 @@
 
   function loadMoreProducts() {
     isLoading = true;
-    document.getElementById('loading-spinner').style.display = 'block';
+    // document.getElementById('loading-spinner').style.display = 'block';
 
     let url = `?page=${page}`;
     if (categorySlug) {
@@ -114,7 +109,7 @@
                                         ₹${product.price}
                                     </span>
                                     ${product.before_discount_price ? `
-                                        <span class="text-gray-600 font-bold line-through">
+                                        <span class="text-red-500 font-bold line-through">
                                             ₹${product.before_discount_price}
                                         </span>
                                     ` : ''}
@@ -125,7 +120,7 @@
                                     `).join('') : ''}
                                 </p>                
                                 <p class="text-sm ${product.stock > 0 ? 'text-green-600' : 'text-red-600'}">
-                                    ${product.stock > 0 ? `In Stock (${product.stock})` : 'Out of Stock'}
+                                    ${product.stock > 0 ? `Stock Remaining (${product.stock})` : 'Out of Stock'}
                                 </p>
                             </div>
                         </div>

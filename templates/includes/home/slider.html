@@ -4,8 +4,8 @@
     <!-- Carousel Container -->
     <div class="flex transition-transform duration-500 ease-in-out" id="carousel-mobile">
       {% for slider in mobile_sliders reversed %}
-      <img src="{{ slider.image.url }}" alt="Mobile Slider {{ forloop.counter }}" class="w-full flex-shrink-0"
-      {% if forloop.first %}loading="eager"{% else %}loading="lazy"{% endif %} height="20%" />
+        <img src="{{ slider.image.url }}" alt="Mobile Slider {{ forloop.counter }}" onclick="location.href='{{slider.url}}'" class="w-full flex-shrink-0"
+        {% if forloop.first %}loading="eager"{% else %}loading="lazy"{% endif %} height="20%" />
       {% endfor %}
     </div>
 
@@ -53,7 +53,7 @@
     <!-- Carousel Container -->
     <div class="flex transition-transform duration-500 ease-in-out" id="carousel-desktop">
       {% for slider in desktop_sliders %}
-      <img src="{{ slider.image.url }}" alt="Desktop Slider {{ forloop.counter }}" class="w-full flex-shrink-0"
+      <img src="{{ slider.image.url }}" alt="Desktop Slider {{ forloop.counter }}" class="w-full flex-shrink-0" onclick="location.href='{{slider.url}}'"
         loading="lazy" />
       {% endfor %}
     </div>
@@ -76,6 +76,13 @@
     </div>
   </div>
 </div>
+<marquee behavior="" direction="" class="bg-black md:hidden">
+  <div class="animate-marquee whitespace-nowrap flex items-center">
+    <span class="py-1 text-xs font-semibold text-gray-700">
+      {{settings.slider_news|safe}}
+    </span>
+  </div>
+</marquee>
 
 <!-- JavaScript for Carousel -->
 <script>

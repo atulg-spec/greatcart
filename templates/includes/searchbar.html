@@ -1,8 +1,8 @@
 <header>
     <!-- SEARCH NAVBAR -->
     <div id="searchbar" class="bg-white w-full fixed left-0 transition-all duration-300 z-50 px-2 py-2">
-        <form action="/store/" method="get">
-            <div class="flex space-x-2">
+        <form action="/store/" method="get" id="searchForm">
+            <div class="flex space-x-2 relative">
                 <div class="w-1/8 py-2">
                     <a href="{{ request.META.HTTP_REFERER }}">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="-0.5 -0.5 16 16"
@@ -15,7 +15,7 @@
                         </svg>
                     </a>
                 </div>
-                <div class="w-full">
+                <div class="w-full relative">
                     <div class="flex items-center w-full border border-black h-full">
                         <!-- Icon -->
                         <span class="text-black pl-4">
@@ -28,10 +28,53 @@
                         </span>
                         <!-- Input Field -->
                         <input type="text" placeholder="Search what you love !" id="search" name="keyword"
-                            class="flex-1 bg-white text-black px-4 focus:outline-none" required="">
+                            class="flex-1 bg-white text-black px-4 focus:outline-none" required autocomplete="off">
                     </div>
                 </div>
             </div>
         </form>
     </div>
 </header>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchForm = document.getElementById('searchForm');
+        const searchInput = document.getElementById('search');
+        const recentSearchesList = document.getElementById('recentSearchesList');
+
+        // Maximum number of recent searches to store
+        const MAX_RECENT_SEARCHES = 5;
+
+        // Load recent searches from local storage
+        function loadRecentSearches() {
+            const searches = JSON.parse(localStorage.getItem('recentSearches') || '[]');
+            return searches;
+        }
+
+        // Save a search to local storage
+        function saveSearch(searchTerm) {
+            let searches = loadRecentSearches();
+
+            // Remove if already exists (to avoid duplicates)
+            searches = searches.filter(item => item.toLowerCase() !== searchTerm.toLowerCase());
+
+            // Add to beginning of array
+            searches.unshift(searchTerm);
+
+            // Keep only the most recent searches
+            if (searches.length > MAX_RECENT_SEARCHES) {
+                searches = searches.slice(0, MAX_RECENT_SEARCHES);
+            }
+
+            localStorage.setItem('recentSearches', JSON.stringify(searches));
+        }
+
+
+        // Form submission handler
+        searchForm.addEventListener('submit', function (e) {
+            const searchTerm = searchInput.value.trim();
+            if (searchTerm) {
+                saveSearch(searchTerm);
+            }
+        });
+    });
+</script>

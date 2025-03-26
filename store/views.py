@@ -10,11 +10,13 @@ from .forms import ReviewForm
 from django.contrib import messages
 from orders.models import OrderProduct
 from home.models import homeSections
+from search.models import search_categories, top_searches, not_found_searches
 
 
 def store(request, category_slug=None):
     categories = None
     products = Product.objects.filter(is_available=True)
+    notfoundsearches = not_found_searches.objects.all()
 
     # Filter by Category
     if category_slug is not None:
@@ -91,6 +93,7 @@ def store(request, category_slug=None):
         return JsonResponse(data)
 
     context = {
+        'notfoundsearches': notfoundsearches,
         'products': paged_products,
         'sizes': sizes,
         'colors': colors,
@@ -103,8 +106,10 @@ def store(request, category_slug=None):
     return render(request, 'store/store.html', context)
 
 def search(request):
+    topsearches = top_searches.objects.all()
     sections = homeSections.objects.all()
     context = {
+        'topsearches': topsearches,
         'sections': sections,
     }
     return render(request, 'store/search.html',context)

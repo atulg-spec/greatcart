@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'django_ckeditor_5',
     'accounts',
     'home',
+    'search',
     'category',
     'coupons',
     'store',

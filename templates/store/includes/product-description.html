@@ -109,14 +109,7 @@
         </div>
         <div id="returns-content" class="hidden py-4 text-sm">
             <div class="">
-                <ol class="list-decimal list-inside space-y-2 text-gray-700">
-                    <li>Hassle-free returns within 7 days under specific product and promotion conditions.</li>
-                    <li>Refunds for prepaid orders revert to the original payment method, while COD orders receive a wallet refund.</li>
-                    <li>Report defective, incorrect, or damaged items within 24 hours of delivery.</li>
-                    <li>Products bought during special promotions like BOGO are not eligible for returns.</li>
-                    <li>For excessive returns, reverse shipment fee up to Rs 100 can be charged, which will be deducted from the refund.</li>
-                    <li>Non-returnable items include accessories, sunglasses, perfumes, masks, and innerwear due to hygiene concerns.</li>
-                </ol>
+                {{settings.product_return_details|safe}}
             </div>
         </div>
     </div>
