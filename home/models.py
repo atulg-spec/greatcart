@@ -6,8 +6,8 @@ from django.utils.text import slugify
 
 class SiteSettings(models.Model):
     site_name = models.CharField(max_length=15, blank=True)
-    site_header_news = CKEditor5Field('Text', config_name='extends')
-    slider_news = CKEditor5Field('Text', config_name='extends', null=True, blank=True)
+    site_header_news = CKEditor5Field('Site Header News', config_name='extends')
+    slider_news = CKEditor5Field('Slider News', config_name='extends', null=True, blank=True)
 
     logo = models.ImageField(upload_to='logos/', blank=True, null=True)
     preloader_img = models.ImageField(upload_to='logos/', blank=True, null=True)
@@ -38,7 +38,7 @@ class SiteSettings(models.Model):
     login_banner = models.ImageField(upload_to='login/', blank=True, null=True)
     login_banner_desktop = models.ImageField(upload_to='login/', blank=True, null=True)
 
-    product_return_details = CKEditor5Field('Text', config_name='extends', null=True, blank=True)
+    product_return_details = CKEditor5Field('Product Return Details', config_name='extends', null=True, blank=True)
 
 
     class Meta:
@@ -167,7 +167,7 @@ class Page(models.Model):
     )
 
     # Page content
-    content = CKEditor5Field('Text', config_name='extends')
+    content = CKEditor5Field('Content', config_name='extends')
 
     # Canonical URL (to avoid duplicate content issues)
     canonical_url = models.URLField(
