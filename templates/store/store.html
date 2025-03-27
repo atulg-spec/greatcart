@@ -3,9 +3,7 @@
 
 {% block content %}
 <!-- ========================= SECTION CONTENT ========================= -->
-
 {% include 'includes/navbar.html' %}
-{% include 'includes/home/slider.html' %}
 {% include 'store/includes/filter.html' %}
 <main class="container mx-auto md:px-2 py-8 md:py-2">
   <section class="py-24 md:py-0">
@@ -15,7 +13,7 @@
           {% include 'store/includes/desktop-filter.html' %}
         </div>
         <!-- Main Content -->
-        <main class="lg:w-4/5">
+        <main class="lg:w-4/5 md:py-24">
           <!-- Product Grid -->
           {% include 'store/includes/product_list.html' %}
 

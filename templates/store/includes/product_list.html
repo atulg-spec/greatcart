@@ -4,13 +4,31 @@
   {% for product in products %}
   <div class="group relative">
     <a href="{{ product.get_url }}">
-      <div>
+      <div class="relative">
         <img src="{{ product.images.url }}" alt="{{ product.product_name }}"
-          class="block w-full h-auto transition-opacity duration-300 group-hover:opacity-0">
+          class="block w-full h-auto transition-opacity duration-300 group-hover:opacity-0" loading="lazy" width="300"
+          height="400" />
+
         {% if product.secondary_image %}
         <img src="{{ product.secondary_image.url }}" alt="{{ product.product_name }}"
-          class="absolute inset-0 w-full h-auto opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+          class="absolute inset-0 w-full h-auto opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+          loading="lazy" width="300" height="400" />
         {% endif %}
+
+        <div class="absolute top-0 right-0 p-2 text-black font-bold">
+          <form action="{% url 'add_wishlist' product.id %}" method="POST">
+            {% csrf_token %}
+            <button type="submit">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="#000000"
+                id="Heart-Straight-Thin--Streamline-Phosphor-Thin" height="24" width="24">
+                <desc>Heart Straight Thin Streamline Icon: https://streamlinehq.com</desc>
+                <path
+                  d="M14.6916125 2.4706625c-1.53091875 -1.5258 -4.00760625 -1.5258 -5.53853125 0l-1.1518375 1.06836875 -1.1518375 -1.072C4.71483125 0.33469375 1.07239375 1.312725 0.29301875 4.22749375c-0.36170625 1.35275 0.02574375 2.79570625 1.01640625 3.78533125L7.79439375 14.592875c0.113725 0.11548125 0.299975 0.11548125 0.4137 0l6.48351875 -6.5786c1.53118125 -1.53068125 1.53118125 -4.01293125 0 -5.5436125Zm-0.411525 5.13426875L8.00124375 13.975225 1.72095 7.60348125C-0.09655625 5.785975 0.73500625 2.682525 3.21776875 2.017275c1.15225 -0.30875 2.3816875 0.02068125 3.22519375 0.8641875l0.0072625 0.00725625 1.352875 1.25998125c0.11155625 0.10416875 0.28473125 0.10416875 0.3962875 0l1.35288125 -1.25998125 0.00725625 -0.00725625c1.7806375 -1.85330625 4.89979375 -1.08401875 5.61448125 1.38470625 0.3454 1.1931 -0.0000875 2.4793125 -0.89681875 3.3387625Z"
+                  stroke-width="0.0625"></path>
+              </svg>
+            </button>
+          </form>
+        </div>
       </div>
     </a>
     <div class="mt-1">
