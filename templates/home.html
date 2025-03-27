@@ -15,6 +15,13 @@
 {% include 'includes/bottomnav.html' %}
 
 <main class="container mx-auto md:px-2">
+  {% include 'includes/home-sections.html' %}
+
+  <section data-aos="fade-up">
+    <img src="{{ settings.main_page_image.url }}" alt="{{ settings.site_name }} Main Page Image" loading="lazy"
+      width="1200" height="600" class="w-full h-auto" />
+  </section>
+
   {% if recently_stalked %}
   <section class="pb-5">
     <div class="container mx-auto">
@@ -77,13 +84,6 @@
     </div>
   </section>
   {% endif %}
-
-  {% include 'includes/home-sections.html' %}
-
-  <section data-aos="fade-up">
-    <img src="{{ settings.main_page_image.url }}" alt="{{ settings.site_name }} Main Page Image" loading="lazy"
-      width="1200" height="600" class="w-full h-auto" />
-  </section>
 
   <section class="my-8" data-aos="fade-up">
     <h1 class="flex justify-center font-extrabold text-xl mb-4">CATEGORIES</h1>
