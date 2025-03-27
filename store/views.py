@@ -10,7 +10,7 @@ from .forms import ReviewForm
 from django.contrib import messages
 from orders.models import OrderProduct
 from home.models import homeSections
-from search.models import search_categories, top_searches, not_found_searches
+from search.models import top_searches, not_found_searches
 
 
 def store(request, category_slug=None):

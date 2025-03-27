@@ -9,7 +9,7 @@
         </h2>
         <div class="flex flex-wrap justify-center gap-2">
             {% for search in notfoundsearches %}
-            <a href="{{search.url}}"
+            <a href="/store/?keyword={{search}}"
                 class="bg-white border border-gray-400 font-medium px-2 py-1 text-sm font-mono whitespace-nowrap text-center">
                 {{ search }}
             </a>

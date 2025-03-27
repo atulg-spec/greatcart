@@ -1,9 +1,9 @@
-<div class="flex justify-center py-6">
+<div class="flex justify-center py-2">
     <div>
         <h1 class="flex justify-center font-extrabold">
             FEATURED CATEGORIES
         </h1>
-        <div class="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-6 gap-1 md:gap-6 py-4 md:px-1">
+        <div class="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-6 gap-1 py-4 md:px-1">
             {% for feature in features %}
             <div>
                 <a href="{{ feature.url }}" title="{{ feature.url }}" class="relative group block"

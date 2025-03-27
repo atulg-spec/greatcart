@@ -4,7 +4,7 @@
     </h1>
     <div class="flex space-x-4 overflow-x-auto scrollbar-hide px-2" data-aos="fade-up">
         {% for search in topsearches %}
-        <a href="{{search.url}}"
+        <a href="/store/?keyword={{search}}"
             class="bg-white border border-gray-400 font-medium px-2 py-1 text-sm font-mono whitespace-nowrap text-center">
             {{ search }}
         </a>
