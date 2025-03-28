@@ -115,7 +115,7 @@
 							RECENTLY STALKED
 						</h1>
 						<div
-							class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-1 px-1 justify-center items-center">
+							class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-1 md:px-1 justify-center items-center">
 							{% for product in recently_stalked %}
 							<div class="group relative" data-aos="fade-up">
 								<a href="{{ product.product.get_url }}" aria-label="{{ product.product.product_name }}">
