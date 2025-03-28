@@ -1,0 +1,16 @@
+<div class="fixed inset-0 flex items-center justify-center z-50 hidden" id="notifyMsg">
+    <div class="bg-black/80 bg-opacity-90 text-white py-4 px-6 rounded-lg">
+        <p class="text-center text-xs font-semibold uppercase" id="message-text"></p>
+    </div>
+</div>
+<script>
+    function showMessage(message) {
+        document.getElementById('notifyMsg').classList.remove('hidden');
+        document.getElementById('message-text').innerText = message;
+        setTimeout(hideMessage, 2000);
+    }
+
+    function hideMessage() {
+        document.getElementById('notifyMsg').classList.add('hidden');
+    }
+</script>

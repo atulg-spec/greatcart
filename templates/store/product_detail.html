@@ -134,8 +134,8 @@
 
           <!-- Product Details -->
           <!-- Product Details -->
-          <div class="lg:w-1/2 p-6 md:border-l">
-            <form action="{% url 'add_cart' single_product.id %}" method="POST">
+          <div class="lg:w-1/2 p-6 md:border-l" id="details-section">
+            <form action="{% url 'add_cart' single_product.id %}" method="POST" id="cart-form">
               {% csrf_token %}
               <h2 class="md:text-3xl font-bold">{{ single_product.product_name }}</h2>
               <div class="flex items-center mb-4">
@@ -216,15 +216,12 @@
                     {% endfor %}
                   </div>
                 </div>
-
-
               </div>
               <!-- COLOR VARIATIONS -->
               <div class="">
                 {% include 'store/includes/variation-colors.html' %}
               </div>
               <!-- END COLOR VARIATIONS -->
-
               {% include 'store/includes/product-description.html' %}
 
               <hr class="my-6">
@@ -233,7 +230,7 @@
               {% if single_product.stock <= 0 %} <div class="text-red-500 font-semibold mb-4">Out of Stock
           </div>
           {% else %}
-          <button type="submit" class="w-full bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-900">
+          <button class="w-full bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-900 add-to-bag-button">
             <div class="flex justify-center items-center space-x-4">
               <p>
                 <svg viewBox="-0.5 -0.5 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"
@@ -256,7 +253,7 @@
           </button>
 
           <div class="fixed bottom-0 left-0 w-full bg-white p-2 shadow-lg md:hidden">
-            <button type="submit" class="w-full bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-900">
+            <button class="w-full bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-900 add-to-bag-button">
               <div class="flex justify-center items-center space-x-4">
                 <p>
                   <svg viewBox="-0.5 -0.5 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"
@@ -366,6 +363,27 @@
     event.currentTarget.classList.add('text-white'); // Add a border to the selected button
     event.currentTarget.classList.add('bg-black'); // Add a border to the selected button
   }
+
+  const addToBagButtons = document.querySelectorAll('.add-to-bag-button');
+
+  // Loop through each button
+  addToBagButtons.forEach(function (button) {
+    button.addEventListener('click', function (event) {
+      event.preventDefault(); // Prevent default button behavior (e.g., form submission)
+
+      const selectedSizeField = document.getElementById('selectedSize');
+      if (selectedSizeField.value.trim() !== '') {
+        const cartForm = document.getElementById('cart-form');
+        if (cartForm) {
+          cartForm.submit();
+        }
+      } else {
+        location.href = "#details-section"
+        showMessage('Please select a size before adding to bag.');
+      }
+    });
+  });
+
 
 </script>
 
