@@ -40,9 +40,9 @@
                 {% else %}
                 <a href="/" aria-label="Home">
                     <figure>
-                        <img src="{{settings.logo.url}}" alt="{{settings.site_name}}" width="144" height="72"
+                        <img src="{{settings.logo.url}}" alt="{{settings.site_name}}" width="{{settings.logo_width}}px" height="{{settings.logo_height}}px"
                             loading="lazy"
-                            class="w-20 h-10 sm:w-24 sm:h-12 md:w-28 md:h-14 lg:w-32 lg:h-16 xl:w-36 xl:h-18">
+                            class="h-10 sm:h-12 md:h-14 lg:h-16 xl:h-18">
                     </figure>
                 </a>
                 {% endif %}

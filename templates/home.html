@@ -16,6 +16,9 @@
 {% include 'includes/bottomnav.html' %}
 
 <main class="container mx-auto md:px-2">
+  <h1 class="flex justify-center font-extrabold pb-4">
+    NEW AND POPULAR
+  </h1>
   {% include 'includes/home-sections.html' %}
   <section data-aos="fade-right">
     <img src="{{ settings.main_page_image.url }}" alt="{{ settings.site_name }} Main Page Image" loading="lazy"
@@ -109,31 +112,29 @@
             aria-label="{{ category.category_name }}">
             <figure class="overflow-hidden shadow-md relative">
               {% if category.cat_image %}
-              <img src="{{ category.cat_image.url }}" alt="{{ category.category_name }}"
-                class="w-full h-auto shadow-md transition-transform duration-300 group-hover:scale-125 group-hover:shadow-xl"
-                loading="lazy" width="300" height="200" />
-              <div
-                class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-opacity duration-300 flex items-center justify-center">
-                <span
-                  class="text-white text-lg font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <div class="relative">
+                <img src="{{ category.cat_image.url }}" alt="{{ category.category_name }}"
+                  class="w-full h-auto shadow-md transition-transform duration-300 group-hover:scale-125 group-hover:shadow-xl"
+                  loading="lazy" width="300" height="200" />
+                <span class="absolute bottom-0 left-0 right-0 flex justify-center py-2 font-semibold text-sm bg-black bg-opacity-70 text-white">
                   {{ category.category_name|upper }}
                 </span>
               </div>
               {% else %}
-              <div class="w-full h-40 bg-gray-200 shadow-md flex items-center justify-center">
+              <div class="w-full h-40 bg-gray-200 shadow-md flex items-center justify-center relative">
+                <span class="absolute bottom-0 left-0 right-0 flex justify-center py-2 font-semibold text-sm bg-black bg-opacity-70 text-white">
+                  {{ category.category_name|upper }}
+                </span>
                 <span class="text-gray-500">No Image</span>
               </div>
               {% endif %}
             </figure>
-            <figcaption class="mt-2 text-center text-gray-700 group-hover:text-gray-900 transition-colors duration-300">
-              {{ category.category_name }}
-            </figcaption>
           </a>
         </div>
         {% endfor %}
       </div>
     </div>
-  </section>
+</section>
 
   {% include 'includes/home/timer.html' %}
 

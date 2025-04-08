@@ -99,7 +99,7 @@ class OrderAdmin(admin.ModelAdmin):
             'fields': ('first_name', 'last_name', 'phone', 'email', 'full_name')
         }),
         ('Shipping Address', {
-            'fields': ('address_line_1', 'address_line_2', 'country', 'state', 'city', 'full_address')
+            'fields': ('address_line_1', 'address_line_2', 'country', 'state', 'city', 'zip_code', 'full_address')
         }),
         ('Order Details', {
             'fields': ('order_note', 'order_total', 'tax')

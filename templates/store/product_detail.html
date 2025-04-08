@@ -153,6 +153,9 @@
                     <p>
                       <span class="text-1xl">₹ </span>
                       <span class="text-2xl font-semibold">{{ single_product.price }}</span>
+                      <span class="text-red-500 font-bold line-through">
+                        ₹{{ single_product.before_discount_price }}
+                      </span>              
                     </p>
                     <p class="text-gray-500 text-sm">inclusive of all taxes</p>
                   </span>
@@ -183,6 +186,7 @@
                   </div>
                   <input type="hidden" name="size" id="selectedSize" required>
                 </div>
+                {% if single_product.variation_set.colors %}
                 <div>
                   <label class="block text-gray-700 font-semibold mb-2">Color Options</label>
                   <div class="flex space-x-2">
@@ -196,7 +200,6 @@
                   </div>
                   <input type="hidden" name="color" id="selectedColor" required>
                 </div>
-
                 <div>
                   <span class="block text-gray-700 font-semibold mb-2">Available Colors</span>
                   <div class="flex space-x-4 overflow-x-auto scrollbar-hide aos-init aos-animate">
@@ -211,6 +214,7 @@
                     {% endfor %}
                   </div>
                 </div>
+                {% endif %}
               </div>
               <!-- COLOR VARIATIONS -->
               <div class="">

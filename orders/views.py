@@ -118,6 +118,17 @@ def place_order(request, total=0, quantity=0,):
             data.tax = tax
             data.ip = request.META.get('REMOTE_ADDR')
             data.save()
+
+            data.user.first_name = form.cleaned_data['first_name']
+            data.user.last_name = form.cleaned_data['last_name']
+            data.user.address_line_1 = form.cleaned_data['address_line_1']
+            data.user.address_line_2 = form.cleaned_data['address_line_2']
+            data.user.city = form.cleaned_data['city']
+            data.user.state = form.cleaned_data['state']
+            data.user.country = form.cleaned_data['country']
+            data.user.zip_code = form.cleaned_data['zip_code']
+            data.user.save()
+            
             # Generate order number
             yr = int(datetime.date.today().strftime('%Y'))
             dt = int(datetime.date.today().strftime('%d'))

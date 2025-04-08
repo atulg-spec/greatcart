@@ -73,11 +73,11 @@ class HeadSectionAdmin(admin.ModelAdmin):
 class SiteSettingsAdmin(admin.ModelAdmin):
     form = SiteSettingsForm
 
-    list_display = ('site_name', 'logo_tag', 'mobile_logo_tag',)
+    list_display = ('site_name', 'logo_tag')
 
     fieldsets = (
         ('Main Settings', {
-            'fields': ('site_name', 'site_header_news', 'slider_news', 'preloader_img','logo', 'mobile_logo', 'tagline', 'font_style')
+            'fields': ('site_name', 'site_header_news', 'slider_news', 'preloader_img','logo', 'logo_width', 'logo_height', 'tagline', 'font_style')
         }),
         ('Index Page Banner', {
             'fields': ('main_page_image',)
@@ -111,14 +111,9 @@ class SiteSettingsAdmin(admin.ModelAdmin):
             return format_html('<img src="{}" style="max-height: 50px;" />', obj.logo.url)
         return "No Logo"
 
-    def mobile_logo_tag(self, obj):
-        if obj.mobile_logo:
-            return format_html('<img src="{}" style="max-height: 50px;" />', obj.mobile_logo.url)
-        return "No Mobile Logo"
 
     # Short descriptions for each image tag
     logo_tag.short_description = 'Logo'
-    mobile_logo_tag.short_description = 'Mobile Logo'
 
 
 @admin.register(featured_categories)
@@ -152,18 +147,6 @@ class FeaturedCategoriesAdmin(admin.ModelAdmin):
     image_preview.short_description = 'Large Preview'    
 
 
-
-class PaymentGatewayAdmin(admin.ModelAdmin):
-    list_display = ('razorpay_key_id', 'razorpay_key_secret')
-    search_fields = ('razorpay_key_id',)
-
-    def has_add_permission(self, request):
-        # Restrict adding more than one PaymentGateway object
-        if PaymentGateway.objects.exists():
-            return False
-        return super().has_add_permission(request)
-
-admin.site.register(PaymentGateway, PaymentGatewayAdmin)
 
 class ProductByCategoryAdmin(admin.ModelAdmin):
     list_display = ('display_image', 'url')  # Include the display_image method

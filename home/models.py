@@ -8,9 +8,10 @@ class SiteSettings(models.Model):
     site_header_news = CKEditor5Field('Site Header News', config_name='extends')
     slider_news = CKEditor5Field('Slider News', config_name='extends', null=True, blank=True)
 
-    logo = models.ImageField(upload_to='logos/', blank=True, null=True)
     preloader_img = models.ImageField(upload_to='logos/', blank=True, null=True)
-    mobile_logo = models.ImageField(upload_to='logos/', blank=True, null=True)
+    logo = models.ImageField(upload_to='logos/', blank=True, null=True)
+    logo_width = models.IntegerField(default=144, help_text='size in px')
+    logo_height = models.IntegerField(default=72, help_text='size in px')
     tagline = models.CharField(max_length=100, blank=True)
 
     main_page_image = models.ImageField(upload_to='slider_images/', blank=True, null=True)
@@ -115,16 +116,6 @@ class homeSections(models.Model):
     def __str__(self):
       return f"Home Section {self.name}"
 
-class PaymentGateway(models.Model):
-    razorpay_key_id = models.CharField(max_length=500,default="")
-    razorpay_key_secret = models.CharField(max_length=500,default="")
-
-    class Meta:
-        verbose_name = "Payment Gateway Setting"
-        verbose_name_plural = "Payment Gateway"
-    def __str__(self):
-      return "Payment Gateway"
-    
 
 class ProductByCategory(models.Model):
     image = models.ImageField(upload_to='slider_images/', blank=True, null=True)

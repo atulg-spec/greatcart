@@ -10,14 +10,19 @@
                     aria-label="{{ feature.url }}">
                     <figure class="overflow-hidden relative">
                         {% if feature.image %}
-                        <img src="{{ feature.image.url }}" alt="{{ feature.name }}"
-                            class="w-full h-auto transition-transform duration-300 group-hover:scale-100"
-                            loading="lazy" width="300" height="200" />
-                        <span class="flex justify-center py-1 font-semibold text-xs">
-                            {{feature.name|upper}}
-                        </span>
+                        <div class="relative">
+                            <img src="{{ feature.image.url }}" alt="{{ feature.name }}"
+                                class="w-full h-auto transition-transform duration-300 group-hover:scale-100"
+                                loading="lazy" width="300" height="200" />
+                            <span class="absolute bottom-0 left-0 right-0 flex justify-center py-1 font-semibold text-xs bg-black bg-opacity-70 text-center text-white">
+                                {{feature.name|upper}}
+                            </span>
+                        </div>
                         {% else %}
-                        <div class="w-full h-40 bg-gray-200 shadow-md flex items-center justify-center">
+                        <div class="w-full h-40 bg-gray-200 shadow-md flex items-center justify-center relative">
+                            <span class="absolute bottom-0 left-0 right-0 flex justify-center py-1 font-semibold text-xs bg-black bg-opacity-70 text-white">
+                                {{feature.name|upper}}
+                            </span>
                             <span class="text-gray-500">No Image</span>
                         </div>
                         {% endif %}
