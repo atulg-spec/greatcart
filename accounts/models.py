@@ -5,6 +5,7 @@ class CustomUser(AbstractUser):
     username = models.CharField(max_length=150, unique=True)
     email = models.EmailField(unique=True)
     phone_number = models.PositiveIntegerField(blank=True, null=True)
+    wallet = models.IntegerField(default=0)
     address_line_1 = models.CharField(blank=True, max_length=100)
     address_line_2 = models.CharField(blank=True, max_length=100)
     profile_picture = models.ImageField(blank=True, upload_to='userprofile')

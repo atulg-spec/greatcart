@@ -6,13 +6,16 @@
         <div class="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-6 gap-1 py-4 md:px-1">
             {% for feature in features %}
             <div>
-                <a href="{{ feature.url }}" title="{{ feature.url }}" class="relative group block"
+                <a href="/store/?keyword={{ feature.name }}" title="/store/?keyword={{ feature.name }}" class="relative group block"
                     aria-label="{{ feature.url }}">
-                    <figure class="overflow-hidden shadow-md relative">
+                    <figure class="overflow-hidden relative">
                         {% if feature.image %}
-                        <img src="{{ feature.image.url }}" alt="{{ feature.url }}"
-                            class="w-full h-auto shadow-md transition-transform duration-300 group-hover:scale-125 group-hover:shadow-xl"
+                        <img src="{{ feature.image.url }}" alt="{{ feature.name }}"
+                            class="w-full h-auto transition-transform duration-300 group-hover:scale-100"
                             loading="lazy" width="300" height="200" />
+                        <span class="flex justify-center py-1 font-semibold text-xs">
+                            {{feature.name|upper}}
+                        </span>
                         {% else %}
                         <div class="w-full h-40 bg-gray-200 shadow-md flex items-center justify-center">
                             <span class="text-gray-500">No Image</span>

@@ -1,57 +1,162 @@
 {% extends 'base.html' %}
-
-
+{% load social_tags %}
 {% block content %}
+{% include 'includes/navbar.html' %}
+{% include 'includes/bottomnav.html' %}
+<div class="py-24 md:px-8">
+    <div class="flex justify-between px-2">
+        <div class="text-lg font-semibold">
+            WELCOME,
+            <span class="font-bold">{{request.user.first_name|upper}}.</span>
+        </div>
+        <div class="text-lg font-bold">MY ORDERS</div>
+    </div>
+    <div class="flex flex-col lg:flex-row gap-8 py-2">
+        {% include 'accounts/includes/sidenav.html' %}
+        <div class="lg:w-4/5 md:px-4">
+            <div class="bg-white rounded-sm shadow-sm">
+                <header class="border-b p-4">
+                    <strong class="text-lg font-bold">YOUR ORDER HISTORY</strong>
+                </header>
+                <div class="p-4">
+                    {% if orders %}
+                    <div class="grid gap-4 md:grid-cols-1">
+                        <!-- Header for desktop -->
+                        <div class="hidden md:grid grid-cols-6 gap-4 px-6 py-3 bg-gray-50 rounded-lg">
+                            <div class="text-xs font-medium text-gray-500 uppercase tracking-wider">Order #</div>
+                            <div class="text-xs font-medium text-gray-500 uppercase tracking-wider">Items</div>
+                            <div class="text-xs font-medium text-gray-500 uppercase tracking-wider">Billing Name</div>
+                            <div class="text-xs font-medium text-gray-500 uppercase tracking-wider">Total</div>
+                            <div class="text-xs font-medium text-gray-500 uppercase tracking-wider">Date</div>
+                            <div class="text-xs font-medium text-gray-500 uppercase tracking-wider">Status</div>
+                        </div>
 
-<section class="section-conten padding-y bg">
+                        {% for order in orders %}
+                        {% with order.orderproduct_set.all as products %}
+                        <div class="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 border border-gray-100">
+                            <!-- Mobile view (stacked) -->
+                            <div class="md:hidden space-y-3">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <a href="{% url 'order_detail' order.order_number %}" class="text-sm font-medium text-blue-600">
+                                            Order #{{order.order_number}}
+                                        </a>
+                                        <div class="text-xs text-gray-500 mt-1">{{order.created_at}}</div>
+                                    </div>
+                                    <span class="text-xs px-2 py-1 rounded 
+                                        {% if order.status == 'Completed' %}bg-green-100 text-green-800
+                                        {% elif order.status == 'Cancelled' %}bg-red-100 text-red-800
+                                        {% elif order.status == 'Accepted' %}bg-blue-100 text-blue-800
+                                        {% else %}bg-gray-100 text-gray-800{% endif %}">
+                                        {{order.status}}
+                                    </span>
+                                </div>
+                                
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <div class="text-sm font-medium text-gray-700">{{order.full_name}}</div>
+                                        <div class="text-xs text-gray-500">{{order.phone}}</div>
+                                    </div>
+                                    <span class="text-sm font-medium">₹{{order.order_total}}</span>
+                                </div>
+                                
+                                <div class="border-t pt-2 mt-2">
+                                    {% if products %}
+                                    <div class="text-xs font-medium text-gray-500 mb-1">ITEMS:</div>
+                                    {% for product in products|slice:":3" %}
+                                    <div class="flex items-start gap-2 mb-2">
+                                        {% if product.product.images %}
+                                        <img src="{{ product.product.images.url }}" alt="{{ product.product.product_name }}" class="w-10 object-cover rounded">
+                                        {% endif %}
+                                        <div>
+                                            <div class="text-sm text-gray-700">{{ product.product.product_name }}</div>
+                                            <div class="text-xs text-gray-500">
+                                                {% if product.variations.all %}
+                                                {% for variation in product.variations.all %}
+                                                {{ variation.variation_category|capfirst }}: {{ variation.variation_value }}{% if not forloop.last %}, {% endif %}
+                                                {% endfor %}
+                                                {% endif %}
+                                            </div>
+                                            <div class="text-xs text-gray-900">
+                                                Qty: {{ product.quantity }} × ₹{{ product.product_price }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                    {% if products.count > 3 %}
+                                    <div class="text-xs text-gray-500">+ {{ products.count|add:"-3" }} more items</div>
+                                    {% endif %}
+                                    {% endif %}
+                                </div>
+                            </div>
 
-{% include 'includes/alerts.html' %}
-<div class="container">
-	<div class="row">
-	{% include 'includes/dashboard_sidebar.html' %}
-	<main class="col-md-9">
-		<article class="card">
-		<header class="card-header">
-			<strong class="d-inline-block mr-3">Your order history</strong>
-
-		</header>
-		<div class="card-body">
-			<div class="row">
-			<div class="col-md-12">
-				<table class="table table-hover">
-				  <thead>
-				    <tr>
-				      <th scope="col">Order #</th>
-				      <th scope="col">Billing Name</th>
-				      <th scope="col">Phone</th>
-				      <th scope="col">Order Total</th>
-							<th scope="col">Date</th>
-				    </tr>
-				  </thead>
-				  <tbody>
-						{% for order in orders %}
-				    <tr>
-				      <th scope="row"><a href="{% url 'order_detail' order.order_number %}">{{order.order_number}}</a></th>
-				      <td>{{order.full_name}}</td>
-				      <td>{{order.phone}}</td>
-				      <td>${{order.order_total}}</td>
-							<td>{{order.created_at}}</td>
-				    </tr>
-				{% endfor %}
-
-				  </tbody>
-				</table>
-			</div>
-
-			</div> <!-- row.// -->
-		</div> <!-- card-body .// -->
-
-		</article> <!-- order-group.// -->
-	</main>
-</div> <!-- row.// -->
+                            <!-- Desktop view (grid) -->
+                            <div class="hidden md:grid grid-cols-6 gap-4 items-center">
+                                <div class="text-sm font-medium text-blue-600">
+                                    <a href="{% url 'order_detail' order.order_number %}">{{order.order_number}}</a>
+                                </div>
+                                <div class="text-sm text-gray-500">
+                                    {% if products %}
+                                    <div class="space-y-2">
+                                        {% for product in products|slice:":2" %}
+                                        <div class="flex items-center gap-2">
+                                            {% if product.product.images %}
+                                            <img src="{{ product.product.images.url }}" alt="{{ product.product.product_name }}" class="w-8 object-cover rounded">
+                                            {% endif %}
+                                            <div>
+                                                <div class="text-sm">{{ product.product.product_name }}</div>
+                                                <div class="text-xs text-gray-500">
+                                                    {% if product.variations.all %}
+                                                    {% for variation in product.variations.all %}
+                                                    {{ variation.variation_category|capfirst }}: {{ variation.variation_value }}{% if not forloop.last %}, {% endif %}
+                                                    {% endfor %}
+                                                    {% endif %}
+                                                </div>
+                                                <div class="text-xs">Qty: {{ product.quantity }} × ₹{{ product.product_price }}</div>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                        {% if products.count > 2 %}
+                                        <div class="text-xs text-gray-500">+ {{ products.count|add:"-2" }} more items</div>
+                                        {% endif %}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                <div class="text-sm text-gray-500">{{order.full_name}}</div>
+                                <div class="text-sm font-medium">₹{{order.order_total}}</div>
+                                <div class="text-sm text-gray-500">{{order.created_at}}</div>
+                                <div>
+                                    <span class="text-xs px-2 py-1 rounded 
+                                        {% if order.status == 'Completed' %}bg-green-100 text-green-800
+                                        {% elif order.status == 'Cancelled' %}bg-red-100 text-red-800
+                                        {% elif order.status == 'Accepted' %}bg-blue-100 text-blue-800
+                                        {% else %}bg-gray-100 text-gray-800{% endif %}">
+                                        {{order.status}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endwith %}
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="text-center py-8">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                        </svg>
+                        <h3 class="mt-2 text-sm font-medium text-gray-900">NO ORDERS FOUND</h3>
+                        <p class="mt-1 text-sm text-gray-500">Your order history will appear here once you make purchases.</p>
+                        <div class="mt-6">
+                            <a href="{% url 'store' %}" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium text-white bg-black hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                CONTINUE SHOPPING
+                            </a>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-
-
-</section>
-
+{% include 'accounts/includes/bottomnav.html' %}
 {% endblock %}

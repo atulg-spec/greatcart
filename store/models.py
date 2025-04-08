@@ -8,6 +8,7 @@ from coupons.models import Coupon
 # Create your models here.
 
 class Product(models.Model):
+    from home.models import featured_categories
     product_name = models.CharField(max_length=200, unique=True)
     slug = models.SlugField(max_length=200, unique=True)
     description = CKEditor5Field('Text', config_name='extends')
@@ -19,6 +20,7 @@ class Product(models.Model):
     stock = models.IntegerField()
     is_available = models.BooleanField(default=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    feature_category = models.ForeignKey(featured_categories, on_delete=models.CASCADE, null=True, blank=True)
     created_date = models.DateTimeField(auto_now_add=True)
     modified_date = models.DateTimeField(auto_now=True)
     before_discount_price = models.IntegerField(default=0)

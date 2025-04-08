@@ -10,13 +10,14 @@
 
 {% block content %}
 {% include 'includes/navbar.html' %}
+{% include 'includes/home/notification.html' %}
 {% include 'includes/home/slider.html' %}
 {% include 'includes/home/featured-categories.html' %}
 {% include 'includes/bottomnav.html' %}
 
 <main class="container mx-auto md:px-2">
   {% include 'includes/home-sections.html' %}
-  <section data-aos="fade-up">
+  <section data-aos="fade-right">
     <img src="{{ settings.main_page_image.url }}" alt="{{ settings.site_name }} Main Page Image" loading="lazy"
       width="1200" height="600" class="w-full h-auto" />
   </section>
@@ -29,7 +30,7 @@
       </h1>
       <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-1 md:px-1">
         {% for product in recently_stalked %}
-        <div class="group relative" data-aos="fade-up">
+        <div class="group relative" data-aos="fade-right">
           <a href="{{ product.product.get_url }}" aria-label="{{ product.product.product_name }}">
             <div class="relative">
               <img src="{{ product.product.images.url }}" alt="{{ product.product.product_name }}"
@@ -98,12 +99,12 @@
   </section>
   {% endif %}
 
-  <section class="my-8" data-aos="fade-up">
+  <section class="my-8" data-aos="fade-right">
     <h1 class="flex justify-center font-extrabold text-xl mb-4">CATEGORIES</h1>
     <div>
       <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1 px-1">
         {% for category in categories %}
-        <div data-aos="fade-up">
+        <div data-aos="fade-right">
           <a href="{{ category.get_url }}" title="{{ category.category_name }}" class="relative group block"
             aria-label="{{ category.category_name }}">
             <figure class="overflow-hidden shadow-md relative">
@@ -134,65 +135,7 @@
     </div>
   </section>
 
-
-
-  <div class="relative overflow-hidden" data-aos="fade-up">
-    <section
-      class="flex justify-center items-center py-10 transform -rotate-45 {{ settings.main_page_timer_strap_classes }}">
-      <div class="flex flex-col md:flex-row items-center gap-10 w-full px-5 space-x-4 transform rotate-45">
-        <!-- Image Section -->
-        <div class="w-full md:w-1/2 flex justify-center items-center" data-aos="fade-up">
-          <img src="{{ settings.main_page_timer_thumbnail.url }}" alt="Match Timer Thumbnail"
-            class="w-auto h-auto transition-transform duration-300 hover:scale-105" loading="lazy" width="400"
-            height="300" />
-        </div>
-
-        <!-- Countdown Section -->
-        <div class="w-full md:w-1/2 text-center flex flex-col items-center gap-6" data-aos="fade-up">
-          <!-- Title & Description -->
-          <h2 class="text-5xl md:text-6xl font-bold font-manrope tracking-widest drop-shadow-2xl">
-            {{ settings.main_page_timer_heading }}
-          </h2>
-          <p class="text-base font-normal leading-relaxed">
-            {{ settings.main_page_timer_caption }}
-          </p>
-
-          <!-- Countdown Timer -->
-          <div class="flex justify-center items-center gap-3 text-2xl font-manrope font-bold">
-            <div class="flex flex-col items-center">
-              <h3 class="countdown-element days"></h3>
-              <p class="text-xs font-normal">DAYS</p>
-            </div>
-            <span>:</span>
-            <div class="flex flex-col items-center">
-              <h3 class="countdown-element hours"></h3>
-              <p class="text-xs font-normal">HRS</p>
-            </div>
-            <span>:</span>
-            <div class="flex flex-col items-center">
-              <h3 class="countdown-element minutes"></h3>
-              <p class="text-xs font-normal">MINS</p>
-            </div>
-            <span>:</span>
-            <div class="flex flex-col items-center">
-              <h3 class="countdown-element seconds"></h3>
-              <p class="text-xs font-normal">SECS</p>
-            </div>
-          </div>
-
-          <!-- Register Button -->
-          <a href="{{ settings.main_page_timer_url }}"
-            class="text-lg sm:w-fit w-full px-12 py-3 bg-black text-white transition-all duration-500 ease-in-out shadow-lg flex justify-center items-center hover:scale-105 animate-bounce"
-            aria-label="Shop Now">
-            Shop Now
-          </a>
-        </div>
-      </div>
-    </section>
-  </div>
-
-
-
+  {% include 'includes/home/timer.html' %}
 
   <!-- ========================= SECTION POPULAR PRODUCTS ========================= -->
   <section class="py-8">
@@ -203,7 +146,7 @@
 
       <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-1 md:px-1">
         {% for product in products %}
-        <div class="group relative" data-aos="fade-up">
+        <div class="group relative" data-aos="fade-right">
           <a href="{{ product.get_url }}" aria-label="{{ product.product_name }}">
             <div class="relative">
               <img src="{{ product.images.url }}" alt="{{ product.product_name }}"

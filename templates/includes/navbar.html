@@ -30,6 +30,14 @@
                 </a>
             </div>
             <div class="flex justify-center">
+                {% if request.GET.keyword %}
+                <a href="/store/search/?keyword={{request.GET.keyword}}" aria-label="Search">
+                    <span
+                        class="inline-flex items-center justify-center w-56 h-10 sm:w-24 sm:h-12 md:w-56 md:h-14 lg:w-56 lg:h-16 xl:w-56 xl:h-18 overflow-hidden whitespace-nowrap truncate">
+                        {{request.GET.keyword|upper}}
+                    </span>
+                </a>
+                {% else %}
                 <a href="/" aria-label="Home">
                     <figure>
                         <img src="{{settings.logo.url}}" alt="{{settings.site_name}}" width="144" height="72"
@@ -37,6 +45,7 @@
                             class="w-20 h-10 sm:w-24 sm:h-12 md:w-28 md:h-14 lg:w-32 lg:h-16 xl:w-36 xl:h-18">
                     </figure>
                 </a>
+                {% endif %}
             </div>
             <div class="justify-end flex items-center">
                 <div class="grid grid-cols-1 md:grid-cols-3 px-4">
@@ -139,7 +148,7 @@
                 {% endif %}
             </div>
             <div class="mx-2">
-                <div class="font-semibold">Hey 
+                <div class="font-semibold">Hey
                     {% if user.is_authenticated %}
                     {{request.user.first_name}} !
                     {% else %}

@@ -27,7 +27,7 @@
                             </svg>
                         </span>
                         <!-- Input Field -->
-                        <input type="text" placeholder="Search what you love !" id="search" name="keyword"
+                        <input type="text" placeholder="Search what you love !" id="search" name="keyword" {% if request.GET.keyword %} value="{{request.GET.keyword}}" {% endif %}
                             class="flex-1 bg-white text-black px-4 focus:outline-none" required autocomplete="off">
                     </div>
                 </div>

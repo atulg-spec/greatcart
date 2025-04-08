@@ -28,10 +28,10 @@ class VariationInline(admin.TabularInline):
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = (
-        'image_preview', 'product_name', 'category', 'price', 'discount_percent', 'before_discount_price', 'stock',
+        'image_preview', 'product_name', 'category', 'feature_category', 'price', 'discount_percent', 'before_discount_price', 'stock',
         'is_available', 'average_rating', 'review_count', 'created_date', 'modified_date', 'product_link'
     )
-    list_filter = ('category', 'is_available', 'created_date', 'modified_date')
+    list_filter = ('category', 'feature_category', 'is_available', 'created_date', 'modified_date')
     search_fields = ('product_name', 'description')
     prepopulated_fields = {'slug': ('product_name',)}
     inlines = [VariationInline, ProductGalleryInline]
@@ -41,7 +41,7 @@ class ProductAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ('Product Information', {
-            'fields': ('product_name', 'slug', 'description', 'coupons', 'size_chart', 'category', 'price', 'discount_percent', 'before_discount_price', 'stock', 'is_available')
+            'fields': ('product_name', 'slug', 'description', 'coupons', 'size_chart', 'category', 'feature_category', 'price', 'discount_percent', 'before_discount_price', 'stock', 'is_available')
         }),
         ('Images', {
             'fields': ('images', 'secondary_image', 'image_preview')

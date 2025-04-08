@@ -12,101 +12,176 @@
 		<div class="text-lg font-bold">MY ACCOUNT</div>
 	</div>
 	<div class="flex flex-col lg:flex-row gap-8 py-8">
-		<div class="hidden lg:block lg:w-1/5">
-			<div class="w-full">
-				<a href="/accounts/"
-					class="block p-3 my-1 rounded-sm border {% if request.path == '/accounts/' %}bg-black text-white hover:bg-gray-800{% else %}bg-white text-black hover:text-white hover:bg-black{% endif %}">
-					DASHBOARD
-				</a>
-				<a href="/cart/"
-					class="block p-3 my-1 rounded-sm border {% if request.path == '/cart/' %}bg-black text-white hover:bg-gray-800{% else %}bg-white text-black hover:text-white hover:bg-black{% endif %}">
-					CART
-				</a>
-				<a href="/orders/"
-					class="block p-3 my-1 rounded-sm border {% if request.path == '/orders/' %}bg-black text-white hover:bg-gray-800{% else %}bg-white text-black hover:text-white hover:bg-black{% endif %}">
-					ORDERS
-				</a>
-				<a href="/accounts/edit_profile/"
-					class="block p-3 my-1 rounded-sm border {% if request.path == '/accounts/edit_profile/' %}bg-black text-white hover:bg-gray-800{% else %}bg-white text-black hover:text-white hover:bg-black{% endif %}">
-					PROFILE
-				</a>
-			</div>
-		</div>
+		{% include 'accounts/includes/sidenav.html' %}
 		<div class="lg:w-4/5 md:px-4">
-			<div>
-				<section class="pt-2 pb-8 md:px-4">
-					<div class="container mx-auto">
-						<header class="items-center mb-2">
-							<h3 class="text-2xl font-bold px-2 md:px-0">Your Last Orders</h3>
-						</header>
-						{% if recently_stalke %}
+			
+			<div class="bg-white rounded-sm shadow-sm">
+				<header class="border-b p-4">
+					<strong class="text-lg font-bold">YOUR ORDER HISTORY</strong>
+				</header>
+				<div class="p-4">
+					{% if orders %}
+					<div class="grid gap-4 md:grid-cols-1">
+						<!-- Header for desktop -->
+						<div class="hidden md:grid grid-cols-6 gap-4 px-6 py-3 bg-gray-50 rounded-lg">
+							<div class="text-xs font-medium text-gray-500 uppercase tracking-wider">Order #</div>
+							<div class="text-xs font-medium text-gray-500 uppercase tracking-wider">Items</div>
+							<div class="text-xs font-medium text-gray-500 uppercase tracking-wider">Billing Name</div>
+							<div class="text-xs font-medium text-gray-500 uppercase tracking-wider">Total</div>
+							<div class="text-xs font-medium text-gray-500 uppercase tracking-wider">Date</div>
+							<div class="text-xs font-medium text-gray-500 uppercase tracking-wider">Status</div>
+						</div>
+
+						{% for order in orders %}
+						{% with order.orderproduct_set.all as products %}
 						<div
-							class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 md:gap-6 px-2 md:px-1">
-							{% for product in recently_stalked %}
-							<div class="group relative" data-aos="fade-up">
-								<a href="{{ product.product.get_url }}" aria-label="{{ product.product.product_name }}">
+							class="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 border border-gray-100">
+							<!-- Mobile view (stacked) -->
+							<div class="md:hidden space-y-3">
+								<div class="flex justify-between items-start">
 									<div>
-										<!-- Primary Image -->
+										<a href="{% url 'order_detail' order.order_number %}"
+											class="text-sm font-medium text-blue-600">
+											Order #{{order.order_number}}
+										</a>
+										<div class="text-xs text-gray-500 mt-1">{{order.created_at}}</div>
+									</div>
+									<span class="text-xs px-2 py-1 rounded 
+                                        {% if order.status == 'Completed' %}bg-green-100 text-green-800
+                                        {% elif order.status == 'Cancelled' %}bg-red-100 text-red-800
+                                        {% elif order.status == 'Accepted' %}bg-blue-100 text-blue-800
+                                        {% else %}bg-gray-100 text-gray-800{% endif %}">
+										{{order.status}}
+									</span>
+									<div class="text-xs mt-1 {% if order.is_ordered %}text-green-500{% else %}text-yellow-500{% endif %}">
+										{{ order.is_ordered|yesno:"Ordered,Pending" }}
+									</div>																		
+								</div>
+
+								<div class="flex justify-between items-center">
+									<div>
+										<div class="text-sm font-medium text-gray-700">{{order.full_name}}</div>
+										<div class="text-xs text-gray-500">{{order.phone}}</div>
+									</div>
+									<span class="text-sm font-medium">₹{{order.order_total}}</span>
+								</div>
+
+								<div class="border-t pt-2 mt-2">
+									{% if products %}
+									<div class="text-xs font-medium text-gray-500 mb-1">ITEMS:</div>
+									{% for product in products|slice:":3" %}
+									<div class="flex items-start gap-2 mb-2">
+										{% if product.product.images %}
 										<img src="{{ product.product.images.url }}"
-											alt="{{ product.product.product_name }}"
-											class="block w-full h-auto transition-opacity duration-300 group-hover:opacity-0"
-											loading="lazy" width="300" height="400" />
-										<!-- Secondary Image (if available) -->
-										{% if product.product.secondary_image %}
-										<img src="{{ product.product.secondary_image.url }}"
-											alt="{{ product.product.product_name }}"
-											class="absolute inset-0 w-full h-auto opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-											loading="lazy" width="300" height="400" />
+											alt="{{ product.product.product_name }}" class="w-10 object-cover rounded">
 										{% endif %}
+										<div>
+											<div class="text-sm text-gray-700">{{ product.product.product_name }}</div>
+											<div class="text-xs text-gray-500">
+												{% if product.variations.all %}
+												{% for variation in product.variations.all %}
+												{{ variation.variation_category|capfirst }}: 
+												{{variation.variation_value }}
+												{% if not forloop.last %}, 
+												{% endif %}
+												{% endfor %}
+												{% endif %}
+											</div>
+											<div class="text-xs text-gray-900">
+												Qty: {{ product.quantity }} × ₹{{ product.product_price }}
+											</div>
+										</div>
 									</div>
-								</a>
-								<div class="mt-1">
-									<a href="{{ product.product.get_url }}"
-										aria-label="{{ product.product.product_name }}">
-										<h3
-											class="text-lg font-semibold text-gray-900 hover:text-gray-600 line-clamp-custom">
-											{{ product.product.product_name }}
-										</h3>
-									</a>
-									<div>
-										<span class="text-gray-900 font-bold">
-											₹{{ product.product.price }}
-										</span>
-										<span class="text-red-500 font-bold line-through">
-											₹{{ product.product.before_discount_price }}
-										</span>
-									</div>
-
-									<!-- Sizes -->
-									<p class="my-1">
-										{% for size in product.product.get_sizes %}
-										<span class="text-gray-800 bg-gray-100 p-1 text-xs">{{ size|upper }}</span>
-										{% endfor %}
-									</p>
-
-									<!-- Stock Availability -->
-									<p
-										class="text-sm {% if product.product.stock > 0 %}text-green-600{% else %}text-red-600{% endif %}">
-										{% if product.product.stock > 0 %}
-										Stock Remaining ({{ product.product.stock }})
-										{% else %}
-										Out of Stock
-										{% endif %}
-									</p>
+									{% endfor %}
+									{% if products.count > 3 %}
+									<div class="text-xs text-gray-500">+ {{ products.count|add:"-3" }} more items</div>
+									{% endif %}
+									{% endif %}
 								</div>
 							</div>
-							{% empty %}
-							<p class="col-span-full text-center">No products available in this section.</p>
-							{% endfor %}
+
+							<!-- Desktop view (grid) -->
+							<div class="hidden md:grid grid-cols-6 gap-4 items-center">
+								<div class="text-sm font-medium text-blue-600">
+									<a href="{% url 'order_detail' order.order_number %}">{{order.order_number}}</a>
+								</div>
+								<div class="text-sm text-gray-500">
+									{% if products %}
+									<div class="space-y-2">
+										{% for product in products|slice:":2" %}
+										<div class="flex items-center gap-2">
+											{% if product.product.images %}
+											<img src="{{ product.product.images.url }}"
+												alt="{{ product.product.product_name }}"
+												class="w-8 object-cover rounded">
+											{% endif %}
+											<div>
+												<div class="text-sm">{{ product.product.product_name }}</div>
+												<div class="text-xs text-gray-500">
+													{% if product.variations.all %}
+													{% for variation in product.variations.all %}
+													{{ variation.variation_category|capfirst }}: 
+													{{variation.variation_value}}
+													{% if not forloop.last %}, 
+													{% endif %}
+													{% endfor %}
+													{% endif %}
+												</div>
+												<div class="text-xs">
+													Qty: {{ product.quantity }} × ₹{{product.product_price }}
+												</div>
+											</div>
+										</div>
+										{% endfor %}
+										{% if products.count > 2 %}
+										<div class="text-xs text-gray-500">+ {{ products.count|add:"-2" }} more items
+										</div>
+										{% endif %}
+									</div>
+									{% endif %}
+								</div>
+								<div class="text-sm text-gray-500">{{order.full_name}}</div>
+								<div class="text-sm font-medium">₹{{order.order_total}}</div>
+								<div class="text-sm text-gray-500">{{order.created_at}}</div>
+								<div>
+									<span class="text-xs px-2 py-1 rounded 
+                                        {% if order.status == 'Completed' %}bg-green-100 text-green-800
+                                        {% elif order.status == 'Cancelled' %}bg-red-100 text-red-800
+                                        {% elif order.status == 'Accepted' %}bg-blue-100 text-blue-800
+                                        {% else %}bg-gray-100 text-gray-800{% endif %}">
+										{{order.status}}
+									</span>
+									<div class="text-xs mt-1 py-2 {% if order.is_ordered %}text-green-500{% else %}text-yellow-500{% endif %}">
+										{{ order.is_ordered|yesno:"Ordered,Pending" }}
+									</div>
+								</div>
+							</div>
 						</div>
-						{% else %}
-						<div class="my-2">
-							{% include 'includes/notfound.html' %}
-						</div>
-						{% endif %}
+						{% endwith %}
+						{% endfor %}
 					</div>
-				</section>
+					{% else %}
+					<div class="text-center py-8">
+						<svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-400" fill="none"
+							viewBox="0 0 24 24" stroke="currentColor">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+								d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+						</svg>
+						<h3 class="mt-2 text-sm font-medium text-gray-900">NO ORDERS FOUND</h3>
+						<p class="mt-1 text-sm text-gray-500">Your order history will appear here once you make
+							purchases.</p>
+						<div class="mt-6">
+							<a href="{% url 'store' %}"
+								class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium text-white bg-black hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+								CONTINUE SHOPPING
+							</a>
+						</div>
+					</div>
+					{% endif %}
+				</div>
 			</div>
+
+
 			<div>
 				{% if recently_stalked %}
 				<section class="pt-2 pb-8 md:px-4">
@@ -180,17 +255,5 @@
 		</div>
 	</div>
 </div>
-<div class="lg:hidden fixed bottom-0 left-0 w-full bg-white z-50 border">
-	<div class="flex justify-around p-2">
-		<a href="/accounts/"
-			class="text-center text-xs p-2 {% if request.path == '/accounts/' %}text-black font-bold{% else %}text-gray-600{% endif %}">DASHBOARD</a>
-		<a href="/cart/"
-			class="text-center text-xs p-2 {% if request.path == '/cart/' %}text-black font-bold{% else %}text-gray-600{% endif %}">CART</a>
-		<a href="/orders/"
-			class="text-center text-xs p-2 {% if request.path == '/orders/' %}text-black font-bold{% else %}text-gray-600{% endif %}">ORDERS</a>
-		<a href="/accounts/edit_profile/"
-			class="text-center text-xs p-2 {% if request.path == '/accounts/edit_profile/' %}text-black font-bold{% else %}text-gray-600{% endif %}">PROFILE</a>
-	</div>
-</div>
-
+{% include 'accounts/includes/bottomnav.html' %}
 {% endblock %}

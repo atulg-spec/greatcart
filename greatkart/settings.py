@@ -23,10 +23,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'social_django',
+    'widget_tweaks',
     'django_ckeditor_5',
     'accounts',
     'home',
     'search',
+    'notifications',
+    'advertisement',
     'category',
     'coupons',
     'store',
@@ -158,7 +161,9 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
 
 
 STATIC_URL = '/static/'
+
 STATIC_ROOT = BASE_DIR /'static'
+
 # STATICFILES_DIRS = [
 #     'static',
 # ]
@@ -173,15 +178,6 @@ MESSAGE_TAGS = {
     messages.ERROR: 'danger',
 }
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-
-# SMTP configuration
-EMAIL_HOST = "config('EMAIL_HOST')"
-EMAIL_PORT = "config('EMAIL_PORT', cast=int)"
-EMAIL_HOST_USER = "config('EMAIL_HOST_USER')"
-EMAIL_HOST_PASSWORD = "config('EMAIL_HOST_PASSWORD')"
-EMAIL_USE_TLS = "config('EMAIL_USE_TLS', cast=bool)"
-
 
 TINYMCE_DEFAULT_CONFIG = {
     'height': 500,

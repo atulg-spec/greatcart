@@ -97,6 +97,9 @@ class SiteSettingsAdmin(admin.ModelAdmin):
         ('Product Return Description', {
             'fields': ('product_return_details',)
         }),
+        ('Financial Details', {
+            'fields': ('gst_percentage',)
+        }),
     )
 
     def has_add_permission(self, request):
@@ -120,13 +123,13 @@ class SiteSettingsAdmin(admin.ModelAdmin):
 
 @admin.register(featured_categories)
 class FeaturedCategoriesAdmin(admin.ModelAdmin):
-    list_display = ('display_image', 'url')
+    list_display = ('display_image', 'name')
     readonly_fields = ('image_preview',)
-    list_display_links = ('display_image', 'url')
+    list_display_links = ('display_image',)
     
     fieldsets = (
         (None, {
-            'fields': ('image', 'image_preview', 'url')
+            'fields': ('image', 'image_preview', 'name')
         }),
     )
     

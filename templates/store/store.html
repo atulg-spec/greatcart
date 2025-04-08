@@ -1,13 +1,105 @@
 {% extends 'base.html' %}
 {% load static %}
+{% block meta %}
+{% if category_slug %}
+<!-- Category Page SEO -->
+{% with category=products.0.category %}
+<title>{{ category.category_name }} | Shop {{ category.category_name }} Online</title>
+<meta name="description"
+  content="Browse our collection of {{ category.category_name }}. Find the best deals on {{ category.category_name }} with free shipping and easy returns.">
+<meta name="keywords"
+  content="{{ category.category_name }}, buy {{ category.category_name }} online, {{ category.category_name }} collection">
+{% endwith %}
+{% elif keyword %}
+<!-- Search Results SEO -->
+<title>Search Results for "{{ keyword }}"</title>
+<meta name="description"
+  content="Find products matching '{{ keyword }}'. Browse our collection of products related to {{ keyword }}.">
+<meta name="keywords" content="{{ keyword }}, search results, products related to {{ keyword }}">
+{% else %}
+<!-- Default Store SEO -->
+<title>Online Store | Shop Latest Collections</title>
+<meta name="description"
+  content="Discover our wide range of products. Shop the latest collections with free shipping and easy returns.">
+<meta name="keywords" content="online shopping, ecommerce, buy products online">
+{% endif %}
+
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="{{ request.build_absolute_uri }}">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="{{ request.build_absolute_uri }}">
+{% if category_slug %}
+<meta property="og:title" content="{{ products.0.category.category_name }} | Shop Online">
+<meta property="og:description" content="Browse our collection of {{ products.0.category.category_name }}">
+{% else %}
+<meta property="og:title" content="Online Store | Shop Latest Collections">
+<meta property="og:description" content="Discover our wide range of products">
+{% endif %}
+{% if products.0 %}
+<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ products.0.images.url }}">
+{% endif %}
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="{{ request.build_absolute_uri }}">
+{% if category_slug %}
+<meta name="twitter:title" content="{{ products.0.category.category_name }} | Shop Online">
+<meta name="twitter:description" content="Browse our collection of {{ products.0.category.category_name }}">
+{% else %}
+<meta name="twitter:title" content="Online Store | Shop Latest Collections">
+<meta name="twitter:description" content="Discover our wide range of products">
+{% endif %}
+{% if products.0 %}
+<meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{{ products.0.images.url }}">
+{% endif %}
+
+<!-- Schema.org markup -->
+<script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Your Store Name",
+        "url": "{{ request.scheme }}://{{ request.get_host }}",
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": "{{ request.scheme }}://{{ request.get_host }}{% url 'store' %}?keyword={search_term_string}",
+            "query-input": "required name=search_term_string"
+        }
+    }
+    </script>
+
+{% if category_slug %}
+<script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "{{ request.scheme }}://{{ request.get_host }}"
+        },{
+            "@type": "ListItem",
+            "position": 2,
+            "name": "{{ products.0.category.category_name }}",
+            "item": "{{ request.build_absolute_uri }}"
+        }]
+    }
+    </script>
+{% endif %}
+{% endblock meta %}
+
 
 {% block content %}
 <!-- ========================= SECTION CONTENT ========================= -->
 {% include 'includes/navbar.html' %}
+{% include 'includes/bottomnav.html' %}
 {% include 'store/includes/filter.html' %}
 <main class="container mx-auto md:px-2 py-8 md:py-2">
   <section class="py-24 md:py-0">
-    <div class="container mx-auto px-4">
+    <div class="container mx-auto">
       <div class="flex flex-col lg:flex-row gap-8">
         <div class="hidden lg:block lg:w-1/5">
           {% include 'store/includes/desktop-filter.html' %}

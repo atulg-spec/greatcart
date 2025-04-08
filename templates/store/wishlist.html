@@ -1,90 +1,110 @@
 {% extends 'base.html' %}
-{% load static %}
-
+{% load social_tags %}
 {% block content %}
 {% include 'includes/navbar.html' %}
+{% include 'includes/bottomnav.html' %}
+<div class="py-24 md:px-8">
+    <div class="flex justify-between px-2">
+        <div class="text-lg font-semibold">
+            WELCOME,
+            <span class="font-bold">{{request.user.first_name|upper}}.</span>
+        </div>
+        <div class="text-lg font-bold">MY ACCOUNT</div>
+    </div>
+    <div class="flex flex-col lg:flex-row gap-8">
+        {% include 'accounts/includes/sidenav.html' %}
+        <div class="lg:w-4/5 md:px-4">
+            <div>
+                <section class="pb-8 md:px-4">
+                    <div class="container mx-auto">
+                        <h1 class="flex justify-center font-extrabold py-6 md:py-4">
+                            WISHLIST
+                        </h1>
+                        {% if wishlist_items %}
+                        <div
+                            class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-1 md:px-1 justify-center items-center">
+                            {% for product in wishlist_items reversed %}
+                            <div class="group relative" data-aos="fade-up">
+                                <a href="{{ product.product.get_url }}" aria-label="{{ product.product.product_name }}">
+                                    <div class="relative">
+                                        <img src="{{ product.product.images.url }}"
+                                            alt="{{ product.product.product_name }}"
+                                            class="block w-full h-auto transition-opacity duration-300 group-hover:opacity-0"
+                                            loading="lazy" width="300" height="400" />
 
+                                        {% if product.product.secondary_image %}
+                                        <img src="{{ product.product.secondary_image.url }}"
+                                            alt="{{ product.product.product_name }}"
+                                            class="absolute inset-0 w-full h-auto opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                                            loading="lazy" width="300" height="400" />
+                                        {% endif %}
 
-<div class="py-14">
-    {% if wishlist_items %}
-    <section class="pt-2 pb-8 md:px-4">
-        <div class="container mx-auto">
-            <h1 class="flex justify-center font-extrabold my-6">
-                WISHLIST
-            </h1>
-            <div
-                class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-1 md:px-1 justify-center items-center">
-                {% for product in wishlist_items reversed %}
-                <div class="group relative" data-aos="fade-up">
-                    <a href="{{ product.product.get_url }}" aria-label="{{ product.product.product_name }}">
-                        <div class="relative">
-                            <img src="{{ product.product.images.url }}" alt="{{ product.product.product_name }}"
-                                class="block w-full h-auto transition-opacity duration-300 group-hover:opacity-0"
-                                loading="lazy" width="300" height="400" />
-
-                            {% if product.product.secondary_image %}
-                            <img src="{{ product.product.secondary_image.url }}"
-                                alt="{{ product.product.product_name }}"
-                                class="absolute inset-0 w-full h-auto opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                                loading="lazy" width="300" height="400" />
-                            {% endif %}
-
-                            <div class="absolute top-0 right-0 p-2 text-black font-bold bg-gray-200/50 rounded-full">
-                                <a href="{% url 'remove_wishlist_item' product.product.id product.id %}"
-                                    onclick="return confirm('Are you sure you want to delete this item?')"
-                                    class="text-red-500 text-center font-semibold text-xs w-full">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="#FF0000"
-                                        id="Trash-Thin--Streamline-Phosphor-Thin" height="16" width="16">
-                                        <desc>Trash Thin Streamline Icon: https://streamlinehq.com</desc>
-                                        <path
-                                            d="M14.8992 2.6688h-3.4496V1.728c0 -0.86598125 -0.70201875 -1.568 -1.568 -1.568H6.1184c-0.86598125 0 -1.568 0.70201875 -1.568 1.568v0.9408H1.1008c-0.2414125 0 -0.3922875 0.26133125 -0.2715875 0.4704 0.05601875 0.09703125 0.15955 0.1568 0.2715875 0.1568h0.9408v11.6032c0 0.5195875 0.4212125 0.9408 0.9408 0.9408h10.0352c0.5195875 0 0.9408 -0.4212125 0.9408 -0.9408V3.296h0.9408c0.2414125 0 0.3922875 -0.26133125 0.2715875 -0.4704 -0.05601875 -0.09703125 -0.15955 -0.1568 -0.2715875 -0.1568ZM5.1776 1.728c0 -0.5195875 0.4212125 -0.9408 0.9408 -0.9408h3.7632c0.5195875 0 0.9408 0.4212125 0.9408 0.9408v0.9408H5.1776Zm8.1536 13.1712c0 0.17319375 -0.14040625 0.3136 -0.3136 0.3136H2.9824c-0.17319375 0 -0.3136 -0.14040625 -0.3136 -0.3136V3.296h10.6624ZM6.432 6.7456v5.0176c0 0.2414125 -0.26133125 0.3922875 -0.4704 0.2715875 -0.09703125 -0.05601875 -0.1568 -0.15955 -0.1568 -0.2715875v-5.0176c0 -0.2414125 0.26133125 -0.3922875 0.4704 -0.2715875 0.09703125 0.05601875 0.1568 0.15955 0.1568 0.2715875Zm3.7632 0v5.0176c0 0.2414125 -0.26133125 0.3922875 -0.4704 0.2715875 -0.09703125 -0.05601875 -0.1568 -0.15955 -0.1568 -0.2715875v-5.0176c0 -0.2414125 0.26133125 -0.3922875 0.4704 -0.2715875 0.09703125 0.05601875 0.1568 0.15955 0.1568 0.2715875Z"
-                                            stroke-width="0.0625"></path>
-                                    </svg>
+                                        <div
+                                            class="absolute top-0 right-0 p-2 text-black font-bold bg-gray-200/50 rounded-full">
+                                            <a href="{% url 'remove_wishlist_item' product.product.id product.id %}"
+                                                onclick="return confirm('Are you sure you want to delete this item?')"
+                                                class="text-red-500 text-center font-semibold text-xs w-full">
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"
+                                                    fill="#FF0000" id="Trash-Thin--Streamline-Phosphor-Thin" height="16"
+                                                    width="16">
+                                                    <desc>Trash Thin Streamline Icon: https://streamlinehq.com</desc>
+                                                    <path
+                                                        d="M14.8992 2.6688h-3.4496V1.728c0 -0.86598125 -0.70201875 -1.568 -1.568 -1.568H6.1184c-0.86598125 0 -1.568 0.70201875 -1.568 1.568v0.9408H1.1008c-0.2414125 0 -0.3922875 0.26133125 -0.2715875 0.4704 0.05601875 0.09703125 0.15955 0.1568 0.2715875 0.1568h0.9408v11.6032c0 0.5195875 0.4212125 0.9408 0.9408 0.9408h10.0352c0.5195875 0 0.9408 -0.4212125 0.9408 -0.9408V3.296h0.9408c0.2414125 0 0.3922875 -0.26133125 0.2715875 -0.4704 -0.05601875 -0.09703125 -0.15955 -0.1568 -0.2715875 -0.1568ZM5.1776 1.728c0 -0.5195875 0.4212125 -0.9408 0.9408 -0.9408h3.7632c0.5195875 0 0.9408 0.4212125 0.9408 0.9408v0.9408H5.1776Zm8.1536 13.1712c0 0.17319375 -0.14040625 0.3136 -0.3136 0.3136H2.9824c-0.17319375 0 -0.3136 -0.14040625 -0.3136 -0.3136V3.296h10.6624ZM6.432 6.7456v5.0176c0 0.2414125 -0.26133125 0.3922875 -0.4704 0.2715875 -0.09703125 -0.05601875 -0.1568 -0.15955 -0.1568 -0.2715875v-5.0176c0 -0.2414125 0.26133125 -0.3922875 0.4704 -0.2715875 0.09703125 0.05601875 0.1568 0.15955 0.1568 0.2715875Zm3.7632 0v5.0176c0 0.2414125 -0.26133125 0.3922875 -0.4704 0.2715875 -0.09703125 -0.05601875 -0.1568 -0.15955 -0.1568 -0.2715875v-5.0176c0 -0.2414125 0.26133125 -0.3922875 0.4704 -0.2715875 0.09703125 0.05601875 0.1568 0.15955 0.1568 0.2715875Z"
+                                                        stroke-width="0.0625"></path>
+                                                </svg>
+                                            </a>
+                                        </div>
+                                    </div>
                                 </a>
+                                <div class="mt-1">
+                                    <a href="{{ product.product.get_url }}"
+                                        aria-label="{{ product.product.product_name }}">
+                                        <h3
+                                            class="text-lg font-semibold text-gray-900 hover:text-gray-600 line-clamp-custom">
+                                            {{ product.product.product_name }}
+                                        </h3>
+                                    </a>
+                                    <div>
+                                        <span class="text-gray-900 font-bold">
+                                            ₹{{ product.product.price }}
+                                        </span>
+                                        <span class="text-red-500 font-bold line-through">
+                                            ₹{{ product.product.before_discount_price }}
+                                        </span>
+                                    </div>
+
+                                    <!-- Sizes -->
+                                    <p class="my-1">
+                                        {% for size in product.product.get_sizes %}
+                                        <span class="text-gray-800 bg-gray-100 p-1 text-xs">{{ size|upper }}</span>
+                                        {% endfor %}
+                                    </p>
+
+                                    <!-- Stock Availability -->
+                                    <p
+                                        class="text-sm {% if product.product.stock > 0 %}text-green-600{% else %}text-red-600{% endif %}">
+                                        {% if product.product.stock > 0 %}
+                                        Stock Remaining ({{ product.product.stock }})
+                                        {% else %}
+                                        Out of Stock
+                                        {% endif %}
+                                    </p>
+                                </div>
                             </div>
-                        </div>
-                    </a>
-                    <div class="mt-1">
-                        <a href="{{ product.product.get_url }}" aria-label="{{ product.product.product_name }}">
-                            <h3 class="text-lg font-semibold text-gray-900 hover:text-gray-600 line-clamp-custom">
-                                {{ product.product.product_name }}
-                            </h3>
-                        </a>
-                        <div>
-                            <span class="text-gray-900 font-bold">
-                                ₹{{ product.product.price }}
-                            </span>
-                            <span class="text-red-500 font-bold line-through">
-                                ₹{{ product.product.before_discount_price }}
-                            </span>
-                        </div>
-
-                        <!-- Sizes -->
-                        <p class="my-1">
-                            {% for size in product.product.get_sizes %}
-                            <span class="text-gray-800 bg-gray-100 p-1 text-xs">{{ size|upper }}</span>
+                            {% empty %}
+                            <p class="col-span-full text-center">No products available in this section.</p>
                             {% endfor %}
-                        </p>
-
-                        <!-- Stock Availability -->
-                        <p
-                            class="text-sm {% if product.product.stock > 0 %}text-green-600{% else %}text-red-600{% endif %}">
-                            {% if product.product.stock > 0 %}
-                            Stock Remaining ({{ product.product.stock }})
-                            {% else %}
-                            Out of Stock
-                            {% endif %}
-                        </p>
+                        </div>
+                        {% else %}
+                        <div class="my-2">
+                            {% include 'includes/notfound.html' %}
+                        </div>
+                        {% endif %}
                     </div>
-                </div>
-                {% empty %}
-                <p class="col-span-full text-center">No products available in this section.</p>
-                {% endfor %}
+                </section>
             </div>
         </div>
-    </section>
-    {% else %}
-    {% include 'includes/notfound.html' %}
-    {% endif %}
+    </div>
 </div>
+{% include 'accounts/includes/bottomnav.html' %}
 {% endblock %}

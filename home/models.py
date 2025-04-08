@@ -1,7 +1,6 @@
 from django.db import models
 from django_ckeditor_5.fields import CKEditor5Field
 from django.db import models
-from store.models import Product
 from django.utils.text import slugify
 
 class SiteSettings(models.Model):
@@ -40,6 +39,7 @@ class SiteSettings(models.Model):
 
     product_return_details = CKEditor5Field('Product Return Details', config_name='extends', null=True, blank=True)
 
+    gst_percentage = models.PositiveIntegerField(default=5)
 
     class Meta:
         verbose_name = "Site Settings"
@@ -62,14 +62,14 @@ class Slider(models.Model):
     
 class featured_categories(models.Model):
     image = models.ImageField(upload_to='slider_images/', blank=True, null=True)
-    url = models.URLField(blank=True)
+    name = models.CharField(max_length=50, default="")
 
     class Meta:
         verbose_name = "Featured Category"
         verbose_name_plural = "Featured Categories"
 
     def __str__(self):
-      return "Featured Category"
+      return self.name
     
 
 class HeadSection(models.Model):
@@ -103,6 +103,7 @@ class SideNav(models.Model):
 
 
 class homeSections(models.Model):
+    from store.models import Product
     heading = models.CharField(default="", max_length=50)
     name = models.CharField(default="", max_length=50)
     products = models.ManyToManyField(Product)

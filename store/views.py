@@ -11,7 +11,7 @@ from django.contrib import messages
 from orders.models import OrderProduct
 from home.models import homeSections
 from search.models import top_searches, not_found_searches
-
+from .utils import get_related_products, get_behavior_related_products
 
 def store(request, category_slug=None):
     categories = None
@@ -56,7 +56,21 @@ def store(request, category_slug=None):
     # Keyword Search
     keyword = request.GET.get('keyword', '')
     if keyword:
-        products = products.filter(Q(description__icontains=keyword) | Q(product_name__icontains=keyword))
+        # Split keywords into individual terms
+        search_terms = keyword.split()
+        
+        # Start with an empty Q object
+        queries = Q()
+        
+        for term in search_terms:
+            queries |= Q(feature_category__name__icontains=term)
+            queries |= Q(product_name__icontains=term)
+            queries |= Q(description__icontains=term)
+            queries |= Q(product_brand__icontains=term)
+            queries |= Q(meta_keywords__icontains=term)
+            queries |= Q(category__category_name__icontains=term)
+        
+        products = products.filter(queries).distinct()
 
     # Pagination
     paginator = Paginator(products, 30)  
@@ -118,6 +132,8 @@ def search(request):
 def product_detail(request, category_slug, product_slug):
     try:
         single_product = Product.objects.get(category__slug=category_slug, slug=product_slug)
+        related_products = get_related_products(single_product, 30)
+        behaviour_related_products = get_behavior_related_products(single_product,request,30)
         in_cart = CartItem.objects.filter(cart__cart_id=_cart_id(request), product=single_product).exists()
     except Exception as e:
         raise e
@@ -139,6 +155,8 @@ def product_detail(request, category_slug, product_slug):
 
     context = {
         'single_product': single_product,
+        'related_products': related_products,
+        'behaviour_related_products': behaviour_related_products,
         'in_cart'       : in_cart,
         'orderproduct': orderproduct,
         'reviews': reviews,

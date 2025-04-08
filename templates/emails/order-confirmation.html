@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Order Confirmation</title>
+</head>
+
+<body style="margin: 0; padding: 0; background: #f6f8fb; font-family: 'Segoe UI', Roboto, sans-serif; color: #333;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f6f8fb; padding: 40px 0;">
+        <tr>
+            <td align="center">
+                <table width="600" cellpadding="0" cellspacing="0"
+                    style="background-color: #ffffff; border-radius: 0px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+
+                    <!-- Header -->
+                    <tr>
+                        <td
+                            style="background: linear-gradient(135deg, black, black); padding: 30px; text-align: center; color: white;">
+                            <h1 style="margin: 0; font-size: 26px;">✅ Order Confirmed</h1>
+                            <p style="margin: 5px 0 0; font-size: 16px;">Thank you for your purchase!</p>
+                        </td>
+                    </tr>
+
+                    <!-- Body -->
+                    <tr>
+                        <td style="padding: 40px 30px;">
+                            <p style="font-size: 16px; line-height: 1.6;">Hi <strong>{{payment.user.first_name}} {{payment.user.last_name}}</strong>,</p>
+                            <p style="font-size: 16px; line-height: 1.6;">
+                                We're pleased to let you know that your order <strong>#{{payment.payment_id}}</strong> has been
+                                received and payment was completed successfully.
+                            </p>
+
+                            <table width="100%" style="margin: 30px 0; border: 1px solid #e1e4e8; border-radius: 8px;">
+                                <tr>
+                                    <td colspan="2"
+                                        style="background-color: #f9fafc; padding: 12px 20px; font-size: 16px; font-weight: bold; border-bottom: 1px solid #e1e4e8;">
+                                        🧾 Order Details
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 12px 20px; width: 50%; border-bottom: 1px solid #e1e4e8;">Order
+                                        Number:</td>
+                                    <td style="padding: 12px 20px; border-bottom: 1px solid #e1e4e8;"><strong>{{payment.payment_id}}</strong></td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 12px 20px; border-bottom: 1px solid #e1e4e8;">Order Date:</td>
+                                    <td style="padding: 12px 20px; border-bottom: 1px solid #e1e4e8;"><strong>{{payment.created_at}}</strong></td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 12px 20px;">Amount Paid:</td>
+                                    <td style="padding: 12px 20px;"><strong>₹{{payment.amount_paid}}</strong></td>
+                                </tr>
+                            </table>
+
+                            <h3
+                                style="margin-top: 30px; font-size: 18px; border-bottom: 1px solid #eee; padding-bottom: 5px;">
+                                📦 Shipping To:</h3>
+                            <p style="line-height: 1.6;">
+                                {{payment.user.first_name}} {{payment.user.last_name}}<br>
+                                {{payment.user.address_line_1}}<br>
+                                {{payment.user.city}}, {{payment.user.state}}, {{payment.user.zip_code}}
+                            </p>
+
+                            <p style="margin-top: 30px; font-size: 16px; line-height: 1.6;">
+                                We’ll send you a notification with tracking information once your order ships.
+                            </p>
+
+                            <p style="font-size: 16px; line-height: 1.6;">Have questions? Feel free to reach out to us
+                                anytime at <a href="mailto:{{settings.email}}"
+                                    style="color: #007BFF; text-decoration: none;">Support Email</a>.</p>
+
+                            <p style="margin-top: 30px;">Warm regards,</p>
+                            <p><strong>The {{settings.site_name}} Team</strong></p>
+                        </td>
+                    </tr>
+
+                    <!-- Footer -->
+                    <tr>
+                        <td
+                            style="background-color: #f0f2f5; text-align: center; padding: 20px; font-size: 13px; color: #777;">
+                            {{settings.site_name}} &bull; {{ request.scheme }}://{{ request.get_host }}
+                            <br>
+                            Call us: {{settings.phone_number}} | Email: <a href="mailto:{{settings.email}}"
+                                style="color: #555; text-decoration: none;">{{settings.email}}</a>
+                            <br><br>
+                            <a href="{{settings.facebook_handle}}" style="margin: 0 5px; text-decoration: none;">Facebook</a> |
+                            <a href="{{settings.instagram_page}}" style="margin: 0 5px; text-decoration: none;">Instagram</a> |
+                            <a href="{{settings.twitter_handle}}" style="margin: 0 5px; text-decoration: none;">Twitter</a>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

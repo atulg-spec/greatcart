@@ -2,107 +2,121 @@
 {% load static %}
 
 {% block content %}
+{% include 'includes/navbar.html' %}
 
-
-<div class="container" style="margin: 0 auto;width: 50%;padding: 50px;background: #f1f1f1;margin-top: 50px;margin-bottom: 50px;">
-    <div class="row invoice row-printable">
-        <div class="col-md-12">
-            <!-- col-lg-12 start here -->
-            <div class="panel panel-default plain" id="dash_0">
-                <!-- Start .panel -->
-                <div class="panel-body p30">
-                    <div class="row">
-                        <!-- Start .row -->
-                        <div class="col-lg-6">
-                            <!-- col-lg-6 start here -->
-                            <div class="invoice-logo"><img src="{% static '/images/logo.png' %}" alt="Invoice logo" style="max-height: 40px;"></div>
-                        </div>
-                        <!-- col-lg-6 end here -->
-                        <div class="col-lg-6">
-                            <!-- col-lg-6 start here -->
-                            <div class="invoice-from">
-                                <ul class="list-unstyled text-right">
-                                    <li><strong>Invoiced To</strong></li>
-                                    <li>{{order.full_name}}</li>
-                                    <li>{{order.full_address}}</li>
-                                    <li>{{order.city}}, {{order.state}}</li>
-                                    <li>{{order.country}}</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <!-- col-lg-6 end here -->
-                        <div class="col-lg-12">
-                            <!-- col-lg-12 start here -->
-                            <div class="invoice-details mt25">
-                                <div class="well">
-                                    <ul class="list-unstyled mb0">
-                                        <li><strong>Order</strong> #{{order.order_number}}</li>
-                                        <li><strong>Transaction ID</strong> {{order.payment.payment_id}}</li>
-                                        <li><strong>Order Date:</strong> {{order.created_at}}</li>
-                                        <li><strong>Status:</strong> {{order.payment.status}}</li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <div class="invoice-items">
-                                <div class="table-responsive" style="overflow: hidden; outline: none;" tabindex="0">
-                                    <table class="table table-bordered">
-                                        <thead>
-                                            <tr>
-                                                <th class="per70 text-center">Products</th>
-                                                <th class="per5 text-center">Qty</th>
-                                                <th class="per25 text-center">Total</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                          {% for item in order_detail %}
-                                            <tr>
-                                                <td>{{item.product.product_name}}
-                                                  <p class="text-muted small">
-                                          					{% if item.variations.all %}
-                                          						{% for i in item.variations.all %}
-                                          							{{ i.variation_category | capfirst }} : {{ i.variation_value | capfirst }} <br>
-                                          						{% endfor %}
-                                          					{% endif %}
-                                          				</p>
-                                                </td>
-                                                <td class="text-center">{{item.quantity}}</td>
-                                                <td class="text-center">${{item.product_price}} USD</td>
-                                            </tr>
-                                          {% endfor %}
-                                        </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <th colspan="2" class="text-right">Sub Total:</th>
-                                                <th class="text-center">${{subtotal}} USD</th>
-                                            </tr>
-                                            <tr>
-                                                <th colspan="2" class="text-right">Tax:</th>
-                                                <th class="text-center">${{order.tax}} USD</th>
-                                            </tr>
-
-                                            <tr>
-                                                <th colspan="2" class="text-right">Grand Total:</th>
-                                                <th class="text-center">${{order.order_total}} USD</th>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
-                            </div>
-                            <div class="invoice-footer mt25">
-                                <p class="text-center">Thank you for shopping with us!</p>
-                            </div>
-                        </div>
-                        <!-- col-lg-12 end here -->
-                    </div>
-                    <!-- End .row -->
+<div class="container mx-auto py-12">
+    <!-- Success Message -->
+    <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-md overflow-hidden">
+        <!-- Invoice Header -->
+        <div class="p-6 md:p-8 border-b border-gray-200">
+            <div class="flex flex-col md:flex-row justify-between items-center md:items-center">
+                <div class="">
+                    <img src="{{settings.logo.url}}" alt="Invoice logo" class="h-24">
+                </div>
+                <div class="text-center md:text-left">
+                    <h1 class="text-2xl font-bold text-gray-800">Order Invoice</h1>
+                    <p class="text-gray-600">#{{order.order_number}}</p>
                 </div>
             </div>
-            <!-- End .panel -->
         </div>
-        <!-- col-lg-12 end here -->
-    </div>
-    </div>
 
+        <!-- Billing Information -->
+        <div class="p-6 md:p-8 border-b border-gray-200">
+            <div class="flex flex-col md:flex-row gap-8">
+                <div class="w-full md:w-1/2">
+                    <h2 class="text-lg font-semibold text-gray-700 mb-3">Billed To</h2>
+                    <ul class="space-y-1 text-gray-600">
+                        <li>{{order.full_name}}</li>
+                        <li>{{order.full_address}}</li>
+                        <li>{{order.city}}, {{order.state}}</li>
+                        <li>{{order.country}}</li>
+                    </ul>
+                </div>
+                <div class="w-full md:w-1/2">
+                    <h2 class="text-lg font-semibold text-gray-700 mb-3">Order Details</h2>
+                    <ul class="space-y-1 text-gray-600">
+                        <li><strong>Order Date:</strong> {{order.created_at}}</li>
+                        <li><strong>Transaction ID:</strong> {{order.payment.payment_id}}</li>
+                        <li><strong>Status:</strong> 
+                            <span class="px-2 py-1 text-xs font-semibold rounded 
+                                {% if order.payment.status == 'Completed' %}bg-green-100 text-green-800
+                                {% else %}bg-blue-100 text-blue-800{% endif %}">
+                                {{order.payment.status}}
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Items -->
+        <div class="p-6 md:p-8">
+            <h2 class="text-lg font-semibold text-gray-700 mb-4">Order Summary</h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th scope="col" class="py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
+                            <th scope="col" class="py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Qty</th>
+                            <th scope="col" class="py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        {% for item in order_detail %}
+                        <tr>
+                            <td class="py-4 whitespace-normal">
+                                <div class="text-sm font-medium text-gray-900">{{item.product.product_name}}</div>
+                                {% if item.variations.all %}
+                                <div class="text-xs text-gray-500 mt-1">
+                                    {% for i in item.variations.all %}
+                                    {{ i.variation_category | capfirst }}: {{ i.variation_value | capfirst }}<br>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                            </td>
+                            <td class="py-4 whitespace-nowrap text-center text-sm text-gray-500">
+                                {{item.quantity}}
+                            </td>
+                            <td class="py-4 whitespace-nowrap text-right text-sm font-medium text-gray-900">
+                                ₹{{item.product_price}} INR
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot class="bg-gray-50">
+                        <tr>
+                            <td colspan="2" class="px-4 py-3 text-right text-sm font-medium text-gray-500">Subtotal:</td>
+                            <td class="px-4 py-3 text-right text-sm font-medium text-gray-900">₹{{subtotal}} INR</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="px-4 py-3 text-right text-sm font-medium text-gray-500">Tax:</td>
+                            <td class="px-4 py-3 text-right text-sm font-medium text-gray-900">₹{{order.tax}} INR</td>
+                        </tr>
+                        <tr class="bg-gray-100">
+                            <td colspan="2" class="px-4 py-3 text-right text-sm font-bold text-gray-700">Total:</td>
+                            <td class="px-4 py-3 text-right text-sm font-bold text-gray-900">₹{{order.order_total}} INR</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+
+        <!-- Invoice Footer -->
+        <div class="p-6 md:p-8 bg-gray-50 text-center">
+            <p class="text-gray-600 mb-2">Thank you for shopping with us!</p>
+            <p class="text-sm text-gray-500">If you have any questions about your order, please contact our customer support.</p>
+            
+            <!-- Print Button -->
+            <div class="mt-6">
+                <button onclick="window.print()" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M5 4v3H4a2 2 0 00-2 2v3a2 2 0 002 2h1v2a2 2 0 002 2h6a2 2 0 002-2v-2h1a2 2 0 002-2V9a2 2 0 00-2-2h-1V4a2 2 0 00-2-2H7a2 2 0 00-2 2zm8 0H7v3h6V4zm0 8H7v4h6v-4z" clip-rule="evenodd" />
+                    </svg>
+                    Print Invoice
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

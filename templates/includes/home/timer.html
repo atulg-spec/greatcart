@@ -1,0 +1,70 @@
+{% if settings.main_page_timer_thumbnail %}
+<!-- 🖤 Monochrome Premium Countdown -->
+<div class="relative overflow-hidden bg-white" data-aos="fade-up">
+    <section class="flex justify-center items-center py-16 md:py-20 border-b border-gray-100">
+        <div class="flex flex-col lg:flex-row items-center gap-12 w-full max-w-6xl px-6">
+            <!-- Image Section (Elevated Product Shot) -->
+            <div class="w-full lg:w-1/2" data-aos="fade-right">
+                <div class="relative overflow-hidden group">
+                    <img 
+                        src="{{ settings.main_page_timer_thumbnail.url }}" 
+                        alt="Exclusive Collection" 
+                        class="w-full h-auto object-cover transition-all duration-500 group-hover:opacity-95"
+                        loading="lazy" 
+                        width="600" 
+                        height="400" 
+                    />
+                    <div class="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </div>
+            </div>
+
+            <!-- Countdown Section (Luxury Typography) -->
+            <div class="w-full lg:w-1/2 space-y-8" data-aos="fade-left">
+                <!-- Heading & Subheading -->
+                <div class="space-y-4">
+                    <h2 class="text-4xl md:text-5xl font-light tracking-tight text-gray-900 uppercase">
+                        {{ settings.main_page_timer_heading }}
+                    </h2>
+                    <p class="text-lg text-gray-600 font-normal max-w-md">
+                        {{ settings.main_page_timer_caption }}
+                    </p>
+                </div>
+
+                <!-- 🕰️ Minimalist Countdown -->
+                <div class="grid grid-cols-4 gap-3 font-serif">
+                    <div class="flex flex-col items-center py-3 border border-gray-200">
+                        <span class="countdown-element days text-3xl md:text-4xl font-medium text-gray-900"></span>
+                        <span class="text-xs font-medium text-gray-500 tracking-widest mt-1">DAYS</span>
+                    </div>
+                    <div class="flex flex-col items-center py-3 border border-gray-200">
+                        <span class="countdown-element hours text-3xl md:text-4xl font-medium text-gray-900"></span>
+                        <span class="text-xs font-medium text-gray-500 tracking-widest mt-1">HRS</span>
+                    </div>
+                    <div class="flex flex-col items-center py-3 border border-gray-200">
+                        <span class="countdown-element minutes text-3xl md:text-4xl font-medium text-gray-900"></span>
+                        <span class="text-xs font-medium text-gray-500 tracking-widest mt-1">MINS</span>
+                    </div>
+                    <div class="flex flex-col items-center py-3 border border-gray-200">
+                        <span class="countdown-element seconds text-3xl md:text-4xl font-medium text-gray-900"></span>
+                        <span class="text-xs font-medium text-gray-500 tracking-widest mt-1">SECS</span>
+                    </div>
+                </div>
+
+                <!-- CTA Button (Luxury Feel) -->
+                <a 
+                    href="{{ settings.main_page_timer_url }}"
+                    class="inline-block px-8 py-3 text-lg font-medium text-white bg-black hover:bg-gray-800 transition-all duration-300 border border-gray-900 hover:border-gray-700 uppercase tracking-widest"
+                    aria-label="Shop the Collection"
+                >
+                    Shop Now →
+                </a>
+
+                <!-- Discreet Urgency Note -->
+                <p class="text-xs text-gray-500 font-light italic mt-2">
+                    Limited inventory remaining
+                </p>
+            </div>
+        </div>
+    </section>
+</div>
+{% endif %}

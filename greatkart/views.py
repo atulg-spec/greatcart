@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from store.models import Product, ReviewRating, RecentlyStalked
 from home.models import Slider, homeSections, Page, featured_categories
 from accounts.utils import phone_number_required
+from notifications.models import SiteNotifications
 
 def home(request):
     recently_stalked = None
@@ -9,6 +10,11 @@ def home(request):
         if not request.user.phone_number:
             return redirect('phone_number_registration')
         recently_stalked = RecentlyStalked.objects.filter(user=request.user)
+    notification = None
+    try:
+        notification = SiteNotifications.objects.first()
+    except:
+        pass
     products = Product.objects.all().filter(is_available=True).order_by('created_date')
     mobile_sliders = Slider.objects.filter(is_mobile=True)
     desktop_sliders = Slider.objects.filter(is_mobile=False)
@@ -21,6 +27,7 @@ def home(request):
         reviews = ReviewRating.objects.filter(product_id=product.id, status=True)
 
     context = {
+        'notification': notification,
         'mobile_sliders': mobile_sliders,
         'desktop_sliders': desktop_sliders,
         'sections': sections,

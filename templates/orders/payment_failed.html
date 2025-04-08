@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <h2 class="text-danger">Payment Failed</h2>
+            <p>{{ error_message }}</p>
+            
+            {% if order %}
+            <p>Order Number: {{ order.order_number }}</p>
+            <a href="{% url 'checkout' %}" class="btn btn-primary">Try Again</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

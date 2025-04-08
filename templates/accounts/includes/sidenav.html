@@ -1,0 +1,20 @@
+<div class="hidden lg:block lg:w-1/5">
+    <div class="w-full">
+        <a href="/accounts/"
+            class="block p-3 my-1 rounded-sm border {% if request.path == '/accounts/' %}bg-black text-white hover:bg-gray-800{% else %}bg-white text-black hover:text-white hover:bg-black{% endif %}">
+            DASHBOARD
+        </a>
+        <a href="/wishlist/"
+            class="block p-3 my-1 rounded-sm border {% if request.path == '/wishlist/' %}bg-black text-white hover:bg-gray-800{% else %}bg-white text-black hover:text-white hover:bg-black{% endif %}">
+            WISHLIST
+        </a>
+        <a href="/accounts/my-orders/"
+            class="block p-3 my-1 rounded-sm border {% if request.path == '/accounts/my-orders/' %}bg-black text-white hover:bg-gray-800{% else %}bg-white text-black hover:text-white hover:bg-black{% endif %}">
+            ORDERS
+        </a>
+        <a href="/accounts/edit_profile/"
+            class="block p-3 my-1 rounded-sm border {% if request.path == '/accounts/edit_profile/' %}bg-black text-white hover:bg-gray-800{% else %}bg-white text-black hover:text-white hover:bg-black{% endif %}">
+            PROFILE
+        </a>
+    </div>
+</div>

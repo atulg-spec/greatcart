@@ -11,6 +11,7 @@ urlpatterns = [
     path('social-auth/', include('social_django.urls',namespace='social')),
     path("ckeditor5/", include('django_ckeditor_5.urls')),
     path('', views.home, name='home'),
+    path('ads/', include('advertisement.urls')),
     path('store/', include('store.urls')),
     path('cart/', include('carts.urls')),
     path('wishlist/', include('wishlist.urls')),

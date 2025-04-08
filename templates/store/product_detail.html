@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 {% load static %}
-
 {% block meta %}
 <title>{{ single_product.meta_title }}</title>
 <meta name="description" content="{{ single_product.meta_description }}">
@@ -40,12 +39,13 @@
     }
   }
 </script>
-
 {% endblock meta %}
-
 {% block content %}
-{% include 'includes/navbar.html' %}
-<main class="container mx-auto px-2 py-6 md:py-1">
+<div class="hidden md:block">
+  {% include 'includes/navbar.html' %}
+</div>
+{% include 'includes/bottomnav.html' %}
+<main class="container mx-auto md:px-2 md:py-1">
   <div class="fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center z-[60] hidden" id="sizeChart">
     <!-- Image Container with Relative Positioning -->
     <div class="relative">
@@ -67,63 +67,58 @@
       </div>
     </div>
   </div>
-
-  <section class="my-6 md:my-24">
+  <section class="md:my-24">
     <div class="">
-      <div class="rounded-lg overflow-hidden">
-        <div class="flex flex-col md:flex-row md:px-8">
+      <div class="overflow-hidden">
+        <div class="flex flex-col md:flex-row">
           <!-- Product Images -->
-          <div class="lg:w-1/2 py-6 md:py-1 px-1 flex flex-col lg:flex-row">
+          <div class="lg:w-1/2 md:py-1 md:px-1 flex flex-col lg:flex-row">
             <!-- Gallery Section -->
             <div
               class="hidden lg:flex lg:flex-col space-x-4 lg:space-x-0 lg:space-y-4 overflow-x-auto lg:overflow-y-auto lg:w-24 scrollbar-hide aos-init aos-animate">
               <a href="{{ single_product.images.url }}" onclick="changeImage(event, 'mainImage')"
                 class="w-16 h-16 min-w-[64px]">
                 <img src="{{ single_product.images.url }}"
-                  class="w-full h-full object-cover rounded-lg border hover:border-black hover:border-2 min-w-[64px]">
+                  class="w-full h-full object-cover border hover:border-black hover:border-2 min-w-[64px]">
               </a>
               {% for i in product_gallery %}
               <a href="{{ i.image.url }}" onclick="changeImage(event, 'mainImage')" class="w-16 h-16 min-w-[64px]">
                 <img src="{{ i.image.url }}"
-                  class="w-full h-full object-cover rounded-lg border hover:border-black hover:border-2 min-w-[64px]">
+                  class="w-full h-full object-cover border hover:border-black hover:border-2 min-w-[64px]">
               </a>
               {% endfor %}
             </div>
-            <!-- End Gallery Section -->
-
             <!-- Main Image -->
-            <div class="mb-6 lg:ml-4">
-              <img id="mainImage" src="{{ single_product.images.url }}" class="w-full rounded-lg shadow-md">
-            </div>
-
-            <div class="flex space-x-4 overflow-x-auto scrollbar-hide aos-init aos-animate md:hidden">
+            {% include 'store/includes/product-description-main-image.html' %}
+            <!-- End Main Image -->
+            <div class="md:hidden px-2 flex space-x-1 overflow-x-auto scrollbar-hide aos-init aos-animate">
               <a href="{{ single_product.images.url }}" onclick="changeImage(event, 'mainImage')"
                 class="w-16 h-16 min-w-[64px]">
                 <img src="{{ single_product.images.url }}"
-                  class="w-full h-full object-cover rounded-lg border hover:border-black hover:border-2 min-w-[64px]">
+                  class="w-full h-full object-cover border hover:border-black hover:border-2 min-w-[64px]">
               </a>
               {% for i in product_gallery %}
               <a href="{{ i.image.url }}" onclick="changeImage(event, 'mainImage')" class="w-16 h-16 min-w-[64px]">
                 <img src="{{ i.image.url }}"
-                  class="w-full h-full object-cover rounded-lg border hover:border-black hover:border-2 min-w-[64px]">
+                  class="w-full h-full object-cover border hover:border-black hover:border-2 min-w-[64px]">
               </a>
               {% endfor %}
             </div>
           </div>
-
           <!-- COLOR VARIATIONS -->
+          {% if single_product.variation_set.colors %}
           <div class="md:hidden">
             <h1 class="flex justify-center font-extrabold mb-4">
               COLORS
             </h1>
             <div class="flex justify-center">
-              <div class="flex space-x-4 overflow-x-auto scrollbar-hide aos-init aos-animate">
+              <div class="flex space-x-1 overflow-x-auto scrollbar-hide aos-init aos-animate">
                 {% for i in single_product.variation_set.colors %}
                 {% if i.variation_image %}
                 <a href="{{ i.variation_image.url }}" onclick="changeImage(event, 'mainImage')"
                   class="w-16 h-16 min-w-[64px]">
                   <img src="{{ i.variation_image.url }}"
-                    class="w-full h-full object-cover rounded-lg border hover:border-black hover:border-2 min-w-[64px]">
+                    class="w-full h-full object-cover border hover:border-black hover:border-2 min-w-[64px]">
                 </a>
                 {% endif %}
                 {% endfor %}
@@ -131,8 +126,8 @@
             </div>
           </div>
           <!-- END COLOR VARIATIONS -->
+          {% endif %}
 
-          <!-- Product Details -->
           <!-- Product Details -->
           <div class="lg:w-1/2 p-6 md:border-l" id="details-section">
             <form action="{% url 'add_cart' single_product.id %}" method="POST" id="cart-form">
@@ -179,7 +174,7 @@
                   </div>
                   <div class="flex space-x-2">
                     {% for i in single_product.variation_set.sizes %}
-                    <button type="button" class="px-4 py-2 border rounded-lg hover:border-black focus:outline-none"
+                    <button type="button" class="px-4 py-2 border rounded-lg hover:border-black focus:outline-none size-button"
                       onclick="selectSize('{{ i.variation_value | lower }}')"
                       data-size="{{ i.variation_value | lower }}">
                       {{ i.variation_value | capfirst }}
@@ -246,14 +241,14 @@
                     stroke-linejoin="round" stroke-width="1"></path>
                 </svg>
               </p>
-              <p>
+              <p class="font-semibold">
                 ADD TO BAG
               </p>
             </div>
           </button>
 
-          <div class="fixed bottom-0 left-0 w-full bg-white p-2 shadow-lg md:hidden">
-            <button class="w-full bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-900 add-to-bag-button">
+          <div class="fixed left-0 w-full bg-white py-1 px-2 shadow-lg md:hidden z-50" style="bottom: 65px;">
+            <button class="w-full bg-black text-white px-6 py-3 hover:bg-gray-900 add-to-bag-button">
               <div class="flex justify-center items-center space-x-4">
                 <p>
                   <svg viewBox="-0.5 -0.5 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"
@@ -269,7 +264,7 @@
                       stroke-linejoin="round" stroke-width="1"></path>
                   </svg>
                 </p>
-                <p>ADD TO BAG</p>
+                <p class="font-semibold">ADD TO BAG</p>
               </div>
             </button>
           </div>
@@ -279,8 +274,9 @@
       </div>
     </div>
     <!-- ============================ COMPONENT 1 END .// ================================= -->
-
     <br>
+    {% include 'store/includes/behaviour-related-products.html' %}
+    {% include 'store/includes/related-products.html' %}
 
     {% if user.is_authenticated %}
     {% if orderproduct %}
@@ -384,7 +380,10 @@
     });
   });
 
+  const firstSizeButton = document.querySelector('.size-button'); // Select the first size button
+  if (firstSizeButton) {
+    firstSizeButton.click(); // Simulate a click event on the first size button
+  }
 
 </script>
-
 {% endblock %}

@@ -1,0 +1,32 @@
+<div class="fixed inset-0 bg-black/50 backdrop-blur-xs flex justify-center items-center z-[60] hidden"
+    id="notificationSection">
+    <!-- Image Container with Relative Positioning -->
+    <div class="relative">
+        <!-- Close Icon Positioned Absolutely -->
+        <i data-feather="x"
+            class="text-white text-2xl absolute -top-10 right-10 cursor-pointer hover:text-gray-300 transition-colors"
+            onclick="document.getElementById('notificationSection').classList.add('hidden');"></i>
+        <!-- Image -->
+        <a href="{{notification.url}}">
+            <div class="rounded-lg p-1 flex justify-center">
+                <div class="flex justify-center md:w-[80%] md:h-[80%]">
+                    {% if notification.banner_image %}
+                    <img src="{{ notification.banner_image.url }}" alt="{{settings.site_name}}"
+                        class="max-w-[90%] max-h-[90%]">
+                    {% else %}
+                    <div class="flex justify-center items-center text-white text-lg p-36">
+                        Notification Unavailable
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+{% if notification %}
+<script>
+    setTimeout(() => {
+        document.getElementById('notificationSection').classList.remove('hidden');
+    }, 5000)
+</script>
+{% endif %}

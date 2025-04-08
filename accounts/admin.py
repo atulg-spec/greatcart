@@ -4,12 +4,13 @@ from .models import CustomUser
 
 class CustomUserAdmin(UserAdmin):
     # Define the fields to be displayed in the admin list view
-    list_display = ('username', 'email', 'phone_number', 'is_active', 'is_staff', 'date_joined')
+    list_display = ('username', 'first_name' ,'email', 'phone_number', 'is_active', 'is_staff', 'date_joined')
     
     # Define the fields to be used in the admin detail view
     fieldsets = (
         (None, {'fields': ('username', 'email', 'password')}),
-        ('Personal Info', {'fields': ('phone_number', 'profile_picture', 'address_line_1', 'address_line_2', 'city', 'state', 'country', 'zip_code')}),
+        ('Financial Info', {'fields': ('wallet',)}),
+        ('Personal Info', {'fields': ('phone_number', 'first_name', 'last_name','profile_picture', 'address_line_1', 'address_line_2', 'city', 'state', 'country', 'zip_code')}),
         ('Location Info', {'fields': ('region_name', 'lat', 'lon', 'timezone', 'isp')}),
         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
         ('Important dates', {'fields': ('last_login',)}),

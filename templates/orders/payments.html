@@ -2,11 +2,13 @@
 {% load static %}
 
 {% block content %}
-<section class="my-6 md:my-16">
+{% include 'includes/navbar.html' %}
+
+<section class="py-6 md:py-16">
   <br><br>
   <div class="container mx-auto md:px-36">
     <!-- ============================ COMPONENT 1 ================================= -->
-    <h4 class="text-center text-2xl font-bold mb-8">Review Your Order and Make Payment</h4>
+    <h4 class="text-center text-1xl font-bold mb-8">REVIEW YOUR ORDER AND MAKE PAYMENT</h4>
     <div class="flex flex-col lg:flex-row gap-8">
       <!-- Left Column: Billing Address, Payment Method, and Review Products -->
       <div class="lg:w-3/4">
@@ -37,10 +39,13 @@
                   <td class="py-4">
                     <div class="flex items-center">
                       <div class="w-16 h-16 mr-4">
-                        <img src="{{ cart_item.product.images.url }}" class="w-full h-full object-cover rounded-lg" alt="{{ cart_item.product.product_name }}">
+                        <img src="{{ cart_item.product.images.url }}" class="w-full h-full object-cover rounded-lg"
+                          alt="{{ cart_item.product.product_name }}">
                       </div>
                       <div>
-                        <a href="{{ cart_item.product.get_url }}" class="text-lg font-semibold hover:text-primary">{{ cart_item.product.product_name }}</a>
+                        <a href="{{ cart_item.product.get_url }}" class="text-lg font-semibold hover:text-primary">
+                          {{cart_item.product.product_name}}
+                        </a>
                         <p class="text-sm text-gray-500">
                           {% if cart_item.variations.all %}
                           {% for item in cart_item.variations.all %}
@@ -53,7 +58,8 @@
                   </td>
                   <td class="py-4">
                     <div class="text-lg font-semibold">₹{{ cart_item.sub_total }}</div>
-                    <small class="text-sm text-gray-500">₹{{ cart_item.product.price }} * {{ cart_item.quantity }} qty</small>
+                    <small class="text-sm text-gray-500">₹{{ cart_item.product.price }} * {{ cart_item.quantity }}
+                      qty</small>
                   </td>
                 </tr>
                 {% endfor %}
@@ -79,15 +85,27 @@
             <div class="text-gray-800 font-semibold text-sm">Grand Total</div>
             <div class="text-gray-800 font-semibold text-sm">₹{{ grand_total }}</div>
           </div>
+          <div class="flex justify-between border p-2">
+            <div class="text-gray-500 text-sm">Wallet Balance</div>
+            <div class="text-gray-800 font-semibold text-sm">₹{{ request.user.wallet }}</div>
+          </div>
         </div>
         <div class="text-center my-6">
           <img src="{% static './images/misc/payments.png' %}" class="h-8 mx-auto" alt="Payment Methods">
         </div>
         <div class="w-full text-white font-semibold py-2 my-2 text-sm bg-black text-center">
           <a href="/orders/proceed_payment/{{order.order_number}}" class="w-full">
-            Continue
+            CONTINUE TO PAY
           </a>
         </div>
+        {% if request.user.wallet >= grand_total %}
+        <span class="py-2 flex justify-center">OR</span>
+        <div class="w-full text-white font-semibold py-2 my-2 text-sm bg-black text-center">
+          <a href="/orders/proceed_payment/{{order.order_number}}" class="w-full">
+            PAY WITH WALLET
+          </a>
+        </div>
+        {% endif %}
       </div>
     </div>
     <!-- ============================ COMPONENT 1 END .// ================================= -->
@@ -127,7 +145,7 @@
     },
 
     // Set up the transaction
-    createOrder: function(data, actions) {
+    createOrder: function (data, actions) {
       return actions.order.create({
         purchase_units: [{
           amount: {
@@ -138,8 +156,8 @@
     },
 
     // Finalize the transaction
-    onApprove: function(data, actions) {
-      return actions.order.capture().then(function(details) {
+    onApprove: function (data, actions) {
+      return actions.order.capture().then(function (details) {
         console.log(details);
         sendData();
         function sendData() {
@@ -156,10 +174,10 @@
               status: details.status,
             }),
           })
-          .then((response) => response.json())
-          .then((data) => {
-            window.location.href = redirect_url + '?order_number=' + data.order_number + '&payment_id=' + data.transID;
-          });
+            .then((response) => response.json())
+            .then((data) => {
+              window.location.href = redirect_url + '?order_number=' + data.order_number + '&payment_id=' + data.transID;
+            });
         }
       });
     }
