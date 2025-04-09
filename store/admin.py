@@ -43,6 +43,9 @@ class ProductAdmin(admin.ModelAdmin):
         ('Product Information', {
             'fields': ('product_name', 'slug', 'description', 'coupons', 'size_chart', 'category', 'feature_category', 'price', 'discount_percent', 'before_discount_price', 'stock', 'is_available')
         }),
+        ('Slider', {
+            'fields': ('product_marquee',)
+        }),
         ('Images', {
             'fields': ('images', 'secondary_image', 'image_preview')
         }),

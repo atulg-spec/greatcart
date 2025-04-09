@@ -14,6 +14,7 @@ from django.contrib.auth.decorators import login_required
 import hashlib
 from django.views.decorators.csrf import csrf_exempt
 import razorpay
+from home.models import SiteSettings
 
 def payments(request):
     body = json.loads(request.body)
@@ -81,7 +82,7 @@ def payments(request):
 
 @login_required
 def place_order(request, total=0, quantity=0,):
-    assigned_tax = 2
+    assigned_tax = SiteSettings.objects.all().first().gst_percentage
     current_user = request.user
 
     # If the cart count is less than or equal to 0, then redirect back to shop

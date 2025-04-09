@@ -106,9 +106,15 @@
         </div>
         <!-- Main Content -->
         <main class="lg:w-4/5 md:py-24">
+          <h1 class="flex justify-center md:justify-start md:px-2 font-extrabold pb-4">
+            {% if category_slug %}
+            {{ category_slug|slice:":24"|upper }}
+            {% elif keyword %}
+            {{ keyword|slice:":24"|upper }}
+            {% endif %}
+          </h1>
           <!-- Product Grid -->
           {% include 'store/includes/product_list.html' %}
-
           <!-- Loading Spinner -->
           <div id="loading-spinner" class="text-center my-8 hidden">
             <div class="spinner-border text-primary" role="status">

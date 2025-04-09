@@ -15,6 +15,7 @@ class SiteSettings(models.Model):
     tagline = models.CharField(max_length=100, blank=True)
 
     main_page_image = models.ImageField(upload_to='slider_images/', blank=True, null=True)
+    main_page_image_url = models.URLField(blank=True)
 
     main_page_timer_thumbnail = models.ImageField(upload_to='slider_images/', blank=True, null=True)
     main_page_timer_heading = models.CharField(max_length=30, blank=True)

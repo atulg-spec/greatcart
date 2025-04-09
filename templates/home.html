@@ -21,8 +21,10 @@
   </h1>
   {% include 'includes/home-sections.html' %}
   <section data-aos="fade-right">
-    <img src="{{ settings.main_page_image.url }}" alt="{{ settings.site_name }} Main Page Image" loading="lazy"
-      width="1200" height="600" class="w-full h-auto" />
+    <a href="{{settings.main_page_image_url}}">
+      <img src="{{ settings.main_page_image.url }}" alt="{{ settings.site_name }} Main Page Image" loading="lazy"
+        width="1200" height="600" class="w-full h-auto" />
+    </a>
   </section>
 
   {% if recently_stalked %}
@@ -116,13 +118,15 @@
                 <img src="{{ category.cat_image.url }}" alt="{{ category.category_name }}"
                   class="w-full h-auto shadow-md transition-transform duration-300 group-hover:scale-125 group-hover:shadow-xl"
                   loading="lazy" width="300" height="200" />
-                <span class="absolute bottom-0 left-0 right-0 flex justify-center py-2 font-semibold text-sm bg-black bg-opacity-70 text-white">
+                <span
+                  class="absolute bottom-0 left-0 right-0 flex justify-center py-2 font-semibold text-sm bg-black bg-opacity-70 text-white">
                   {{ category.category_name|upper }}
                 </span>
               </div>
               {% else %}
               <div class="w-full h-40 bg-gray-200 shadow-md flex items-center justify-center relative">
-                <span class="absolute bottom-0 left-0 right-0 flex justify-center py-2 font-semibold text-sm bg-black bg-opacity-70 text-white">
+                <span
+                  class="absolute bottom-0 left-0 right-0 flex justify-center py-2 font-semibold text-sm bg-black bg-opacity-70 text-white">
                   {{ category.category_name|upper }}
                 </span>
                 <span class="text-gray-500">No Image</span>
@@ -134,7 +138,7 @@
         {% endfor %}
       </div>
     </div>
-</section>
+  </section>
 
   {% include 'includes/home/timer.html' %}
 

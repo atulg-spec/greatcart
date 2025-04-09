@@ -2,8 +2,8 @@
     <div id="main-image-section" class="relative">
         <!-- Back Icon (Top Left) -->
         <a href="{{ request.META.HTTP_REFERER }}" class="absolute top-4 left-4 z-10 md:hidden">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="-0.5 -0.5 16 16" id="Alt-Arrow-Left--Streamline-Solar"
-                height="26" width="26">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="-0.5 -0.5 16 16"
+                id="Alt-Arrow-Left--Streamline-Solar" height="26" width="26">
                 <desc>Alt Arrow Left Streamline Icon: https://streamlinehq.com</desc>
                 <g id="Line Duotone/Arrows/Alt Arrow Left">
                     <!-- White border effect (stroked twice) -->
@@ -26,7 +26,7 @@
                 <path
                     d="M4.518750000000001 6.30625V3.9187499999999997A2.9812499999999997 2.9812499999999997 0 0 1 7.5 0.9375a2.9812499999999997 2.9812499999999997 0 0 1 2.9812499999999997 2.9812499999999997v2.3874999999999997"
                     fill="none" stroke="white" stroke-miterlimit="10" stroke-width="2"></path>
-                
+
                 <!-- Original paths (on top) -->
                 <path
                     d="M2.13125 4.518750000000001h10.7375v7.75625a1.7874999999999999 1.7874999999999999 0 0 1 -1.7874999999999999 1.7874999999999999H3.9187499999999997a1.7874999999999999 1.7874999999999999 0 0 1 -1.7874999999999999 -1.7874999999999999V4.518750000000001Z"
@@ -34,29 +34,21 @@
                 <path
                     d="M4.518750000000001 6.30625V3.9187499999999997A2.9812499999999997 2.9812499999999997 0 0 1 7.5 0.9375a2.9812499999999997 2.9812499999999997 0 0 1 2.9812499999999997 2.9812499999999997v2.3874999999999997"
                     fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="1"></path>
-            </svg>        
+            </svg>
         </button>
 
         <!-- Heart Icon (Below Cart) -->
         <form action="{% url 'add_wishlist' single_product.id %}" method="POST">
             {% csrf_token %}
             <button type="submit" class="absolute top-16 right-6 z-10">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-black" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
                     <!-- White border (behind the original path) -->
-                    <path 
-                        stroke-linecap="round" 
-                        stroke-linejoin="round" 
-                        stroke-width="2.5" 
-                        stroke="white"   
-                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" 
-                    />
-                    <path 
-                        stroke-linecap="round" 
-                        stroke-linejoin="round" 
-                        stroke-width="1.5" 
-                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" 
-                    />
-                </svg>            
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" stroke="white"
+                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
             </button>
         </form>
 
@@ -78,7 +70,7 @@
                     stroke-linejoin="round" />
                 <line x1="12" y1="3" x2="12" y2="15" stroke="currentColor" stroke-width="1" stroke-linecap="round"
                     stroke-linejoin="round" />
-            </svg> 
+            </svg>
         </button>
 
         <div class="absolute bottom-4 flex justify-center z-5 w-full md:hidden" id="dots-container">
@@ -87,6 +79,15 @@
         <!-- Main Image -->
         <img id="mainImage" src="{{ single_product.images.url }}" class="w-full shadow-md">
     </div>
+    {% if single_product.product_marquee %}
+    <marquee behavior="" direction="" class="bg-black md:hidden">
+        <div class="animate-marquee whitespace-nowrap flex items-center">
+            <span class="py-1 text-xs font-semibold text-gray-700">
+                {{single_product.product_marquee|safe}}
+            </span>
+        </div>
+    </marquee>
+    {% endif %}
 </div>
 
 <!-- Include Hammer.js -->

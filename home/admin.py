@@ -80,7 +80,7 @@ class SiteSettingsAdmin(admin.ModelAdmin):
             'fields': ('site_name', 'site_header_news', 'slider_news', 'preloader_img','logo', 'logo_width', 'logo_height', 'tagline', 'font_style')
         }),
         ('Index Page Banner', {
-            'fields': ('main_page_image',)
+            'fields': ('main_page_image', 'main_page_image_url')
         }),
         ('Index Page Timer', {
             'fields': ('main_page_timer_thumbnail', 'main_page_timer_heading', 'main_page_timer_caption','main_page_timer','main_page_timer_url', 'main_page_timer_strap_classes')

@@ -25,7 +25,9 @@ class Product(models.Model):
     modified_date = models.DateTimeField(auto_now=True)
     before_discount_price = models.IntegerField(default=0)
     discount_percent = models.IntegerField(default=10)
-
+    
+    product_marquee = CKEditor5Field('Product Marquee', config_name='extends', null=True, blank=True)
+    
     meta_title = models.CharField(max_length=70, default="", help_text="Meta Title (Recommended: 60-70 characters)")
     meta_description = models.TextField(max_length=320, default="", help_text="Meta Description (Recommended: 150-320 characters)")
     meta_keywords = models.TextField(default="", help_text="Comma-separated keywords (Avoid keyword stuffing)")

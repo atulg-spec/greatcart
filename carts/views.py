@@ -4,6 +4,7 @@ from .models import Cart, CartItem
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
 from accounts.utils import phone_number_required
+from home.models import SiteSettings
 
 # Create your views here.
 from django.http import HttpResponse
@@ -168,6 +169,7 @@ def remove_cart_item(request, product_id, cart_item_id):
 @phone_number_required
 def cart(request, total=0, quantity=0, cart_items=None):
     try:
+        gst = SiteSettings.objects.all().first().gst_percentage
         tax = 0
         grand_total = 0
         if request.user.is_authenticated:
@@ -178,7 +180,7 @@ def cart(request, total=0, quantity=0, cart_items=None):
         for cart_item in cart_items:
             total += (cart_item.product.price * cart_item.quantity)
             quantity += cart_item.quantity
-        tax = (2 * total)/100
+        tax = (gst * total)/100
         grand_total = total + tax
     except ObjectDoesNotExist:
         pass #just ignore
@@ -197,6 +199,7 @@ def cart(request, total=0, quantity=0, cart_items=None):
 @phone_number_required
 def checkout(request, total=0, quantity=0, cart_items=None):
     try:
+        gst = SiteSettings.objects.all().first().gst_percentage
         tax = 0
         grand_total = 0
         if request.user.is_authenticated:
@@ -207,7 +210,7 @@ def checkout(request, total=0, quantity=0, cart_items=None):
         for cart_item in cart_items:
             total += (cart_item.product.price * cart_item.quantity)
             quantity += cart_item.quantity
-        tax = (2 * total)/100
+        tax = (gst * total)/100
         grand_total = total + tax
     except ObjectDoesNotExist:
         pass #just ignore
