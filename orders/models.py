@@ -5,6 +5,7 @@ from store.models import Product, Variation
 
 class PaymentGateway(models.Model):
     USE = (
+        ('MANUAL', 'MANUAL'),
         ('PAYU', 'PAYU'),
         ('RAZORPAY', 'RAZORPAY'),
     )
@@ -15,6 +16,9 @@ class PaymentGateway(models.Model):
 
     payu_marchent_key = models.CharField(max_length=500,default="")
     payu_marchent_salt = models.CharField(max_length=500,default="")
+
+    qr_image = models.ImageField(upload_to='order/paymentgateway', null=True, blank=True)
+    contact_url = models.URLField(null=True ,blank=True)
 
     mode = models.CharField(max_length=10,help_text="LIVE or TEST")
 

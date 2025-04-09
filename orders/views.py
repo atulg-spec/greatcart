@@ -232,6 +232,77 @@ def proceed_payment(request,orderid):
         }
 
         return render(request, 'orders/order_complete.html', context)
+
+    elif gateway.use == 'MANUAL':
+        payment = Payment(
+            user = request.user,
+            payment_id = order.order_number,
+            payment_method = 'MANUAL',
+            amount_paid = order.order_total,
+            status = 'pending',
+        )
+        
+        payment.save()
+
+        order.payment = payment
+        order.is_ordered = False
+        order.save()
+
+        cart_items = CartItem.objects.filter(user=request.user)
+
+        for item in cart_items:
+            orderproduct = OrderProduct()
+            orderproduct.order_id = order.id
+            orderproduct.payment = payment
+            orderproduct.user_id = request.user.id
+            orderproduct.product_id = item.product_id
+            orderproduct.quantity = item.quantity
+            orderproduct.product_price = item.product.price
+            orderproduct.ordered = False
+            orderproduct.save()
+            cart_item = CartItem.objects.get(id=item.id)
+            product_variation = cart_item.variations.all()
+            orderproduct = OrderProduct.objects.get(id=orderproduct.id)
+            orderproduct.variations.set(product_variation)
+            orderproduct.save()
+    
+    
+            # Reduce the quantity of the sold products
+            product = Product.objects.get(id=item.product_id)
+            product.stock -= item.quantity
+            product.save()
+
+        CartItem.objects.filter(user=request.user).delete()
+    
+        ordered_products = OrderProduct.objects.filter(order_id=order.id)
+        subtotal = 0
+        for i in ordered_products:
+            subtotal += i.product_price * i.quantity
+
+        try:
+            from home.models import SiteSettings
+            settings = SiteSettings.objects.all().first()
+            variables = {
+                'payment': payment,
+                'request': request,
+                'settings': settings,
+            }
+            message = render_to_string('emails/order-confirmation-manual.html', variables)
+            send_emails('Order Confirmation', message, [payment.user.email], message)
+        except Exception as e:
+            print(f'Error sending e-mail {e}')
+
+        context = {
+            'gateway': gateway,
+            'order': order,
+            'ordered_products': ordered_products,
+            'order_number': order.order_number,
+            'transID': payment.payment_id,
+            'payment': payment,
+            'subtotal': subtotal,
+        }
+
+        return render(request, 'orders/manual-payment.html', context)
             
     elif gateway.use == 'PAYU':
         payu_url = "https://secure.payu.in/_payment"  # Default to LIVE mode

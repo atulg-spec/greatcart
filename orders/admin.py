@@ -23,6 +23,10 @@ class PaymentGatewayAdmin(admin.ModelAdmin):
             'fields': ('payu_marchent_key', 'payu_marchent_salt'),
             'description': "Configuration details for PayU payment gateway."
         }),
+        ('Manual Payment QR', {
+            'fields': ('qr_image', 'contact_url'),
+            'description': "Configuration details for UPI QR Payments."
+        }),
     )
 
     def has_add_permission(self, request):

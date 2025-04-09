@@ -3,8 +3,8 @@
 
 {% block content %}
 {% include 'includes/navbar.html' %}
-
-<section class="py-6 md:py-16">
+{% include 'includes/bottomnav.html' %}
+<section class="py-6 md:py-16 mb-24">
   <br><br>
   <div class="container mx-auto md:px-36">
     <!-- ============================ COMPONENT 1 ================================= -->
@@ -111,6 +111,14 @@
     <!-- ============================ COMPONENT 1 END .// ================================= -->
   </div>
 </section>
+<div class="fixed left-0 w-full bg-white py-1 px-2 shadow-lg md:hidden z-50" style="bottom: 65px;">
+  <a href="/orders/proceed_payment/{{order.order_number}}" class="w-full block bg-black text-white px-6 py-3 hover:bg-gray-900">
+    <div class="flex justify-center items-center space-x-4">
+      <p class="font-semibold">CONTINUE TO PAY</p>
+    </div>
+  </a>
+</div>
+
 
 <script>
   function getCookie(name) {
