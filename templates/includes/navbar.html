@@ -129,7 +129,7 @@
     {% include 'includes/subnavbar.html' %}
 </header>
 
-<aside class="fixed left-0 top-0 h-full w-64 bg-white backdrop-blur-sm shadow-lg z-50 hidden" id="sideNav"
+<aside class="fixed left-0 top-0 h-full w-64 bg-white backdrop-blur-sm shadow-lg z-[51] hidden" id="sideNav"
     onclick="document.getElementById('sideNav').classList.add('hidden')">
     <div class="px-4 pt-4 flex justify-between items-center">
         <div class="flex justify-between items-center">
@@ -167,7 +167,7 @@
     {% for nav in side_nav %}
     <div class="flex items-center my-4">
         <div class="bg-blue-50 rounded-full p-1 ml-4">
-            <img src="{{nav.logo.url}}" alt="{{nav.name}}" class="w-8 h-8" loading="lazy">
+            {{nav.logo|safe}}
         </div>
         <div class="mx-2">
             <div class=""><a href="{{nav.url}}">{{nav.name}}</a></div>
@@ -190,7 +190,7 @@
                     stroke-linecap="round" stroke-width="1"></path>
             </svg>
         </a>
-        <a href="{{settings.email}}" class="flex justify-center items-center p-4 border border-gray-200"
+        <a href="mailto:{{settings.email}}" class="flex justify-center items-center p-4 border border-gray-200"
             aria-label="Email">
             <svg viewBox="-0.5 -0.5 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" height="24" width="24"
                 aria-hidden="true">

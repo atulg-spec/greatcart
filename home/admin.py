@@ -86,10 +86,10 @@ class SiteSettingsAdmin(admin.ModelAdmin):
             'fields': ('main_page_timer_thumbnail', 'main_page_timer_heading', 'main_page_timer_caption','main_page_timer','main_page_timer_url', 'main_page_timer_strap_classes')
         }),
         ('Contact Info', {
-            'fields': ('instagram', 'phone_number', 'email', 'location')
+            'fields': ('phone_number', 'email', 'location')
         }),
         ('Social Media', {
-            'fields': ('instagram_page', 'facebook_handle', 'twitter_handle', 'youtube_handle')
+            'fields': ('instagram_handle', 'facebook_handle', 'twitter_handle', 'youtube_handle')
         }),
         ('Login/SignUp', {
             'fields': ('login_banner', 'login_banner_desktop')
@@ -179,27 +179,20 @@ class SliderAdmin(admin.ModelAdmin):
 
 @admin.register(Page)
 class PageAdmin(admin.ModelAdmin):
-    list_display = ('title', 'slug', 'is_published', 'created_at')
-    list_filter = ('is_published',)
+    list_display = ('title', 'slug', 'created_at')
     search_fields = ('title', 'slug', 'meta_description')
     prepopulated_fields = {'slug': ('title',)}
     fieldsets = (
         ('Basic Information', {
-            'fields': ('title', 'slug', 'content', 'is_published'),
+            'fields': ('title', 'slug', 'content', 'is_published', 'links'),
         }),
         ('SEO Metadata', {
-            'fields': ('meta_description', 'meta_keywords', 'canonical_url'),
+            'fields': ('meta_description', 'meta_keywords'),
         }),
         ('Open Graph (Social Media)', {
-            'fields': ('og_title', 'og_description', 'og_image'),
-        }),
-        ('Twitter Card', {
-            'fields': ('twitter_card', 'twitter_title', 'twitter_description', 'twitter_image'),
+            'fields': ('og_title', 'og_description'),
         }),
         ('Structured Data', {
             'fields': ('structured_data',),
-        }),
-        ('Robots Meta Tag', {
-            'fields': ('robots_index', 'robots_follow'),
         }),
     )

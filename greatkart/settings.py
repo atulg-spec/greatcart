@@ -7,7 +7,7 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 SECRET_KEY = "django-insecure-$=z-*)!)e-%056aypw6$!q-#(1l+19i&d@)i!&%qdn)e*p@vu%"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'django_ckeditor_5',
     'accounts',
     'home',
+    'blogs',
     'search',
     'notifications',
     'advertisement',
@@ -162,11 +163,11 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = BASE_DIR /'static'
+# STATIC_ROOT = BASE_DIR /'static'
 
-# STATICFILES_DIRS = [
-#     'static',
-# ]
+STATICFILES_DIRS = [
+    'static',
+]
 
 # media files configuration
 MEDIA_URL = '/media/'

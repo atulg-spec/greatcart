@@ -5,25 +5,26 @@
 <title>{{ page.title }}</title>
 <meta name="description" content="{{ page.meta_description }}">
 <meta name="keywords" content="{{ page.meta_keywords }}">
-<meta name="robots"
-    content="{% if page.robots_index %}index{% else %}noindex{% endif %}, {% if page.robots_follow %}follow{% else %}nofollow{% endif %}">
-<link rel="canonical" href="{{ page.canonical_url }}">
-
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="{{ request.build_absolute_uri }}">
 <!-- Open Graph -->
 <meta property="og:title" content="{{ page.og_title }}">
 <meta property="og:description" content="{{ page.og_description }}">
-<meta property="og:image" content="{{ page.og_image }}">
+<meta property="og:image" content="{{settings.logo.url}}">
 
 <!-- Twitter Card -->
-<meta name="twitter:card" content="{{ page.twitter_card }}">
-<meta name="twitter:title" content="{{ page.twitter_title }}">
-<meta name="twitter:description" content="{{ page.twitter_description }}">
-<meta name="twitter:image" content="{{ page.twitter_image }}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ page.title }}">
+<meta name="twitter:description" content="{{ page.meta_description }}">
+<meta name="twitter:image" content="{{settings.logo.url}}">
 
 <!-- Structured Data -->
 <script type="application/ld+json">
     {{ page.structured_data|safe }}
 </script>
+{% if page.links %}
+{{page.links|safe}}
+{% endif %}
 {% endblock meta %}
 
 {% block content %}

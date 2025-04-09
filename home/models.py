@@ -1,7 +1,7 @@
 from django.db import models
 from django_ckeditor_5.fields import CKEditor5Field
-from django.db import models
 from django.utils.text import slugify
+from django.db import models
 
 class SiteSettings(models.Model):
     site_name = models.CharField(max_length=15, blank=True)
@@ -23,12 +23,10 @@ class SiteSettings(models.Model):
     main_page_timer_url = models.URLField(blank=True)
     main_page_timer_strap_classes = models.CharField(max_length=500, default="bg-red-500")
 
-    instagram = models.CharField(max_length=50, blank=True)
     phone_number = models.CharField(max_length=50, blank=True)
     email = models.CharField(max_length=50, blank=True)
     location = models.CharField(max_length=150, blank=True)
-
-    instagram_page = models.URLField(blank=True)
+    instagram_handle = models.URLField(blank=True)
     facebook_handle = models.URLField(blank=True)
     twitter_handle = models.URLField(blank=True)
     youtube_handle = models.URLField(blank=True)
@@ -93,7 +91,7 @@ class HeadSection(models.Model):
 
 
 class SideNav(models.Model):
-    logo = models.ImageField(upload_to='logo/', blank=True, null=True)
+    logo = models.TextField(null=True, blank=True)
     name = models.CharField(default="",max_length=50)
     url = models.URLField(blank=True)
     class Meta:
@@ -161,13 +159,6 @@ class Page(models.Model):
     # Page content
     content = CKEditor5Field('Content', config_name='extends')
 
-    # Canonical URL (to avoid duplicate content issues)
-    canonical_url = models.URLField(
-        max_length=500,
-        blank=True,
-        help_text="The canonical URL of the page (e.g., 'https://example.com/about-us').",
-    )
-
     # Open Graph (OG) tags for social media sharing
     og_title = models.CharField(
         max_length=200,
@@ -179,55 +170,15 @@ class Page(models.Model):
         blank=True,
         help_text="The description of the page for social media sharing.",
     )
-    og_image = models.URLField(
-        max_length=500,
-        blank=True,
-        help_text="The URL of the image to display when the page is shared on social media.",
-    )
 
     # Twitter Card tags for Twitter sharing
-    twitter_card = models.CharField(
-        max_length=50,
-        blank=True,
-        help_text="The type of Twitter card to use (e.g., 'summary', 'summary_large_image').",
-    )
-    twitter_title = models.CharField(
-        max_length=200,
-        blank=True,
-        help_text="The title of the page for Twitter sharing.",
-    )
-    twitter_description = models.CharField(
-        max_length=300,
-        blank=True,
-        help_text="The description of the page for Twitter sharing.",
-    )
-    twitter_image = models.URLField(
-        max_length=500,
-        blank=True,
-        help_text="The URL of the image to display when the page is shared on Twitter.",
-    )
-
-    # Structured Data (JSON-LD for rich snippets)
     structured_data = models.TextField(
         blank=True,
         help_text="JSON-LD structured data for rich snippets (e.g., FAQ, Article, Breadcrumb).",
     )
 
-    # Robots meta tag (to control indexing)
-    robots_index = models.BooleanField(
-        default=True,
-        help_text="Whether search engines should index this page.",
-    )
-    robots_follow = models.BooleanField(
-        default=True,
-        help_text="Whether search engines should follow links on this page.",
-    )
+    links = models.TextField(help_text="Custom links for the head section", null=True, blank=True)
 
-    # Additional fields
-    is_published = models.BooleanField(
-        default=True,
-        help_text="Whether the page is published and visible on the site.",
-    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
