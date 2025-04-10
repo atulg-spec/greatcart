@@ -2,6 +2,10 @@
 {% load static %}
 {% block meta %}
 <title>{{ blogsettings.page_title }}</title>
+{% if page.banner_image %}
+<link rel="icon" href="{{ blogsettings.banner_image.url }}" type="image/x-icon">
+{% endif %}
+
 <meta name="description" content="{{ blogsettings.meta_description }}">
 <meta name="keywords" content="{{ blogsettings.meta_keywords }}">
 <meta name="robots" content="index, follow">
