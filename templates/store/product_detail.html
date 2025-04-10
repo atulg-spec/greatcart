@@ -2,19 +2,20 @@
 {% load static %}
 {% block meta %}
 <title>{{ single_product.meta_title }}</title>
+<link rel="icon" href="{{ single_product.images.url }}" type="image/x-icon">
 <meta name="description" content="{{ single_product.meta_description }}">
 <meta name="keywords" content="{{ single_product.meta_keywords }}">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="{{ request.build_absolute_uri }}">
 <meta property="og:title" content="{{ single_product.meta_title }}">
 <meta property="og:description" content="{{ single_product.meta_description }}">
-<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ single_product.images.url }}">
+<meta property="og:image" content="{{ single_product.images.url }}">
 <meta property="og:url" content="{{ request.build_absolute_uri }}">
 <meta property="og:type" content="product">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{{ single_product.meta_title }}">
 <meta name="twitter:description" content="{{ single_product.meta_description }}">
-<meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{{ single_product.images.url }}">
+<meta name="twitter:image" content="{{ single_product.images.url }}">
 <script type="application/ld+json">
   {
     "@context": "https://schema.org/",

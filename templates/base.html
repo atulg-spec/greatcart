@@ -14,12 +14,12 @@
     {{head.links|safe}}
 
     {% block meta %}
-    {% endblock meta %}
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Favicon -->
     {% if head.favicon %}
     <link rel="icon" href="{{ head.favicon.url }}" type="image/x-icon">
     {% endif %}
+    {% endblock meta %}
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Favicon -->
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
