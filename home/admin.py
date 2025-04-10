@@ -184,7 +184,7 @@ class PageAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
     fieldsets = (
         ('Basic Information', {
-            'fields': ('title', 'slug', 'content', 'is_published', 'links'),
+            'fields': ('title', 'slug', 'content', 'links'),
         }),
         ('SEO Metadata', {
             'fields': ('meta_description', 'meta_keywords'),
