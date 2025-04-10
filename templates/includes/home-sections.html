@@ -120,6 +120,7 @@
     document.addEventListener("DOMContentLoaded", function () {
         let firstButton = document.querySelector('.category-btn');
         if (firstButton) {
+            firstButton.classList.remove('bg-white', 'text-black');
             firstButton.classList.add('bg-black', 'text-white');
         }
     });

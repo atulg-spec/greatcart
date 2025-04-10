@@ -6,7 +6,13 @@
             <p class="text-xs text-center flex-grow">
                 {{ settings.site_header_news|safe }}
             </p>
-            <i data-feather="x" class="text-white cursor-pointer" onclick="hideNews()" aria-label="Close news"></i>
+            <svg xmlns="http://www.w3.org/2000/svg" onclick="hideNews()" viewBox="-0.5 -0.5 16 16" fill="none" stroke="#FFFFFF"
+                stroke-linecap="round" stroke-linejoin="round" id="Letter-X-Small--Streamline-Tabler" height="28"
+                width="28">
+                <desc>Letter X Small Streamline Icon: https://streamlinehq.com</desc>
+                <path d="m6.25 5 2.5 5" stroke-width="1"></path>
+                <path d="m6.25 10 2.5 -5" stroke-width="1"></path>
+            </svg>
         </div>
     </div>
 
@@ -145,11 +151,11 @@
                 <img src="{{ profile_picture }}" alt="Profile Picture"
                     style="width: 40px; height: 40px; border-radius: 50%;">
                 {% else %}
-                <i data-feather="user" class="w-6 h-6 text-gray-800 m-3" aria-hidden="true"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="-0.5 -0.5 16 16" fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" id="User-Circle--Streamline-Tabler" height="36" width="36"><desc>User Circle Streamline Icon: https://streamlinehq.com</desc><path d="M1.875 7.5a5.625 5.625 0 1 0 11.25 0 5.625 5.625 0 1 0 -11.25 0" stroke-width="1"></path><path d="M5.625 6.25a1.875 1.875 0 1 0 3.75 0 1.875 1.875 0 1 0 -3.75 0" stroke-width="1"></path><path d="M3.855 11.780625A2.5 2.5 0 0 1 6.25 10h2.5a2.5 2.5 0 0 1 2.39625 1.784375" stroke-width="1"></path></svg>                
                 {% endif %}
                 {% endwith %}
                 {% else %}
-                <i data-feather="user" class="w-6 h-6 text-gray-800 m-3" aria-hidden="true"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="-0.5 -0.5 16 16" fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" id="User-Circle--Streamline-Tabler" height="36" width="36"><desc>User Circle Streamline Icon: https://streamlinehq.com</desc><path d="M1.875 7.5a5.625 5.625 0 1 0 11.25 0 5.625 5.625 0 1 0 -11.25 0" stroke-width="1"></path><path d="M5.625 6.25a1.875 1.875 0 1 0 3.75 0 1.875 1.875 0 1 0 -3.75 0" stroke-width="1"></path><path d="M3.855 11.780625A2.5 2.5 0 0 1 6.25 10h2.5a2.5 2.5 0 0 1 2.39625 1.784375" stroke-width="1"></path></svg>                
                 {% endif %}
             </div>
             <div class="mx-2">

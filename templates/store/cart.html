@@ -38,13 +38,19 @@
                         {% endfor %}
                       </p>
                       <div class="pt-2">
-                        <div class="flex items-center">
+                        <div class="flex items-center border border-gray-300 w-20 rounded-md overflow-hidden">
                           <a href="{% url 'remove_cart' cart_item.product.id cart_item.id %}"
-                            class="bg-gray-200 text-gray-700 px-1 py-1 rounded-l hover:bg-gray-300 transition duration-300">
-                            <i data-feather="minus" class="w-2 h-2"></i>
+                            class="bg-white text-gray-600 hover:bg-gray-50 px-1 transition-colors duration-200 flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24"
+                              stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
+                            </svg>
                           </a>
-                          <input type="text" class="w-5 text-xs text-center border-t border-b border-gray-200"
+
+                          <input type="text"
+                            class="w-8 text-sm text-center border-x border-gray-300 py-1 bg-white text-gray-700 font-medium"
                             value="{{ cart_item.quantity }}" readonly>
+
                           <form action="{% url 'add_cart' cart_item.product.id %}" method="POST" class="inline">
                             {% csrf_token %}
                             {% for item in cart_item.variations.all %}
@@ -52,8 +58,12 @@
                               value="{{ item.variation_value|capfirst }}">
                             {% endfor %}
                             <button type="submit"
-                              class="bg-gray-200 text-gray-700 px-1 py-1 rounded-r hover:bg-gray-300 transition duration-300">
-                              <i data-feather="plus" class="w-2 h-2"></i>
+                              class="bg-white text-gray-600 hover:bg-gray-50 px-1 transition-colors duration-200 flex items-center justify-center">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M12 4v16m8-8H4" />
+                              </svg>
                             </button>
                           </form>
                         </div>
