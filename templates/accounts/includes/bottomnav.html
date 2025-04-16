@@ -1,4 +1,4 @@
-<div class="lg:hidden fixed left-0 w-full bg-white z-50 border" style="bottom: 65px;">
+<div class="lg:hidden fixed left-0 w-full bg-white z-50" style="bottom: 65px;">
     <div class="flex justify-around p-2">
         <a href="/accounts/"
             class="text-center text-xs p-2 {% if request.path == '/accounts/' %}text-black font-bold{% else %}text-gray-600{% endif %}">DASHBOARD</a>
@@ -8,5 +8,8 @@
             class="text-center text-xs p-2 {% if request.path == '/accounts/my-orders/' %}text-black font-bold{% else %}text-gray-600{% endif %}">ORDERS</a>
         <a href="/accounts/edit_profile/"
             class="text-center text-xs p-2 {% if request.path == '/accounts/edit_profile/' %}text-black font-bold{% else %}text-gray-600{% endif %}">PROFILE</a>
+        <a href="/accounts/my-wallet/"
+            class="text-center text-xs p-2 {% if request.path == '/accounts/my-wallet/' %}text-black font-bold{% else %}text-gray-600{% endif %}">WALLET</a>
+
     </div>
 </div>

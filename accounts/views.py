@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import UserForm
-from .models import CustomUser
+from .models import CustomUser, Transaction
 from store.models import RecentlyStalked
 from orders.models import Order, OrderProduct
 from django.contrib import messages, auth
@@ -10,6 +10,7 @@ from carts.views import _cart_id
 from carts.models import Cart, CartItem
 import requests
 from .forms import PhoneNumberForm
+from orders.models import PaymentGateway
 
 @login_required
 def phone_number_registration(request):
@@ -114,6 +115,29 @@ def dashboard(request):
         'orders_count': orders_count,
     }
     return render(request, 'accounts/dashboard.html', context)
+
+
+@login_required(login_url='login')
+@phone_number_required
+def my_wallet(request):
+    transactions = Transaction.objects.filter(user=request.user).order_by('-created_at')
+
+    status_filter = request.GET.get('status')
+    type_filter = request.GET.get('type')
+
+    if status_filter:
+        transactions = transactions.filter(status=status_filter)
+
+    if type_filter:
+        transactions = transactions.filter(transaction_type=type_filter)
+
+    context = {
+        'transactions': transactions,
+        'status_filter': status_filter,
+        'type_filter': type_filter,
+    }
+    return render(request, 'accounts/my-wallet.html', context)
+
 
 
 @login_required(login_url='login')
