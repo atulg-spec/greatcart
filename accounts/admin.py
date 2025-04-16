@@ -9,7 +9,7 @@ from django.contrib import messages
 class CustomUserAdmin(UserAdmin):
     # Define the fields to be displayed in the admin list view
     list_display = ('username', 'first_name' ,'email', 'phone_number', 'is_active', 'is_staff', 'date_joined')
-    
+    readonly_fields = ('wallet',)
     # Define the fields to be used in the admin detail view
     fieldsets = (
         (None, {'fields': ('username', 'email', 'password')}),
