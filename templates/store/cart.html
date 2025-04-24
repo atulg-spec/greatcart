@@ -4,15 +4,15 @@
 {% block content %}
 {% include 'includes/navbar.html' %}
 {% include 'includes/bottomnav.html' %}
-<main class="container mx-auto md:px-2 py-8">
-  <section class="my-6 md:my-16">
+<main class="container mx-auto md:px-2 py-4">
+  <section class="md:my-16">
     <br><br>
     <div class="container mx-auto md:px-36">
       <!-- ============================ COMPONENT 1 ================================= -->
       {% if not cart_items %}
       {% include 'includes/notfound.html' %}
       {% else %}
-      <div class="flex flex-col lg:flex-row gap-8">
+      <div class="flex flex-col md:space-x-6 lg:flex-row md:gap-8">
         <!-- Cart Items -->
         <div class="lg:w-3/4">
           <div class="border overflow-hidden">
@@ -88,12 +88,14 @@
 
         <!-- Order Summary -->
         <div class="lg:w-1/4">
-          <div class="hidden md:block w-full text-white font-semibold py-2 my-2 text-sm bg-black text-center">
+          <div class="hidden md:block w-full text-white font-semibold py-2 text-sm bg-black text-center">
             <a href="{% url 'checkout' %}" class="">
               PLACE ORDER
             </a>
           </div>
-          <p class="py-5 text-gray-400 text-sm">BILLING DETAILS</p>
+          <h1 class="py-5 flex justify-center font-extrabold">
+            BILLING DETAILS
+          </h1>
           <div>
             <div class="flex justify-between border p-2">
               <div class="text-gray-500 text-sm">Cart Total</div>
@@ -116,7 +118,12 @@
       {% endif %}
     </div>
   </section>
+  
+  <div class="container mx-auto md:px-36">
+  {% include 'store/includes/behaviour-related-products.html' %}
+  </div>
 </main>
+<br><br><br><br>
 <div class="fixed left-0 w-full bg-white py-1 px-2 shadow-lg md:hidden z-50" style="bottom: 65px;">
   <a href="{% url 'checkout' %}" class="w-full block bg-black text-white px-6 py-3 hover:bg-gray-900">
     <div class="flex justify-center items-center space-x-4">
@@ -124,4 +131,5 @@
     </div>
   </a>
 </div>
+{% include 'includes/footer.html' %}
 {% endblock %}

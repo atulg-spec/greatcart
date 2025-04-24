@@ -41,9 +41,9 @@
                     <span
                         class="inline-flex items-center justify-center md:font-bold w-56 h-10 sm:w-24 sm:h-12 md:w-56 md:h-14 lg:w-56 lg:h-16 xl:w-56 xl:h-18 overflow-hidden whitespace-nowrap truncate">
                         {% if category_slug %}
-                        {{ category_slug|upper }}
+                        {{ category_slug|upper|slice:":12" }}
                         {% elif keyword %}
-                        {{ keyword|upper }}
+                        {{ keyword|upper|slice:":12" }}
                         {% else %}
                         {% endif %}
                     </span>

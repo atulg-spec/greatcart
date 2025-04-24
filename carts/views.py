@@ -5,6 +5,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
 from accounts.utils import phone_number_required
 from home.models import SiteSettings
+from store.utils import get_behavior_related_products
 
 # Create your views here.
 from django.http import HttpResponse
@@ -168,6 +169,7 @@ def remove_cart_item(request, product_id, cart_item_id):
 @login_required(login_url = 'login')
 @phone_number_required
 def cart(request, total=0, quantity=0, cart_items=None):
+    behaviour_related_products = None
     try:
         gst = SiteSettings.objects.all().first().gst_percentage
         tax = 0
@@ -182,12 +184,16 @@ def cart(request, total=0, quantity=0, cart_items=None):
             quantity += cart_item.quantity
         tax = (gst * total)/100
         grand_total = total + tax
+
+        if cart_items:
+            behaviour_related_products = get_behavior_related_products(cart_items.first().product,request,30)
     except ObjectDoesNotExist:
         pass #just ignore
 
     context = {
         'total': total,
         'quantity': quantity,
+        'behaviour_related_products': behaviour_related_products,
         'cart_items': cart_items,
         'tax'       : tax,
         'grand_total': grand_total,

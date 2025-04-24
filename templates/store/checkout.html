@@ -4,15 +4,15 @@
 {% block content %}
 {% include 'includes/navbar.html' %}
 {% include 'includes/bottomnav.html' %}
-<main class="container mx-auto md:px-2 py-8">
-  <section class="my-6 md:my-16">
+<main class="mx-auto md:px-2 py-1">
+  <section class="md:my-16">
     <br><br>
-    <div class="container mx-auto md:px-36">
+    <div class="mx-auto md:px-36">
       <!-- ============================ COMPONENT 1 ================================= -->
       <div class="flex flex-col lg:flex-row gap-8">
         <!-- Billing Address -->
         <div class="lg:w-3/4">
-          <div class="border overflow-hidden">
+          <div class="md:border overflow-hidden">
             <div class="px-6 py-4">
               <h1 class="font-extrabold mb-4">
                 BILLING ADDRESS
@@ -23,13 +23,13 @@
                   <div>
                     <label class="block text-gray-700 font-semibold mb-2 text-xs">First Name</label>
                     <input type="text" name="first_name" value="{{request.user.first_name}}"
-                      class="w-full px-4 py-1 border rounded-sm focus:outline-none focus:ring-2 focus:ring-black"
+                      class="w-full px-4 py-1 border focus:outline-none focus:ring-1 focus:ring-black"
                       required>
                   </div>
                   <div>
                     <label class="block text-gray-700 font-semibold mb-2 text-xs">Last Name</label>
                     <input type="text" name="last_name" value="{{request.user.last_name}}"
-                      class="w-full px-4 py-1 border rounded-sm focus:outline-none focus:ring-2 focus:ring-black"
+                      class="w-full px-4 py-1 border focus:outline-none focus:ring-1 focus:ring-black"
                       required>
                   </div>
                 </div>
@@ -38,13 +38,13 @@
                   <div>
                     <label class="block text-gray-700 font-semibold mb-2 text-xs">Email</label>
                     <input type="email" name="email" value="{{request.user.email}}"
-                      class="w-full px-4 py-1 border rounded-sm focus:outline-none focus:ring-2 focus:ring-black"
+                      class="w-full px-4 py-1 border focus:outline-none focus:ring-1 focus:ring-black"
                       required>
                   </div>
                   <div>
                     <label class="block text-gray-700 font-semibold mb-2 text-xs">Phone Number</label>
                     <input type="text" name="phone" value="{{request.user.phone_number}}"
-                      class="w-full px-4 py-1 border rounded-sm focus:outline-none focus:ring-2 focus:ring-black"
+                      class="w-full px-4 py-1 border focus:outline-none focus:ring-1 focus:ring-black"
                       required>
                   </div>
                 </div>
@@ -52,39 +52,39 @@
                 <div class="mt-4">
                   <label class="block text-gray-700 font-semibold mb-2 text-xs">Address Line 1</label>
                   <input type="text" name="address_line_1" value="{{request.user.address_line_1}}"
-                    class="w-full px-4 py-1 border rounded-sm focus:outline-none focus:ring-2 focus:ring-black"
+                    class="w-full px-4 py-1 border focus:outline-none focus:ring-1 focus:ring-black"
                     required>
                 </div>
 
                 <div class="mt-4">
                   <label class="block text-gray-700 font-semibold mb-2 text-xs">Address Line 2</label>
                   <input type="text" name="address_line_2" value="{{request.user.address_line_2}}"
-                    class="w-full px-4 py-1 border rounded-sm focus:outline-none focus:ring-2 focus:ring-black">
+                    class="w-full px-4 py-1 border focus:outline-none focus:ring-1 focus:ring-black">
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-2 mt-4">
                   <div>
                     <label class="block text-gray-700 font-semibold mb-2 text-xs">City</label>
                     <input type="text" name="city" value="{{request.user.city}}"
-                      class="w-full px-4 py-1 border rounded-sm focus:outline-none focus:ring-2 focus:ring-black"
+                      class="w-full px-4 py-1 border focus:outline-none focus:ring-1 focus:ring-black"
                       required>
                   </div>
                   <div>
                     <label class="block text-gray-700 font-semibold mb-2 text-xs">State</label>
                     <input type="text" name="state" value="{{request.user.state}}"
-                      class="w-full px-4 py-1 border rounded-sm focus:outline-none focus:ring-2 focus:ring-black"
+                      class="w-full px-4 py-1 border focus:outline-none focus:ring-1 focus:ring-black"
                       required>
                   </div>
                   <div>
                     <label class="block text-gray-700 font-semibold mb-2 text-xs">Country</label>
                     <input type="text" name="country" value="{{request.user.country}}"
-                      class="w-full px-4 py-1 border rounded-sm focus:outline-none focus:ring-2 focus:ring-black"
+                      class="w-full px-4 py-1 border focus:outline-none focus:ring-1 focus:ring-black"
                       required>
                   </div>
                   <div>
                     <label class="block text-gray-700 font-semibold mb-2 text-xs">Zip Code</label>
                     <input type="text" name="zip_code" value="{{request.user.zip_code}}"
-                      class="w-full px-4 py-1 border rounded-sm focus:outline-none focus:ring-2 focus:ring-black"
+                      class="w-full px-4 py-1 border focus:outline-none focus:ring-1 focus:ring-black"
                       required>
                   </div>
                 </div>
@@ -99,7 +99,7 @@
                 <div class="mt-4">
                   <label class="block text-gray-700 font-semibold mb-2 text-xs">Order Note</label>
                   <textarea name="order_note" rows="2"
-                    class="w-full px-4 py-2 border rounded-sm focus:outline-none focus:ring-2 focus:ring-black"></textarea>
+                    class="w-full px-4 py-2 border focus:outline-none focus:ring-1 focus:ring-black"></textarea>
                 </div>
             </div>
           </div>

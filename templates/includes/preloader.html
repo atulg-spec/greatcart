@@ -47,15 +47,11 @@
 </div>
 
 <script>
-    window.addEventListener('load', function () {
-        const preloader = document.getElementById('preloader');
-
-        // Add fade-out animation to the preloader
-        preloader.classList.add('fade-out');
-
-        // Remove the preloader from the DOM after the animation ends
-        preloader.addEventListener('animationend', function () {
-            preloader.style.display = 'none';
-        });
+    const preloader = document.getElementById('preloader');
+    // Add fade-out animation to the preloader
+    preloader.classList.add('fade-out');
+    // Remove the preloader from the DOM after the animation ends
+    preloader.addEventListener('animationend', function () {
+        preloader.style.display = 'none';
     });
 </script>
