@@ -107,26 +107,25 @@
   <section class="my-8" data-aos="fade-right">
     <h1 class="flex justify-center font-extrabold text-xl mb-4">CATEGORIES</h1>
     <div>
-      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1 px-1">
+      <div class="flex gap-4 px-4 py-2 overflow-x-auto whitespace-nowrap scrollbar-hide">
         {% for category in categories %}
-        <div data-aos="fade-right">
+        <div data-aos="fade-right" class="flex-shrink-0 w-48">
           <a href="{{ category.get_url }}" title="{{ category.category_name }}" class="relative group block"
             aria-label="{{ category.category_name }}">
-            <figure class="overflow-hidden shadow-md relative">
+            <figure class="overflow-hidden shadow-md relative aspect-[4/3]">
               {% if category.cat_image %}
-              <div class="relative">
+              <div class="relative h-full">
                 <img src="{{ category.cat_image.url }}" alt="{{ category.category_name }}"
-                  class="w-full h-auto shadow-md transition-transform duration-300 group-hover:scale-125 group-hover:shadow-xl"
-                  loading="lazy" width="300" height="200" />
+                  class="block w-full h-auto transition-opacity duration-300" loading="lazy" width="300" height="400" />
                 <span
-                  class="absolute bottom-0 left-0 right-0 flex justify-center py-2 font-semibold text-sm bg-black bg-opacity-70 text-white">
+                  class="absolute bottom-0 left-0 right-0 flex justify-center py-2 px-2 font-semibold text-sm bg-black bg-opacity-70 text-white truncate">
                   {{ category.category_name|upper }}
                 </span>
               </div>
               {% else %}
-              <div class="w-full h-40 bg-gray-200 shadow-md flex items-center justify-center relative">
+              <div class="w-full h-full bg-gray-200 shadow-md flex items-center justify-center relative">
                 <span
-                  class="absolute bottom-0 left-0 right-0 flex justify-center py-2 font-semibold text-sm bg-black bg-opacity-70 text-white">
+                  class="absolute bottom-0 left-0 right-0 flex justify-center py-2 px-2 font-semibold text-sm bg-black bg-opacity-70 text-white truncate">
                   {{ category.category_name|upper }}
                 </span>
                 <span class="text-gray-500">No Image</span>

@@ -41,7 +41,7 @@ class ProductAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ('Product Information', {
-            'fields': ('product_name', 'slug', 'description', 'coupons', 'size_chart', 'category', 'feature_category', 'price', 'discount_percent', 'before_discount_price', 'stock', 'is_available')
+            'fields': ('product_name', 'slug', 'description', 'coupons', 'size_chart', 'category', 'feature_category', 'price', 'discount_percent', 'before_discount_price', 'stock', 'is_available', 'search_keywords')
         }),
         ('Slider', {
             'fields': ('product_marquee',)

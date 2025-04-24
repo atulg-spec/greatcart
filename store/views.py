@@ -63,11 +63,8 @@ def store(request, category_slug=None):
         queries = Q()
         
         for term in search_terms:
+            queries |= Q(search_keywords=term)
             queries |= Q(feature_category__name__icontains=term)
-            queries |= Q(product_name__icontains=term)
-            queries |= Q(description__icontains=term)
-            queries |= Q(product_brand__icontains=term)
-            queries |= Q(meta_keywords__icontains=term)
             queries |= Q(category__category_name__icontains=term)
         
         products = products.filter(queries).distinct()

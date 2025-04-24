@@ -25,6 +25,8 @@ class Product(models.Model):
     modified_date = models.DateTimeField(auto_now=True)
     before_discount_price = models.IntegerField(default=0)
     discount_percent = models.IntegerField(default=10)
+
+    search_keywords = models.TextField(default="", help_text="Comma-separated keywords (Avoid keyword stuffing)")
     
     product_marquee = CKEditor5Field('Product Marquee', config_name='extends', null=True, blank=True)
     
