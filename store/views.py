@@ -63,7 +63,7 @@ def store(request, category_slug=None):
         queries = Q()
         
         for term in search_terms:
-            queries |= Q(search_keywords=term)
+            queries |= Q(search_keywords__icontains=term)
             # queries |= Q(feature_category__name__icontains=term)
             # queries |= Q(category__category_name__icontains=term)
         
