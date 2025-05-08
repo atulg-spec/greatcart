@@ -1,4 +1,10 @@
 {% extends 'base.html' %}
+{% block meta %}
+    {% if head.favicon %}
+    <link rel="icon" href="{{ head.favicon.url }}" type="image/x-icon">
+    {% endif %}
+{% endblock meta %}
+
 {% block page %}Login or Signup{% endblock page %}
 {% block content %}
 <div class="flex items-center justify-center bg-gray-100">

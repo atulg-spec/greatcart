@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block meta %}
+<link rel="icon" href="{{ head.favicon.url }}" type="image/x-icon">
 {% if category_slug %}
 <!-- Category Page SEO -->
 {% with category=products.0.category %}

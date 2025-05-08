@@ -2,6 +2,10 @@
 {% load static %}
 
 {% block meta %}
+{% if head.favicon %}
+<link rel="icon" href="{{ head.favicon.url }}" type="image/x-icon">
+{% endif %}
+
 <title>{{ head.site_title }}</title>
 <meta name="title" content="{{ head.meta_title }}">
 <meta name="description" content="{{ head.meta_description }}">

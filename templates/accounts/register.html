@@ -1,5 +1,10 @@
 {% extends 'base.html' %}
 
+{% block meta %}
+    {% if head.favicon %}
+    <link rel="icon" href="{{ head.favicon.url }}" type="image/x-icon">
+    {% endif %}
+{% endblock meta %}
 
 {% block content %}
 
